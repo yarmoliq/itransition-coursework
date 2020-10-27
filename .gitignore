@@ -1,0 +1,8 @@
+bin
+Bin
+obj
+Obj
+app*.db
+# /**/*.js
+# wwwroot/js
+.vscode
