@@ -4,5 +4,5 @@ obj
 Obj
 app*.db
 # /**/*.js
-# wwwroot/js
+wwwroot/js
 .vscode
