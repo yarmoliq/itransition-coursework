@@ -2,7 +2,7 @@ bin
 Bin
 obj
 Obj
-app*.db
+app*.db*
 # /**/*.js
 wwwroot/js
 .vscode
