@@ -20,6 +20,8 @@ namespace coursework_itransition.Models
         
         List<Tuple<string,short>> IDAndRating = new List<Tuple<string, short>>();
 
+        string genre{get; set;}
+
         public double averageRating()
         {
             double average = 0;
