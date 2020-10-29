@@ -3,6 +3,18 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+
+<ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Administrator">Admin</a>
+        </li>
+    }
+</ul>
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using coursework_itransition.Models;
+using Microsoft.AspNetCore.Authentication;
 
 namespace coursework_itransition.Controllers
 {
@@ -19,6 +20,11 @@ namespace coursework_itransition.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+         public IActionResult Administrator()
         {
             return View();
         }
