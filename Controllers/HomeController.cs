@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using coursework_itransition.Models;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace coursework_itransition.Controllers
 {
     public class HomeController : Controller
@@ -19,6 +21,12 @@ namespace coursework_itransition.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult NewComposition()
         {
             return View();
         }
