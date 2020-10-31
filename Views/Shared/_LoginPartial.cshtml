@@ -8,11 +8,17 @@
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
     </li>
-    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+    @if (SignInManager.IsSignedIn(User) )
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Administrator">Admin</a>
-        </li>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="NewComposition">New composition</a>
+    </li>
+        @if(User.IsInRole("Administrator"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Administrator">Admin</a>
+            </li>
+        }
     }
 </ul>
 <ul class="navbar-nav">
