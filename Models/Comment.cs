@@ -6,10 +6,11 @@ namespace coursework_itransition.Models
     {
         string ID{get;set;}
         
-        string UserID{get;set;}
+        string AuthorID{get;set;}
         
-        DateTime editTime{get;set;}
+        DateTime CreationDT{get;set;}
+        DateTime LastEditDT{get;set;}
         
-        string text{get;set;}
+        string Contents{get;set;}
     }
 }

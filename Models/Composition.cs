@@ -7,20 +7,22 @@ namespace coursework_itransition.Models
     {
         Composition()
         {
-            EditTime = DateTime.Now;
+            CreationDT = DateTime.UtcNow;
+            LastEditDT = DateTime.Now;
         }
 
         string ID{get;set;}
         
-        string UserID{get;set;}
+        string AuthorID{get;set;}
         
-        DateTime EditTime{get;set;}
+        DateTime CreationDT{get;set;}
+        DateTime LastEditDT{get;set;}
         
         List<string> Chapters;
         
         List<Tuple<string,short>> IDAndRating = new List<Tuple<string, short>>();
 
-        string genre{get; set;}
+        string Genre{get; set;}
 
         public double averageRating()
         {

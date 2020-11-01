@@ -9,8 +9,11 @@ namespace coursework_itransition.Models
         
         string CompositionID{get;set;}
         
-        DateTime EditTime{get;set;}
-        
+        DateTime CreationDT{get;set;}
+        DateTime LastEditDT{get;set;}
+
+        string Contents;
+
         List<string> Likes;
     }
 }
