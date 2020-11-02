@@ -17,19 +17,16 @@ namespace coursework_itransition.Controllers
         public readonly ILogger<HomeController> _logger;
         public readonly RoleManager<IdentityRole> _roleManager;
 
-        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, RoleManager<IdentityRole> roleManager)
+        public HomeController(ApplicationDbContext context,
+            ILogger<HomeController> logger,
+            RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _logger = logger;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        [Authorize]
-        public IActionResult NewComposition()
         {
             return View();
         }
