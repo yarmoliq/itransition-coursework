@@ -11,7 +11,7 @@
     @if (SignInManager.IsSignedIn(User) )
     {
         <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="NewComposition">New composition</a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Composition" asp-action="New">New composition</a>
     </li>
         @if(User.IsInRole("Administrator"))
         {
