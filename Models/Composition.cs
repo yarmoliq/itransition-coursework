@@ -11,18 +11,18 @@ namespace coursework_itransition.Models
             LastEditDT = DateTime.Now;
         }
 
-        string ID{get;set;}
+        public string ID{get; private set;}
         
-        string AuthorID{get;set;}
-        
-        DateTime CreationDT{get;set;}
-        DateTime LastEditDT{get;set;}
-        
-        List<string> Chapters;
-        
-        List<Tuple<string,short>> IDAndRating = new List<Tuple<string, short>>();
+        public string AuthorID{ get; private set; }
 
-        string Genre{get; set;}
+        public DateTime CreationDT{get; private set;}
+        public DateTime LastEditDT{get;set;}
+
+        public List<string> Chapters;
+
+        public List<Tuple<string,short>> IDAndRating = new List<Tuple<string, short>>();
+
+        public string Genre{get; set;}
 
         public double averageRating()
         {

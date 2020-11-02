@@ -5,15 +5,15 @@ namespace coursework_itransition.Models
 {
     public class Chapter
     {
-        string ID{get;set;}
-        
-        string CompositionID{get;set;}
-        
-        DateTime CreationDT{get;set;}
-        DateTime LastEditDT{get;set;}
+        public string ID{get; private set;}
 
-        string Contents;
+        public string CompositionID{get; private set;}
 
-        List<string> Likes;
+        public DateTime CreationDT{get; private set;}
+        public DateTime LastEditDT{get;set;}
+
+        public string Contents;
+
+        public List<string> Likes;
     }
 }
