@@ -15,11 +15,11 @@ namespace coursework_itransition.Models
 
         public string Summary { get; set; }
 
-        public string ID{get; private set;}
+        public string ID{get; set;}
         
-        public string AuthorID{ get; private set; }
+        public string AuthorID{ get; set; }
 
-        public DateTime CreationDT{get; private set;}
+        public DateTime CreationDT{get; set;}
         public DateTime LastEditDT{get;set;}
 
         public List<string> Chapters;

@@ -37,10 +37,18 @@ namespace coursework_itransition.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public void New([Bind("Title,Summary")] Composition comp)
+        public void New([Bind("Title,Summary,Genre")] Composition comp)
         {
             var currentUserId = _h.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            ApplicationUser currentUser = _context.Users.Find(currentUserId);
+
+            var newComp = new Composition();
+            newComp.AuthorID = currentUserId;
+            newComp.Title = comp.Title;
+            newComp.Summary = comp.Summary;
+            newComp.Genre = comp.Genre;
+
+            _context.Add<Composition>(newComp);
+            _context.SaveChanges();
         }
 
         public IActionResult Edit()

@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+using coursework_itransition.Models;
 using Identity.Models;
 
 namespace coursework_itransition.Data
@@ -14,5 +15,16 @@ namespace coursework_itransition.Data
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Composition>()
+                .ToTable("Composition")
+                .Property(e => e.ID)
+                .ValueGeneratedOnAdd();
+            base.OnModelCreating(builder);
+        }
+
+        public DbSet<Composition> Composition { get; set; }
     }
 }
