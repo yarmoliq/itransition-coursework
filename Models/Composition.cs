@@ -5,11 +5,15 @@ namespace coursework_itransition.Models
 {
     public class Composition
     {
-        Composition()
+        public Composition()
         {
             CreationDT = DateTime.UtcNow;
             LastEditDT = DateTime.Now;
         }
+
+        public string Title { get; set; }
+
+        public string Summary { get; set; }
 
         public string ID{get; private set;}
         

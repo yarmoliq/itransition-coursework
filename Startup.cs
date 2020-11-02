@@ -49,8 +49,9 @@ namespace coursework_itransition
             });
                 
             services.AddControllersWithViews();
-           services.AddRazorPages();
-           services.AddSignalR();
+            services.AddRazorPages();
+            services.AddSignalR();
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

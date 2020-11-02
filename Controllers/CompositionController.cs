@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 
 using coursework_itransition.Data;
 using Microsoft.AspNetCore.Identity;
+using Identity.Models;
+using Microsoft.AspNetCore.Http; // httpcontext
+using System.Security.Claims;
 
 
 namespace coursework_itransition.Controllers
@@ -14,22 +17,30 @@ namespace coursework_itransition.Controllers
     [Authorize]
     public class CompositionController : Controller
     {
-        public readonly ApplicationDbContext _context;
-        public readonly ILogger<CompositionController> _logger;
-        public readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
+        private readonly ILogger<CompositionController> _logger;
+        private IHttpContextAccessor _h;
 
         public CompositionController(ApplicationDbContext context,
             ILogger<CompositionController> logger,
-            RoleManager<IdentityRole> roleManager)
+            IHttpContextAccessor h)
         {
             _context = context;
             _logger = logger;
-            _roleManager = roleManager;
+            _h = h;
         }
 
         public IActionResult New()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public void New([Bind("Title,Summary")] Composition comp)
+        {
+            var currentUserId = _h.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            ApplicationUser currentUser = _context.Users.Find(currentUserId);
         }
 
         public IActionResult Edit()
