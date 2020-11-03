@@ -28,7 +28,7 @@ namespace coursework_itransition.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(this);
         }
 
         [Authorize(Roles = "Administrator")]
