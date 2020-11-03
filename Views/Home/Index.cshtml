@@ -19,27 +19,30 @@
                     <th></th>
                 </tr>
             </thead>
-            @foreach (var b in Model._context.Compositions)
+            @foreach (var composition in Model._context.Compositions)
             {
                 <tr>
-                    <td><p>@b.Title</p></td>
-                    <td><p>@b.AuthorID</p></td>
-                    <td><p>@b.LastEditDT</p></td> 
+                    <td><p>@composition.Title</p></td>
+                    <td><p>@composition.AuthorID</p></td>
+                    <td><p>@composition.LastEditDT</p></td> 
                     <td>
-                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#model-@b.ID" >
+                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#model-@composition.ID" >
                             <i class="fa fa-eye"></i>
                         </button>    
-                        <div class="modal fade" id="model-@b.ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <a asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" type="button" class="btn btn-dark">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <div class="modal fade" id="model-@composition.ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
                               <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">@b.Title</h5>
+                                <h5 class="modal-title" id="exampleModalLongTitle">@composition.Title</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                   <span aria-hidden="true">&times;</span>
                                 </button>
                               </div>
                               <div class="modal-body">
-                                @b.Summary
+                                @composition.Summary
                               </div>
                               <div class="modal-footer">
                               </div>
