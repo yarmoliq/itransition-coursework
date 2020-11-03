@@ -25,6 +25,6 @@ namespace coursework_itransition.Data
             base.OnModelCreating(builder);
         }
 
-        public DbSet<Composition> Composition { get; set; }
+        public DbSet<Composition> Compositions { get; set; }
     }
 }

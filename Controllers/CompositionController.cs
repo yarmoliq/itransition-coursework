@@ -30,6 +30,11 @@ namespace coursework_itransition.Controllers
             _h = h;
         }
 
+        private string CurrentUserID()
+        {
+            return this._h.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        }
+
         public IActionResult New()
         {
             return View();
@@ -39,10 +44,10 @@ namespace coursework_itransition.Controllers
         [ValidateAntiForgeryToken]
         public void New([Bind("Title,Summary,Genre")] Composition comp)
         {
-            var currentUserId = _h.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
             var newComp = new Composition();
-            newComp.AuthorID = currentUserId;
+            newComp.CreationDT = System.DateTime.UtcNow;
+            newComp.LastEditDT = System.DateTime.UtcNow;
+            newComp.AuthorID = CurrentUserID();
             newComp.Title = comp.Title;
             newComp.Summary = comp.Summary;
             newComp.Genre = comp.Genre;
@@ -51,9 +56,44 @@ namespace coursework_itransition.Controllers
             _context.SaveChanges();
         }
 
-        public IActionResult Edit()
+        public IActionResult Edit(string id)
         {
-            return View();
+            var composition = _context.Compositions.Find(id);
+            
+            if(composition.AuthorID != CurrentUserID())
+            {
+                return View();
+            }
+
+            return View(composition);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public void Edit(string id, [Bind("Title,Summary,Genre")] Composition editedComp)
+        {
+            var comp = this._context.Compositions.Find(id);
+            if((System.Object)comp != null)
+            {
+                if(comp.AuthorID == CurrentUserID())
+                {
+                    comp.LastEditDT = System.DateTime.UtcNow;
+                    comp.Title      = editedComp.Title;
+                    comp.Genre      = editedComp.Genre;
+                    comp.Summary    = editedComp.Summary;
+
+                    this._context.Compositions.Update(comp);
+                    this._context.SaveChanges();
+                }
+                else
+                {
+                    // idk wtf do i do here
+                }
+            }
+            else
+            {
+                // and here too...
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

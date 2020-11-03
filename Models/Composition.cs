@@ -7,8 +7,6 @@ namespace coursework_itransition.Models
     {
         public Composition()
         {
-            CreationDT = DateTime.UtcNow;
-            LastEditDT = DateTime.Now;
         }
 
         public string Title { get; set; }
