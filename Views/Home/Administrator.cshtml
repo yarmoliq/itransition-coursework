@@ -4,16 +4,21 @@
 
 @model coursework_itransition.Controllers.HomeController
 
+<div class="p-2 text-center bg-light">     
+    <h3 class="mb-2">
+        Users
+    </h3>
+</div>
 <div class="table-responsive table-striped">
-        <table class="table" id="controls">
-            <caption class="caption">Users</caption>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Status</th>
-                </tr>
                     <th>Role</th>
+                    <th></th>
+                </tr>
             </thead>
             @foreach (var b in Model._context.Users)
             {
@@ -30,10 +35,41 @@
                             <p>ban</p>
                         }
                     </td> 
-                    <td><p></p></td>
+                    <td>@Model.RoleFind(b.Id)</td>  
+                    <td>
+                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#model-@b.Id" >
+                            <i class="fa fa-eye"></i>
+                        </button>                         
+                        <div class="modal fade" id="model-@b.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <form>
+                                    <div class="form-group">
+                                      <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                      <input type="text" class="form-control" id="recipient-name">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="message-text" class="col-form-label">Message:</label>
+                                      <textarea class="form-control" id="message-text"></textarea>
+                                    </div>
+                                  </form>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-primary">Send message</button>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             }
-        </table>
-    
-    
+        </table>    
 </div>
