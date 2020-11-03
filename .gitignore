@@ -6,3 +6,4 @@ app*.db*
 # /**/*.js
 wwwroot/js
 .vscode
+Migrations

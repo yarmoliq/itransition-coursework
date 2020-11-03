@@ -5,17 +5,21 @@ namespace coursework_itransition.Models
 {
     public class Composition
     {
-        Composition()
+        public Composition()
         {
             CreationDT = DateTime.UtcNow;
             LastEditDT = DateTime.Now;
         }
 
-        public string ID{get; private set;}
-        
-        public string AuthorID{ get; private set; }
+        public string Title { get; set; }
 
-        public DateTime CreationDT{get; private set;}
+        public string Summary { get; set; }
+
+        public string ID{get; set;}
+        
+        public string AuthorID{ get; set; }
+
+        public DateTime CreationDT{get; set;}
         public DateTime LastEditDT{get;set;}
 
         public List<string> Chapters;
