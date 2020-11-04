@@ -1,8 +1,10 @@
-﻿@{
+﻿@using static coursework_itransition.Utils;
+
+@model coursework_itransition.Controllers.HomeController;
+
+@{
     ViewData["Title"] = "Home Page";
 }
-
-@model coursework_itransition.Controllers.HomeController
 
 <div class="p-2 text-center bg-light">     
     <h3 class="mb-2">
@@ -29,7 +31,7 @@
                         <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#model-@composition.ID" >
                             <i class="fa fa-eye"></i>
                         </button>
-                        @if(Model.CurrentUserIsAuthorOf(composition))
+                        @if(UserIsAuthor(User, composition))
                         {  
                             <a asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" type="button" class="btn btn-dark">
                                 <i class="fa fa-edit"></i>

@@ -6,8 +6,6 @@ using coursework_itransition.Models;
 using Microsoft.AspNetCore.Authorization;
 
 using coursework_itransition.Data;
-using Microsoft.AspNetCore.Identity;
-using Identity.Models;
 using System.Security.Claims;
 
 
@@ -48,7 +46,7 @@ namespace coursework_itransition.Controllers
             var newComp = new Composition();
             newComp.CreationDT = System.DateTime.UtcNow;
             newComp.LastEditDT = System.DateTime.UtcNow;
-            newComp.AuthorID = CurrentUserID();
+            newComp.AuthorID = coursework_itransition.Utils.GetUserID(this.User);
             newComp.Title = comp.Title;
             newComp.Summary = comp.Summary;
             newComp.Genre = comp.Genre;

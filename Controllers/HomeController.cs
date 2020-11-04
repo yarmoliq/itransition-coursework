@@ -3,12 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using coursework_itransition.Models;
 
-using Microsoft.AspNetCore.Authorization;
-
 using coursework_itransition.Data;
 using Microsoft.AspNetCore.Identity;
-
-using Identity.Models;
 
 namespace coursework_itransition.Controllers
 {
@@ -25,19 +21,6 @@ namespace coursework_itransition.Controllers
             _context = context;
             _logger = logger;
             _roleManager = roleManager;
-        }
-
-        public bool CurrentUserIsAuthorOf(Composition c)
-        {
-            if(this.User == null)
-                return false;
-            
-            var x = this.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-
-            if(x == null)
-                return false;
-
-            return x.Value == c.AuthorID;
         }
 
         public IActionResult Index()
