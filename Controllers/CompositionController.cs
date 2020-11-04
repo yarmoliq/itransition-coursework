@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using coursework_itransition.Data;
 using System.Security.Claims;
 
-
 namespace coursework_itransition.Controllers
 {
     [Authorize]
@@ -16,6 +15,11 @@ namespace coursework_itransition.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<CompositionController> _logger;
+
+        public string ReturnUrl;
+
+        [BindProperty]
+        public Composition DisplayComposition { get; set; }
 
         public CompositionController(ApplicationDbContext context,
             ILogger<CompositionController> logger)
@@ -41,7 +45,7 @@ namespace coursework_itransition.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public void New([Bind("Title,Summary,Genre")] Composition comp)
+        public IActionResult New([Bind("Title,Summary,Genre")] Composition comp)
         {
             var newComp = new Composition();
             newComp.CreationDT = System.DateTime.UtcNow;
@@ -53,23 +57,30 @@ namespace coursework_itransition.Controllers
 
             _context.Add<Composition>(newComp);
             _context.SaveChanges();
+
+            return RedirectToRoute("default", new { controller = "Composition", action = "Edit", id = newComp.ID });
         }
 
-        public IActionResult Edit(string id)
+        public IActionResult Edit(string id, string returnUrl = null)
         {
             var composition = _context.Compositions.Find(id);
-            
-            if(composition.AuthorID != CurrentUserID())
+
+            if ((System.Object)composition != null)
             {
-                return View();
+                if (composition.AuthorID != CurrentUserID())
+                {
+                    // "you have no rights" message and back & home buttons
+                    return View();
+                }
             }
 
-            return View(composition);
+            ReturnUrl = new string(returnUrl);
+            DisplayComposition = composition;
+            return View(this);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public void Edit(string id, [Bind("Title,Summary,Genre")] Composition editedComp)
+        public IActionResult Edit(string id, string returnUrl, int ifyoudontmakethisvaritwillnotwork = 0)
         {
             var comp = this._context.Compositions.Find(id);
             if((System.Object)comp != null)
@@ -77,22 +88,23 @@ namespace coursework_itransition.Controllers
                 if(comp.AuthorID == CurrentUserID())
                 {
                     comp.LastEditDT = System.DateTime.UtcNow;
-                    comp.Title      = editedComp.Title;
-                    comp.Genre      = editedComp.Genre;
-                    comp.Summary    = editedComp.Summary;
+                    comp.Title      = DisplayComposition.Title;
+                    comp.Genre      = DisplayComposition.Genre;
+                    comp.Summary    = DisplayComposition.Summary;
 
                     this._context.Compositions.Update(comp);
                     this._context.SaveChanges();
+
+                    return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
                 }
                 else
                 {
                     // idk wtf do i do here
+                    return Content("this aint your shit, man");
                 }
             }
-            else
-            {
-                // and here too...
-            }
+
+            return Content("didnt find any composition");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

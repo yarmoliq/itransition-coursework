@@ -82,7 +82,7 @@ namespace coursework_itransition
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}/{returnUrl?}");
                 endpoints.MapRazorPages();
                 endpoints.MapHub<CommentHub>("/commenthub");
             });

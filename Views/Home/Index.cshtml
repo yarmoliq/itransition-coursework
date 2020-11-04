@@ -33,7 +33,7 @@
                         </button>
                         @if(UserIsAuthor(User, composition))
                         {  
-                            <a asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" type="button" class="btn btn-dark">
+                            <a asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Model.Url.ActionLink()" type="button" class="btn btn-dark">
                                 <i class="fa fa-edit"></i>
                             </a>
                         }
