@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using coursework_itransition.Data;
 using Microsoft.AspNetCore.Identity;
 
+using Identity.Models;
 
 namespace coursework_itransition.Controllers
 {
@@ -16,7 +17,7 @@ namespace coursework_itransition.Controllers
         public readonly ApplicationDbContext _context;
         public readonly ILogger<HomeController> _logger;
         public readonly RoleManager<IdentityRole> _roleManager;
-
+        
         public HomeController(ApplicationDbContext context,
             ILogger<HomeController> logger,
             RoleManager<IdentityRole> roleManager)
@@ -31,22 +32,10 @@ namespace coursework_itransition.Controllers
             return View(this);
         }
 
-        [Authorize(Roles = "Administrator")]
-        public IActionResult Administrator()
-        {
-            return View(this);
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        
-        public string RoleFind(string UserID)
-        {
-            return "";
         }
     }
 }
