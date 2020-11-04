@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using coursework_itransition.Data;
 using Microsoft.AspNetCore.Identity;
 using Identity.Models;
-using Microsoft.AspNetCore.Http; // httpcontext
 using System.Security.Claims;
 
 
@@ -19,20 +18,22 @@ namespace coursework_itransition.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<CompositionController> _logger;
-        private IHttpContextAccessor _h;
 
         public CompositionController(ApplicationDbContext context,
-            ILogger<CompositionController> logger,
-            IHttpContextAccessor h)
+            ILogger<CompositionController> logger)
         {
             _context = context;
             _logger = logger;
-            _h = h;
         }
 
         private string CurrentUserID()
         {
-            return this._h.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var c = this.User.FindFirst(ClaimTypes.NameIdentifier);
+            
+            if(c == null)
+                return System.String.Empty;
+                
+            return c.Value;
         }
 
         public IActionResult New()

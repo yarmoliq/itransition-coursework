@@ -27,6 +27,19 @@ namespace coursework_itransition.Controllers
             _roleManager = roleManager;
         }
 
+        public bool CurrentUserIsAuthorOf(Composition c)
+        {
+            if(this.User == null)
+                return false;
+            
+            var x = this.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+
+            if(x == null)
+                return false;
+
+            return x.Value == c.AuthorID;
+        }
+
         public IActionResult Index()
         {
             return View(this);
