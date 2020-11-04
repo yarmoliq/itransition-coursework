@@ -34,8 +34,15 @@
                         {
                             <p>ban</p>
                         }
-                    </td> 
-                    <td>@Model.RoleFind(b.Id)</td>  
+                    </td>
+                    @if(await Model._userManager.IsInRoleAsync(b,"Administrator"))
+                    {
+                      <td>Yes</td>  
+                    }
+                    else
+                    {
+                      <td></td>
+                    }
                     <td>
                         <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#model-@b.Id" >
                             <i class="fa fa-eye"></i>

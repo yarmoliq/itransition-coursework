@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using coursework_itransition.Models;
@@ -44,11 +45,11 @@ namespace coursework_itransition.Controllers
         }
 
         
-        public /*async*/ string RoleFind(string UserID)
+        public async Task<string> RoleFind(string UserID)
         {
-            // string rolename = await _userManager.GetRoles(userId).FirstOrDefault();
-            // return rolename;
-            return "";
+            var u = await _context.Users.FindAsync(UserID);
+            var lrn = await _userManager.GetRolesAsync(u);
+            return lrn[0];
         }
     }
 }
