@@ -44,7 +44,6 @@ namespace coursework_itransition.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult New([Bind("Title,Summary,Genre")] Composition comp)
         {
             var newComp = new Composition();
@@ -67,16 +66,15 @@ namespace coursework_itransition.Controllers
 
             if ((System.Object)composition != null)
             {
-                if (composition.AuthorID != CurrentUserID())
-                {
-                    // "you have no rights" message and back & home buttons
-                    return View();
-                }
+                if (!coursework_itransition.Utils.UserIsAuthor(this.User, composition))
+                    return RedirectToAction("NoEditRights");
+
+                ReturnUrl = returnUrl;
+                DisplayComposition = composition;
+                return View(this);
             }
 
-            ReturnUrl = new string(returnUrl);
-            DisplayComposition = composition;
-            return View(this);
+            return RedirectToAction("CompNotFound");
         }
 
         [HttpPost]
@@ -85,7 +83,7 @@ namespace coursework_itransition.Controllers
             var comp = this._context.Compositions.Find(id);
             if((System.Object)comp != null)
             {
-                if(comp.AuthorID == CurrentUserID())
+                if(coursework_itransition.Utils.UserIsAuthor(this.User, comp))
                 {
                     comp.LastEditDT = System.DateTime.UtcNow;
                     comp.Title      = DisplayComposition.Title;
@@ -99,13 +97,18 @@ namespace coursework_itransition.Controllers
                 }
                 else
                 {
-                    // idk wtf do i do here
-                    return Content("this aint your shit, man");
+                    return RedirectToAction("NoEditRights");
                 }
             }
 
-            return Content("didnt find any composition");
+            return RedirectToAction("CompNotFound");
         }
+
+
+
+
+        public IActionResult NoEditRights() => View();
+        public IActionResult CompNotFound() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
