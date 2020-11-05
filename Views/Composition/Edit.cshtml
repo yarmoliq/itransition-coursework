@@ -1,45 +1,40 @@
-@model coursework_itransition.Controllers.CompositionController
+@model coursework_itransition.Models.Composition
 
-@if((System.Object)Model != null)
+@if(Model == null)
 {
-    @if(Model.DisplayComposition == null)
-    {
-        <h2>Composition was not found or you have no access rights</h2>
-        <a href='javascript:history.go(-1)' type="button" class="btn btn-primary">Back</a>
-        <a asp-controller="Home" asp-action="Index" type="button" class="btn btn-primary">Home</a>
-    }
-    else
-    {
-        <div class="row justify-content-center">
-            <div class="col-lg-9 col-xl-9">
-                <form asp-action="Edit">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <input asp-for="DisplayComposition.Title" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <select asp-for="DisplayComposition.Genre" class="form-control" required>
-                            <option>Fiction</option>
-                            <option>Novel</option>
-                            <option>Prose</option>
-                            <option>Drama</option>
-                            <option>Mystery</option>
-                            <option>Horror</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" asp-for="DisplayComposition.Summary" class="form-control" rows="10"></textarea>
-                    </div>
-                    <div class="form-group" align="center">
-                        <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary" onclick="return confirm('you sure? :)');">Cancel</a>
-                        <input type="submit" value="Save" class="btn btn-primary" asp-route-returnUrl="@Model.ReturnUrl">
-                    </div>
-                </form>
-            </div>
-        </div>
-    }
+    <h2>Something went wrong :(</h2>
+    <a href='javascript:history.go(-1)' type="button" class="btn btn-primary">Back</a>
+    <a asp-controller="Home" asp-action="Index" type="button" class="btn btn-primary">Home</a>
 }
 else
 {
-    <p>bad</p>
+    <div class="row justify-content-center">
+        <div class="col-lg-9 col-xl-9">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="Title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <select asp-for="Genre" class="form-control" required>
+                        <option>Fiction</option>
+                        <option>Novel</option>
+                        <option>Prose</option>
+                        <option>Drama</option>
+                        <option>Mystery</option>
+                        <option>Horror</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" asp-for="Summary" class="form-control" rows="10"></textarea>
+                </div>
+                <div class="form-group" align="center">
+                    <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary" onclick="return confirm('you sure? :)');">Cancel</a>
+                    <script>
+                        document.write('<button type="submit" name="returnUrl" value="'+ document.referrer + '" class="btn btn-primary">Save</button>');
+                    </script>
+                </div>
+            </form>
+        </div>
+    </div>
 }

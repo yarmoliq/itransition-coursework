@@ -16,26 +16,11 @@ namespace coursework_itransition.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<CompositionController> _logger;
 
-        public string ReturnUrl;
-
-        [BindProperty]
-        public Composition DisplayComposition { get; set; }
-
         public CompositionController(ApplicationDbContext context,
             ILogger<CompositionController> logger)
         {
             _context = context;
             _logger = logger;
-        }
-
-        private string CurrentUserID()
-        {
-            var c = this.User.FindFirst(ClaimTypes.NameIdentifier);
-            
-            if(c == null)
-                return System.String.Empty;
-                
-            return c.Value;
         }
 
         public IActionResult New()
@@ -60,7 +45,7 @@ namespace coursework_itransition.Controllers
             return RedirectToRoute("default", new { controller = "Composition", action = "Edit", id = newComp.ID });
         }
 
-        public IActionResult Edit(string id, string returnUrl = null)
+        public IActionResult Edit(string id)
         {
             var composition = _context.Compositions.Find(id);
 
@@ -69,16 +54,14 @@ namespace coursework_itransition.Controllers
                 if (!coursework_itransition.Utils.UserIsAuthor(this.User, composition))
                     return RedirectToAction("NoEditRights");
 
-                ReturnUrl = returnUrl;
-                DisplayComposition = composition;
-                return View(this);
+                return View(composition);
             }
 
             return RedirectToAction("CompNotFound");
         }
 
         [HttpPost]
-        public IActionResult Edit(string id, string returnUrl, int ifyoudontmakethisvaritwillnotwork = 0)
+        public IActionResult Edit(string id, string returnUrl, [Bind("Title,Summary,Genre")] Composition editedComp)
         {
             var comp = this._context.Compositions.Find(id);
             if((System.Object)comp != null)
@@ -86,14 +69,14 @@ namespace coursework_itransition.Controllers
                 if(coursework_itransition.Utils.UserIsAuthor(this.User, comp))
                 {
                     comp.LastEditDT = System.DateTime.UtcNow;
-                    comp.Title      = DisplayComposition.Title;
-                    comp.Genre      = DisplayComposition.Genre;
-                    comp.Summary    = DisplayComposition.Summary;
+                    comp.Title      = editedComp.Title;
+                    comp.Genre      = editedComp.Genre;
+                    comp.Summary    = editedComp.Summary;
 
                     this._context.Compositions.Update(comp);
                     this._context.SaveChanges();
 
-                    return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
+                    return Redirect(returnUrl ?? "~/");
                 }
                 else
                 {

@@ -20,13 +20,13 @@
                     <th></th>
                 </tr>
             </thead>
-            @foreach (var b in Model._context.Users)
+            @foreach (var user in Model._context.Users)
             {
                 <tr>
-                    <td><p>@b.Name</p></td>
-                    <td><p>@b.Email</p></td>
+                    <td><p>@user.Name</p></td>
+                    <td><p>@user.Email</p></td>
                     <td> 
-                        @if (b.LockoutEnabled)
+                        @if (user.LockoutEnabled)
                         {
                             <p>not ban</p>
                         }
@@ -35,7 +35,7 @@
                             <p>ban</p>
                         }
                     </td>
-                    @if(await Model._userManager.IsInRoleAsync(b,"Administrator"))
+                    @if(await Model._userManager.IsInRoleAsync(user,"Administrator"))
                     {
                       <td>Yes</td>  
                     }
@@ -44,17 +44,17 @@
                       <td></td>
                     }
                     <td>
-                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#model-@b.Id" >
+                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#model-@user.Id" >
                             <i class="fa fa-eye"></i>
                         </button>    
                         @* <div class="modal fade bd-example-modal-lg" id="model-@b.Id" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                           <div class="modal-dialog modal-lg">
                             <div class="modal-content">                              *@
-                        <div class="modal fade" id="model-@b.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="model-@user.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLabel">@b.Name</h5>
+                                  <h5 class="modal-title" id="exampleModalLabel">@user.Name</h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
@@ -62,12 +62,12 @@
                                 <div class="modal-body">
                                   <form>
                                     <div class="form-group">
-                                      <label for="recipient-name" class="col-form-label">EMAIL : @b.Email</label> <br/>
-                                      <label for="recipient-name" class="col-form-label">USER ID: @b.Id</label>
+                                      <label for="recipient-name" class="col-form-label">EMAIL : @user.Email</label> <br/>
+                                      <label for="recipient-name" class="col-form-label">USER ID: @user.Id</label>
                                     </div>
                                     <div class="form-group">
                                       
-                                      @if (b.LockoutEnabled)
+                                      @if (user.LockoutEnabled)
                                       {
                                         <button type="button" class="btn btn-dark">Ban</button>
                                       }
