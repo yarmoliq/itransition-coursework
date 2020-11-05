@@ -32,7 +32,11 @@
                     </div>
                     <div class="form-group" align="center">
                         <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary" onclick="return confirm('you sure? :)');">Cancel</a>
-                        <input type="submit" value="Save" class="btn btn-primary" asp-route-returnUrl="@Model.ReturnUrl">
+                        @* type="submit" namevalue="document.referrer" *@
+                        <script>
+                            document.write('<button type="submit" name="retrunUrl" value="'+ document.referrer + '" class="btn btn-primary">Save</button>');
+                        </script>
+                        
                     </div>
                 </form>
             </div>
@@ -43,3 +47,12 @@ else
 {
     <p>bad</p>
 }
+@* 
+<script>
+    document.getElementById("omega-lol").setAttribute(";
+    //el.setAttribute("", document.referrer);
+    var k =  document.getElementById("omega-lol");
+    alert(document.referrer);
+    alert(k.getAtribute("asp-route-returnUrl"));
+    //document.appendChild(el);
+</script> *@

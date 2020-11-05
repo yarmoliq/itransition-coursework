@@ -61,7 +61,7 @@ namespace coursework_itransition.Controllers
             return RedirectToRoute("default", new { controller = "Composition", action = "Edit", id = newComp.ID });
         }
 
-        public IActionResult Edit(string id, string returnUrl = null)
+        public IActionResult Edit(string id)
         {
             var composition = _context.Compositions.Find(id);
 
@@ -69,18 +69,16 @@ namespace coursework_itransition.Controllers
             {
                 if (composition.AuthorID != CurrentUserID())
                 {
-                    // "you have no rights" message and back & home buttons
                     return View();
                 }
             }
 
-            ReturnUrl = new string(returnUrl);
             DisplayComposition = composition;
             return View(this);
         }
 
         [HttpPost]
-        public IActionResult Edit(string id, string returnUrl, int ifyoudontmakethisvaritwillnotwork = 0)
+        public IActionResult Edit(string id, string returnUrl,int ifyoudontmakethisvaritwillnotwork = 0)
         {
             var comp = this._context.Compositions.Find(id);
             if((System.Object)comp != null)
@@ -94,17 +92,12 @@ namespace coursework_itransition.Controllers
 
                     this._context.Compositions.Update(comp);
                     this._context.SaveChanges();
-
-                    return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
                 }
                 else
                 {
-                    // idk wtf do i do here
-                    return Content("this aint your shit, man");
                 }
             }
-
-            return Content("didnt find any composition");
+            return Redirect(returnUrl);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
