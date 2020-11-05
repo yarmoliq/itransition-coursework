@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - coursework_itransition</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" id="theme" href="~/css/black_custome_bootstrap.css" />
 </head>
 <body>
     <header>
@@ -18,6 +19,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-lg-inline-flex flex-lg-row">
                     <partial name="_LoginPartial" />
+                    <div onclick="changeCSS()">a</div>
                 </div>
             </div>
         </nav>
@@ -42,3 +44,20 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+<script>
+    var cssLinkIndex = "/css/black_custome_bootstrap.css";
+    var cssFile = "/css/white_custome_bootstrap.css";
+   function changeCSS() {
+        var el_link = document.getElementById("theme");
+        if(el_link.href.split('/').pop()=="white_custome_bootstrap.css")
+        {
+            el_link.href="/css/black_custome_bootstrap.css";
+        }
+        else
+        {
+            el_link.href="/css/white_custome_bootstrap.css";
+        }
+        document.appendChild(el_link);
+    }
+</script>
