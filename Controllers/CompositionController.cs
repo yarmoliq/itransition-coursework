@@ -78,7 +78,7 @@ namespace coursework_itransition.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(string id, string returnUrl,int ifyoudontmakethisvaritwillnotwork = 0)
+        public IActionResult Edit(string id, string url, int ifyoudontmakethisvaritwillnotwork = 0)
         {
             var comp = this._context.Compositions.Find(id);
             if((System.Object)comp != null)
@@ -97,7 +97,7 @@ namespace coursework_itransition.Controllers
                 {
                 }
             }
-            return Redirect(returnUrl);
+            return Redirect(url);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
