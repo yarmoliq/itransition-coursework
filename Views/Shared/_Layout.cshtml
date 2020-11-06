@@ -4,8 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - coursework_itransition</title>
-
-    <script type="module" src="~/js/themeLoader.js"></script>
+    @if(Context.Request.Cookies["theme"] == "dark")
+    {
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-darkly.css" />
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-flatly.css" />
+    }
+    <script type="module" src="~/js/switchTheme.js"></script>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
