@@ -6,7 +6,6 @@
     <title>@ViewData["Title"] - coursework_itransition</title>
     <link rel="stylesheet" href="~/css/site.css" />  
     <script>  
-        alert( document.cookie );
         var cssDark = "/css/black_custome_bootstrap.css";
         var cssWhite = "/css/white_custome_bootstrap.css";
 
@@ -36,30 +35,26 @@
             document.cookie = updatedCookie;
         }
 
-        let link=document.createElement('link');
-        link.id='theme';
-        link.rel='stylesheet';
+        let link = document.createElement('link');
+        link.id = "theme";
+        link.rel="stylesheet";
         if(getCookie("theme") == "dark")
             link.href = cssDark;
         else
             link.href = cssWhite;
-        document.getElementsByTagName('head')[0].appendChild(link);  
+        document.getElementsByTagName("head")[0].appendChild(link);  
 
         function changeCSS(id) {
             var el_link = document.getElementById("theme");
             if(el_link.href.split('/').pop()=="white_custome_bootstrap.css")
             {
                 setCookie("theme","dark");
-                alert( document.cookie );
-
                 el_link.href = cssDark;
                 document.getElementById(id).innerHTML = ' <i size="9px" class="fa fa-moon"></i>';
             }
             else
             {
                 setCookie("theme","white");
-                alert( document.cookie );
-
                 el_link.href = cssWhite;
                 document.getElementById(id).innerHTML = '<i size="9px" class="fa fa-sun"></i>';
             }
@@ -89,19 +84,16 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        
-        <div class="container">
-            <script>
-                if(getCookie("theme") == "dark")
-                {
-                    document.write('<a  class="nav-link text-dark" id="changer-theme" onclick="changeCSS(id)"><i size="9px" class="fa fa-moon"></i></a>');
-                }
-                else
-                {
-                    document.write('<a  class="nav-link text-dark" id="changer-theme" onclick="changeCSS(id)"><i size="9px" class="fa fa-sun"></i></a>');
-                }
-            </script>
-        </div>
+        <script>
+            if(getCookie("theme") == "dark")
+            {
+                document.write('<a  class="nav-link text-dark" id="changer-theme" onclick="changeCSS(id)"><i size="9px" class="fa fa-moon"></i></a>');
+            }
+            else
+            {
+                document.write('<a  class="nav-link text-dark" id="changer-theme" onclick="changeCSS(id)"><i size="9px" class="fa fa-sun"></i></a>');
+            }
+        </script>
     </footer>
     
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
