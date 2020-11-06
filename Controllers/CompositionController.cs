@@ -22,12 +22,12 @@ namespace coursework_itransition.Controllers
             _logger = logger;
         }
 
-        public IActionResult New()
-        {
-            return View();
-        }
+        public IActionResult New() => View();
+        public IActionResult NoEditRights() => View();
+        public IActionResult CompNotFound() => View();
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult New([Bind("Title,Summary,Genre")] Composition comp)
         {
             var newComp = new Composition();
@@ -44,7 +44,7 @@ namespace coursework_itransition.Controllers
             return RedirectToRoute("default", new { controller = "Composition", action = "Edit", id = newComp.ID });
         }
 
-        public IActionResult Edit(string id)
+        public IActionResult Edit(string id, string returnUrl)
         {
             var composition = _context.Compositions.Find(id);
 
@@ -59,8 +59,9 @@ namespace coursework_itransition.Controllers
             return RedirectToAction("CompNotFound");
         }
 
-        [HttpPost]
-        public IActionResult Edit(string id, string returnUrl, [Bind("Title,Summary,Genre")] Composition editedComp)
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditPost(string id, string returnUrl, [Bind("Title,Summary,Genre")] Composition editedComp)
         {
             var comp = this._context.Compositions.Find(id);
             if((System.Object)comp != null)
@@ -75,7 +76,9 @@ namespace coursework_itransition.Controllers
                     this._context.Compositions.Update(comp);
                     this._context.SaveChanges();
 
-                    return Redirect(returnUrl ?? "~/");
+                    if(returnUrl == null)
+                        return Redirect("~/");
+                    return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
                 }
                 else
                 {
@@ -86,8 +89,28 @@ namespace coursework_itransition.Controllers
             return RedirectToAction("CompNotFound");
         }
 
-        public IActionResult NoEditRights() => View();
-        public IActionResult CompNotFound() => View();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteComp(string id, string returnUrl)
+        {
+            if(id == null)
+                return RedirectToAction("CompNotFound");
+
+            var comp = this._context.Compositions.Find(id);
+            if((System.Object)comp == null)
+                return RedirectToAction("CompNotFound");
+
+            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp))
+                return RedirectToAction("NoEditRights");
+
+            // check if deleted
+            this._context.Compositions.Remove(comp);
+            this._context.SaveChanges();
+
+            if (returnUrl == null)
+                return Redirect("~/");
+            return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
