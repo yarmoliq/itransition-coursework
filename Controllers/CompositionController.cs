@@ -6,7 +6,6 @@ using coursework_itransition.Models;
 using Microsoft.AspNetCore.Authorization;
 
 using coursework_itransition.Data;
-using System.Security.Claims;
 
 namespace coursework_itransition.Controllers
 {
@@ -87,9 +86,6 @@ namespace coursework_itransition.Controllers
             return RedirectToAction("CompNotFound");
         }
 
-
-
-
         public IActionResult NoEditRights() => View();
         public IActionResult CompNotFound() => View();
 
@@ -98,5 +94,5 @@ namespace coursework_itransition.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-    }
+    }   
 }
