@@ -9,6 +9,10 @@
         "dist/browser/signalr.js",
         "dist/browser/signalr.min.js"
       ]
+    },
+    {
+      "library": "bootstrap@latest",
+      "destination": "wwwroot/lib/bootstrap"
     }
   ]
 }

@@ -7,3 +7,7 @@ app*.db*
 wwwroot/js
 .vscode
 Migrations
+wwwroot/scss
+wwwroot/lib/bootstrap/scss
+wwwroot/lib/bootstrap/js
+wwwroot/lib/bootstrap/package.json
