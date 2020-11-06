@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - coursework_itransition</title>
-    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-darkly.css" />
+
+    <script type="module" src="~/js/themeLoader.js"></script>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -13,6 +13,7 @@
         <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <button id="switch-theme">CHANGE</button>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -23,7 +24,7 @@
             </div>
         </nav>
     </header>
-    
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
