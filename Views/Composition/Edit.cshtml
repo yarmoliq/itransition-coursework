@@ -30,9 +30,6 @@ else
                 </div>
                 <div class="form-group" align="center">
                     <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary" onclick="return confirm('you sure? :)');">Cancel</a>
-                    @* <script>
-                        document.write('<button type="submit" name="returnUrl" value="'+ document.referrer + '" class="btn btn-primary">Save</button>');
-                    </script> *@
                     <input type="submit" value="Save" class="btn btn-primary" 
                             asp-route-id="@ViewContext.RouteData.Values["id"]"
                             asp-route-returnUrl="@ViewContext.RouteData.Values["returnUrl"]">
@@ -42,8 +39,8 @@ else
     </div>
 
     <form  asp-controller="Composition" asp-action="DeleteComp"
-        asp-route-id="@ViewContext.RouteData.Values["id"]"
-        asp-route-returnUrl="">
+            asp-route-id="@ViewContext.RouteData.Values["id"]"
+            asp-route-returnUrl="@ViewContext.RouteData.Values["returnUrl"]">
         <button  type="submit" class="btn btn-danger">Delete</button>
     </form>
 

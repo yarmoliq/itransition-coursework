@@ -91,7 +91,7 @@ namespace coursework_itransition.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteComp(string id, string returnUrl)
+        public IActionResult DeleteComp(string id, string returnUrl = null)
         {
             if(id == null)
                 return RedirectToAction("CompNotFound");
