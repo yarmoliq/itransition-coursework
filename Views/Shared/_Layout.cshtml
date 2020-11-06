@@ -20,13 +20,36 @@
         <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                <button id="switch-theme">CHANGE</button>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse">
-                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav ml-auto">    
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-item" id="switch-theme">
+                                    @if(Context.Request.Cookies["theme"] == "dark")
+                                    {
+                                        <a>Light mode</a>
+                                    }
+                                    else
+                                    {
+                                        <a>Dark mode</a>
+                                    }
+                                </div>
+                                <partial name="_LoginPartial" />
+                            </div>
+                        </li>
+
+                        <form class="form-inline my-2 my-lg-0 ml-lg-3 ml-xl-3">
+                            <input class="form-control" type="text" placeholder="Search"></input>
+                            <button class="btn btn-secondary" type="submit">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </ul>
                 </div>
             </div>
         </nav>
