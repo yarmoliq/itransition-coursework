@@ -3,46 +3,42 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<div class="d-inline-flex order-md-4 ml-auto ">
-    <div class="input-group ">
-        <input type="text" class="form-control">
-        <div class="input-group-append">
-            <button class="btn btn-dark">
-                <i class="fa fa-search" aria-hidden="true"></i>
-            </button>
-        </div>
-    </div> 
-</div>
-@if (SignInManager.IsSignedIn(User) )
-{
-    <div class="order-md-2">
-        <a class="nav-link" asp-area="" asp-controller="Composition" asp-action="New">New composition</a>
-    </div>
-    @if(User.IsInRole("Administrator"))
-    {
-        <div class="order-md-3">
-            <a class="nav-link" asp-area="" asp-controller="Administrator" asp-action="Administrator">Admin</a>
-        </div>
-    }
-}
+<ul class="navbar-nav mr-auto">
+    @* tyt veshi, kotorie v navbare sleva bydyt *@
+</ul>
 
-@if (SignInManager.IsSignedIn(User))
-{
-    <div class="order-md-5">
-        <a  class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Info</a>
-    </div>
-    <div class="order-md-6">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link">Logout</button>
+<ul class="navbar-nav ml-auto">    
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
+        <div class="dropdown-menu">
+            @if (SignInManager.IsSignedIn(User) )
+            {
+                <a class="dropdown-item nav-link" asp-area="" asp-controller="Composition" asp-action="New">New composition</a>
+                @if(User.IsInRole("Administrator"))
+                {
+                    <a class="dropdown-item nav-link" asp-area="" asp-controller="Administrator" asp-action="Administrator">Admin</a>
+                }
+            
+                <a  class="dropdown-item nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Info</a>
+                <form  class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button  type="submit" class="dropdown-item nav-link btn btn-link">Logout</button>
+                </form>
+            }
+            else
+            {
+                <a class="dropdown-item nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                <a class="dropdown-item nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            }
+        </div>
+    </li>
+
+    <li class="nav-item">
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </input>
         </form>
-    </div>
-}
-else
-{
-    <div class="order-md-5">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </div>
-    <div class="order-md-6">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </div>
-}
+    </li>
+</ul>
