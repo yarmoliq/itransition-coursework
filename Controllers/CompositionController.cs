@@ -48,7 +48,7 @@ namespace coursework_itransition.Controllers
             _context.Add<Composition>(newComp);
             _context.SaveChanges();
 
-            return RedirectToRoute("default", new { controller = "Composition", action = "Edit", id = newComp.ID });
+            return RedirectToRoute("composition", new { controller = "Composition", action = "Edit", id = newComp.ID });
         }
 
         public IActionResult Edit(string id, string returnUrl)
