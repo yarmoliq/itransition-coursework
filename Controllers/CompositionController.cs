@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 
 using coursework_itransition.Data;
 
+using Microsoft.AspNetCore.Identity;
+using Identity.Models;
+
 namespace coursework_itransition.Controllers
 {
     [Authorize]
@@ -14,12 +17,16 @@ namespace coursework_itransition.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<CompositionController> _logger;
+        public readonly UserManager<ApplicationUser> _userManager;
+
 
         public CompositionController(ApplicationDbContext context,
-            ILogger<CompositionController> logger)
+            ILogger<CompositionController> logger,
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public IActionResult New() => View();
@@ -50,7 +57,7 @@ namespace coursework_itransition.Controllers
 
             if ((System.Object)composition != null)
             {
-                if (!coursework_itransition.Utils.UserIsAuthor(this.User, composition))
+                if (!(coursework_itransition.Utils.UserIsAuthor(this.User, composition) || this.User.IsInRole("Administrator")))
                     return RedirectToAction("NoEditRights");
 
                 return View(composition);
@@ -66,7 +73,7 @@ namespace coursework_itransition.Controllers
             var comp = this._context.Compositions.Find(id);
             if((System.Object)comp != null)
             {
-                if(coursework_itransition.Utils.UserIsAuthor(this.User, comp))
+                if(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator"))
                 {
                     comp.LastEditDT = System.DateTime.UtcNow;
                     comp.Title      = editedComp.Title;

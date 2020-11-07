@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Authorization;
 
 using coursework_itransition.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 using Identity.Models;
+using System.Linq; 
 
 namespace coursework_itransition.Controllers
 {
@@ -45,11 +47,27 @@ namespace coursework_itransition.Controllers
         }
 
         
-        public async Task<string> RoleFind(string UserID)
+        // public async Task<string> RoleFind(string UserID)
+        // {
+        //     var u = await _context.Users.FindAsync(UserID);
+        //     var lrn = await _userManager.GetRolesAsync(u);
+        //     return lrn[0];
+        // }
+
+        [HttpPost]
+        public IActionResult DeleteUser(string UserID)
         {
-            var u = await _context.Users.FindAsync(UserID);
-            var lrn = await _userManager.GetRolesAsync(u);
-            return lrn[0];
+            _context.Users.Remove(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
+            _context.SaveChanges();
+            return Redirect("/");
         }
+
+        // [HttpPost]
+        // public IActionResult DeleteUser(ApplicationUser User)
+        // {
+        //     _context.Users.Remove(User);
+        //     _context.SaveChanges();
+        //     return Redirect("/");
+        // }
     }
 }

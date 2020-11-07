@@ -13,13 +13,7 @@ namespace coursework_itransition.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
-        {Add table chapter to database and connection of tables
-
-add : connection user to composition
-add : connection composition to chapter
-change : models chapter, composition, user
-add : view author name in index
-add : view all chapters jf composition in index
+        {
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

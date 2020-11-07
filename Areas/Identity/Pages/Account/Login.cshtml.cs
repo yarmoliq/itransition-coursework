@@ -80,10 +80,6 @@ namespace coursework_itransition.Areas.Identity.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
-            // var role = new IdentityRole();
-            // role.Name = "Administrator";
-            // await _roleManager.CreateAsync(role);
-
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout

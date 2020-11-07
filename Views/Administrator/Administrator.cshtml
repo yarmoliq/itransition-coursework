@@ -3,6 +3,7 @@
 }
 
 @model coursework_itransition.Controllers.AdministratorController
+@using Microsoft.EntityFrameworkCore
 
 <div class="p-2 text-center bg-light">     
     <h3 class="mb-2">
@@ -20,7 +21,7 @@
                     <th></th>
                 </tr>
             </thead>
-            @foreach (var user in Model._context.Users)
+            @foreach (var user in Model._context.Users.Include(comp=>comp.Compositions))
             {
                 <tr>
                     <td><p>@user.Name</p></td>
@@ -62,7 +63,7 @@
                                 <div class="modal-body">
                                   <form>
                                     <div class="form-group">
-                                      <label for="recipient-name" class="col-form-label">EMAIL : @user.Email</label> <br/>
+                                      <label for="recipient-name" class="col-form-label">EMAIL  : @user.Email</label> <br/>
                                       <label for="recipient-name" class="col-form-label">USER ID: @user.Id</label>
                                     </div>
                                     <div class="form-group">
@@ -75,30 +76,51 @@
                                       {
                                         <button type="button" class="btn btn-dark">Unban</button>
                                       }
-                                      @if(true)
+                                      @if(await Model._userManager.IsInRoleAsync(user,"Administrator"))
                                       {
-                                        <button type="button" class="btn btn-dark">Make admin</button>       
+                                        <button type="button" class="btn btn-dark">Remove admin status</button>       
                                       }
                                       else
                                       {
-                                        <button type="button" class="btn btn-dark">Remove admin status</button>       
+                                        <button type="button" class="btn btn-dark">Make admin</button>       
                                       }       
-                                      <button type="button" class="btn btn-dark">Delete user</button>       
+                                      <form  asp-controller="Administrator" asp-action="DeleteUser"
+                                          asp-route-UserID="@ViewContext.RouteData.Values["user.Id"]">
+                                          <button type="submit" class="btn btn-danger" >Delete user</button>       
+                                      </form>
                                     </div>
-                                    @if(true)
+                                    @if(user.Compositions.Count > 0)
                                     {
-                                      <label for="message-text" class="col-form-label">All composition:</label>
-                                      @*@{int number = 1;} 
-                                      @foreach (var item in collection)
-                                      {
-                                        ++number;
-                                      } *@
+                                      <div class="p-2 text-center bg-dark">     
+                                          <h3 class="mb-2">
+                                              Composition
+                                          </h3>
+                                      </div>
+                                      <table class="table">
+                                          @foreach (var composition in user.Compositions)
+                                          {
+                                            <tr>
+                                              <td>
+                                                <div>@composition.Title</div>
+                                              </td>
+                                              <td>
+                                                <button type="button" class="btn btn-dark">
+                                                  <i class="fa fa-eye"></i>
+                                                </button>
+                                              </td>
+                                              <td>
+                                                <a asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()" type="button" class="btn btn-dark">
+                                                  <i class="fa fa-edit"></i>
+                                                </a>
+                                              </td>
+                                            </tr>
+                                          }
+                                      </table>
                                     }
                                     else
                                     {
                                       <label for="message-text" class="col-form-label">No composition</label>
                                     }
-                                    
                                   </form>
                                 </div>
                                 <div class="modal-footer">
