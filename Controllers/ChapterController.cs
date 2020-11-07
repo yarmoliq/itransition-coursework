@@ -6,6 +6,7 @@ using coursework_itransition.Models;
 using Microsoft.AspNetCore.Authorization;
 
 using coursework_itransition.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace coursework_itransition.Controllers
 {
@@ -23,15 +24,14 @@ namespace coursework_itransition.Controllers
         }
 
         public IActionResult New(string compID, string returnUrl = null) => View();
+
+        [Route("Chapter/Edit/{id?}/{returnUrl?}")]
         public IActionResult Edit(string id, string returnUrl = null) => View(this._context.Chapters.Find(id));
 
         [HttpPost, ActionName("New")]
         [ValidateAntiForgeryToken]
         public IActionResult AddNewChapter(string compID, string returnUrl, [Bind("Title,Contents")] Chapter data)
         {
-            // _logger.LogWarning(compID);
-            // _logger.LogWarning(returnUrl);
-
             if(compID == null)
                 return Content("no id");
 
@@ -48,6 +48,29 @@ namespace coursework_itransition.Controllers
             newChapter.Composition = comp;
 
             this._context.Chapters.Add(newChapter);
+            this._context.SaveChanges();
+
+            if (returnUrl == null)
+                return Redirect("~/");
+            return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
+        }
+
+        [HttpPost, Route("Chapter/Edit/{id?}/{returnUrl?}")]
+        [ValidateAntiForgeryToken]
+        public async System.Threading.Tasks.Task<IActionResult> EditChapter(string id, string returnUrl, [Bind("Title,Contents")] Chapter data)
+        {
+            var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
+            if((System.Object)chapter == null)
+                return Content("chapter not found");
+
+            if(!coursework_itransition.Utils.UserIsAuthor(this.User, chapter.Composition.AuthorID))
+                return Content("No rights");
+
+            chapter.Title       = data.Title;
+            chapter.Contents    = data.Contents;
+            chapter.LastEditDT  = System.DateTime.UtcNow;
+
+            this._context.Chapters.Update(chapter);
             this._context.SaveChanges();
 
             if (returnUrl == null)

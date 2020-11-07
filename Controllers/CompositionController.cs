@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using coursework_itransition.Models;
@@ -9,6 +10,7 @@ using coursework_itransition.Data;
 
 using Microsoft.AspNetCore.Identity;
 using Identity.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace coursework_itransition.Controllers
 {
@@ -51,9 +53,11 @@ namespace coursework_itransition.Controllers
             return RedirectToRoute("composition", new { controller = "Composition", action = "Edit", id = newComp.ID });
         }
 
-        public IActionResult Edit(string id, string returnUrl)
+        public async Task<IActionResult> Edit(string id, string returnUrl)
         {
-            var composition = _context.Compositions.Find(id);
+            var composition = await this._context.Compositions
+                                    .Include(c => c.Chapters)
+                                    .FirstOrDefaultAsync(c => c.ID == id);
 
             if ((System.Object)composition != null)
             {
@@ -70,8 +74,6 @@ namespace coursework_itransition.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditPost(string id, string returnUrl, [Bind("Title,Summary,Genre")] Composition editedComp)
         {
-            // _logger.LogWarning(ControllerContext.ActionDescriptor.AttributeRouteInfo.Name);
-
             var comp = this._context.Compositions.Find(id);
             if((System.Object)comp != null)
             {

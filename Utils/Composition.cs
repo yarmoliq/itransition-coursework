@@ -17,6 +17,18 @@ namespace coursework_itransition
 
             return c.Value == comp.AuthorID;
         }
+        public static bool UserIsAuthor(ClaimsPrincipal User, string AuthorID)
+        {
+            if (User == null)
+                return false;
+
+            var c = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+
+            if (c == null)
+                return false;
+
+            return c.Value == AuthorID;
+        }
 
         public static string GetUserID(ClaimsPrincipal User)
         {
