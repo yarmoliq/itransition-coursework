@@ -15,9 +15,9 @@ namespace coursework_itransition.Models
 
         public DateTime LastEditDT { get; set; }
 
-        public string Title;
+        public string Title { get; set; }
         
-        public string Contents;
+        public string Contents { get; set; }
 
         // public List<string> Likes;
     }

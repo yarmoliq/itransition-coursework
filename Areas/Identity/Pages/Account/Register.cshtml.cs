@@ -93,7 +93,7 @@ namespace coursework_itransition.Areas.Identity.Pages.Account
                     // var role = new IdentityRole();
                     // role.Name = "Administrator";
                     // await _roleManager.CreateAsync(role);
-                    await _userManager.AddToRoleAsync(user, "Administrator");
+                    // await _userManager.AddToRoleAsync(user, "Administrator");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

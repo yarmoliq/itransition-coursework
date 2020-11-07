@@ -13,7 +13,7 @@
             <div class="form-group" align="center">
                 <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary" onclick="return confirm('you sure? :)');">Cancel</a>
                 <input type="submit" value="Save" class="btn btn-primary" 
-                        asp-route-compID="@ViewContext.RouteData.Values["compID"]"
+                        asp-route-id="@ViewContext.RouteData.Values["id"]"
                         asp-route-returnUrl="@ViewContext.RouteData.Values["returnUrl"]">
             </div>
         </form>

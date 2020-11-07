@@ -5,7 +5,7 @@
 @model coursework_itransition.Controllers.AdministratorController
 @using Microsoft.EntityFrameworkCore
 
-<div class="p-2 text-center bg-light">     
+<div class="p-2 text-center bg-dark">     
     <h3 class="mb-2">
         Users
     </h3>
@@ -45,7 +45,7 @@
                       <td></td>
                     }
                     <td>
-                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#model-@user.Id" >
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#model-@user.Id" >
                             <i class="fa fa-eye"></i>
                         </button>    
                         @* <div class="modal fade bd-example-modal-lg" id="model-@b.Id" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -70,19 +70,19 @@
                                       
                                       @if (user.LockoutEnabled)
                                       {
-                                        <button type="button" class="btn btn-dark">Ban</button>
+                                        <button type="button" class="btn btn-secondary">Ban</button>
                                       }
                                       else
                                       {
-                                        <button type="button" class="btn btn-dark">Unban</button>
+                                        <button type="button" class="btn btn-secondary">Unban</button>
                                       }
                                       @if(await Model._userManager.IsInRoleAsync(user,"Administrator"))
                                       {
-                                        <button type="button" class="btn btn-dark">Remove admin status</button>       
+                                        <button type="button" class="btn btn-secondary">Remove admin status</button>       
                                       }
                                       else
                                       {
-                                        <button type="button" class="btn btn-dark">Make admin</button>       
+                                        <button type="button" class="btn btn-secondary">Make admin</button>       
                                       }       
                                       <form  asp-controller="Administrator" asp-action="DeleteUser"
                                           asp-route-UserID="@ViewContext.RouteData.Values["user.Id"]">
@@ -104,12 +104,12 @@
                                                 <div>@composition.Title</div>
                                               </td>
                                               <td>
-                                                <button type="button" class="btn btn-dark">
+                                                <button type="button" class="btn btn-secondary">
                                                   <i class="fa fa-eye"></i>
                                                 </button>
                                               </td>
                                               <td>
-                                                <a asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()" type="button" class="btn btn-dark">
+                                                <a asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()" type="button" class="btn btn-secondary">
                                                   <i class="fa fa-edit"></i>
                                                 </a>
                                               </td>
@@ -124,7 +124,7 @@
                                   </form>
                                 </div>
                                 <div class="modal-footer">
-                                  <button type="button" class="btn btn-darks" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-secondarys" data-dismiss="modal">Close</button>
                                   @* <button type="button" class="btn btn-primary">Send message</button> *@
                                 </div>
                               </div>

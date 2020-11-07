@@ -23,13 +23,14 @@ namespace coursework_itransition.Controllers
         }
 
         public IActionResult New(string compID, string returnUrl = null) => View();
+        public IActionResult Edit(string id, string returnUrl = null) => View(this._context.Chapters.Find(id));
 
         [HttpPost, ActionName("New")]
         [ValidateAntiForgeryToken]
         public IActionResult AddNewChapter(string compID, string returnUrl, [Bind("Title,Contents")] Chapter data)
         {
-            _logger.LogWarning(compID);
-            _logger.LogWarning(returnUrl);
+            // _logger.LogWarning(compID);
+            // _logger.LogWarning(returnUrl);
 
             if(compID == null)
                 return Content("no id");

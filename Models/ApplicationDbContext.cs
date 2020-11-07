@@ -19,13 +19,15 @@ namespace coursework_itransition.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Composition>()
-                .ToTable("Composition")
+                .ToTable("Compositions")
                 .Property(e => e.ID)
                 .ValueGeneratedOnAdd();
+
             builder.Entity<Chapter>()
-                .ToTable("Chapter")
+                .ToTable("Chapters")
                 .Property(e => e.ID)
                 .ValueGeneratedOnAdd();
+                
             base.OnModelCreating(builder);
         }
 
