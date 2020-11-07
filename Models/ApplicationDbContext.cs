@@ -13,7 +13,13 @@ namespace coursework_itransition.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
-        {
+        {Add table chapter to database and connection of tables
+
+add : connection user to composition
+add : connection composition to chapter
+change : models chapter, composition, user
+add : view author name in index
+add : view all chapters jf composition in index
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -22,9 +28,15 @@ namespace coursework_itransition.Data
                 .ToTable("Composition")
                 .Property(e => e.ID)
                 .ValueGeneratedOnAdd();
+            builder.Entity<Chapter>()
+                .ToTable("Chapter")
+                .Property(e => e.ID)
+                .ValueGeneratedOnAdd();
             base.OnModelCreating(builder);
         }
 
         public DbSet<Composition> Compositions { get; set; }
+
+        public DbSet<Chapter> Chapters { get; set; }
     }
 }

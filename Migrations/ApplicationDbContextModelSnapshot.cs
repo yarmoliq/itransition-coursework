@@ -214,6 +214,28 @@ namespace coursework_itransition.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("coursework_itransition.Models.Chapter", b =>
+                {
+                    b.Property<string>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CompositionID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreationDT")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastEditDT")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CompositionID");
+
+                    b.ToTable("Chapter");
+                });
+
             modelBuilder.Entity("coursework_itransition.Models.Composition", b =>
                 {
                     b.Property<string>("ID")
@@ -239,6 +261,8 @@ namespace coursework_itransition.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("AuthorID");
 
                     b.ToTable("Composition");
                 });
@@ -292,6 +316,20 @@ namespace coursework_itransition.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("coursework_itransition.Models.Chapter", b =>
+                {
+                    b.HasOne("coursework_itransition.Models.Composition", "Composition")
+                        .WithMany("Chapters")
+                        .HasForeignKey("CompositionID");
+                });
+
+            modelBuilder.Entity("coursework_itransition.Models.Composition", b =>
+                {
+                    b.HasOne("Identity.Models.ApplicationUser", "Author")
+                        .WithMany("Compositions")
+                        .HasForeignKey("AuthorID");
                 });
 #pragma warning restore 612, 618
         }

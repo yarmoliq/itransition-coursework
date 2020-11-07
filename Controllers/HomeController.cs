@@ -5,6 +5,7 @@ using coursework_itransition.Models;
 
 using coursework_itransition.Data;
 using Microsoft.AspNetCore.Identity;
+using Identity.Models;
 
 namespace coursework_itransition.Controllers
 {
