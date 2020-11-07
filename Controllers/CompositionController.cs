@@ -70,6 +70,8 @@ namespace coursework_itransition.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditPost(string id, string returnUrl, [Bind("Title,Summary,Genre")] Composition editedComp)
         {
+            // _logger.LogWarning(ControllerContext.ActionDescriptor.AttributeRouteInfo.Name);
+
             var comp = this._context.Compositions.Find(id);
             if((System.Object)comp != null)
             {

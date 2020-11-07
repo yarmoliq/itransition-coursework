@@ -81,8 +81,24 @@ namespace coursework_itransition
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "chapter",
+                    pattern: "Chapter/{action}/{compID?}/{returnUrl?}",
+                    defaults: new { controller = "Chapter", action = "New" });
+            
+                endpoints.MapControllerRoute(
+                    name: "composition",
+                    pattern: "Composition/{action}/{id?}/{returnUrl?}",
+                    defaults: new { controller = "Composition", action = "New" });
+            
+                endpoints.MapControllerRoute(
+                    name: "administrator",
+                    pattern: "Administrator/{action}/{UserID?}/{returnUrl?}",
+                    defaults: new { controller = "Administrator", action = "Administrator" });
+                
+                endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}/{returnUrl?}/");
+                    pattern: "{controller=Home}/{action=Index}/");
+                    
                 endpoints.MapRazorPages();
                 endpoints.MapHub<CommentHub>("/commenthub");
             });

@@ -29,12 +29,12 @@
                   <td><p>@composition.Author.Name</p></td>
                   <td><p>@composition.LastEditDT</p></td> 
                   <td>
-                      <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#model-@composition.ID" >
+                      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#model-@composition.ID" >
                           <i class="fa fa-eye"></i>
                       </button>
                       @if(UserIsAuthor(User, composition))
                       {  
-                          <a asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()" type="button" class="btn btn-dark">
+                          <a asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()" type="button" class="btn btn-secondary">
                               <i class="fa fa-edit"></i>
                           </a>
                       }
