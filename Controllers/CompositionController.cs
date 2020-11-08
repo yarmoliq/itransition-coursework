@@ -102,12 +102,15 @@ namespace coursework_itransition.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteComp(string id, string returnUrl = null)
+        public async Task<IActionResult> DeleteComp(string id, string returnUrl = null)
         {
             if(id == null)
                 return RedirectToAction("CompNotFound");
 
-            var comp = this._context.Compositions.Find(id);
+            var comp = await this._context.Compositions
+                                    .Include(c => c.Chapters)
+                                    .FirstOrDefaultAsync(c => c.ID == id);
+
             if((System.Object)comp == null)
                 return RedirectToAction("CompNotFound");
 
@@ -121,6 +124,21 @@ namespace coursework_itransition.Controllers
             if (returnUrl == null)
                 return Redirect("~/");
             return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
+        }
+
+        public async Task<IActionResult> Show(string id)
+        {
+            if(id == null)
+                return RedirectToAction("CompNotFound");
+
+            var comp = await this._context.Compositions
+                                    .Include(c => c.Chapters)
+                                    .FirstOrDefaultAsync(c => c.ID == id);
+
+            if ((System.Object)comp == null)
+                return RedirectToAction("CompNotFound");
+
+            return View(comp);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

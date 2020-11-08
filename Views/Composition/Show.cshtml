@@ -1,0 +1,16 @@
+@model coursework_itransition.Models.Composition
+
+@if(@Model == null)
+{
+    <h1>problems</h1>
+}
+else
+{
+    <h1>@Model.Title</h1>
+    <p>@Model.Summary</p>
+    @foreach (var chapter in Model.Chapters)
+    {
+        <h3>@chapter.Title</h3>
+        <p>@chapter.Contents</p>
+    }
+}
