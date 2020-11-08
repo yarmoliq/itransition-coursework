@@ -9,6 +9,7 @@ namespace coursework_itransition.Models
 
         public string CompositionID { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
         public Composition Composition { get; set; }
 
         public DateTime CreationDT { get; set; }

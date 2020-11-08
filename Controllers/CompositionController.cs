@@ -141,6 +141,28 @@ namespace coursework_itransition.Controllers
             return View(comp);
         }
 
+
+        public class shit
+        {
+            public string id { get; set; }
+        };
+
+        [HttpPost, Route("Composition/GetChapters")]
+        public async Task<Chapter[]> GetChapters([FromBody] string id)
+        {
+            var comp = await this._context.Compositions
+                                    .Include(c => c.Chapters)
+                                    .FirstOrDefaultAsync(c => c.ID == id);
+
+            if((System.Object)comp == null)
+                return null;
+
+            var result = new Chapter[comp.Chapters.Count];
+            comp.Chapters.CopyTo(result, 0);
+
+            return result;
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
