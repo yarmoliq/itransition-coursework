@@ -17,7 +17,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark bg-dark box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,9 +26,11 @@
 
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav ml-auto">    
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
-                            <div class="dropdown-menu">
+                        <li class="nav-item dropdown mr-3">
+                            <a class="nav-link dropdown-toggle" type="button" data-toggle="dropdown" data-target="#profile-dropdown" aria-haspopup="true" aria-expanded="false">
+                                Profile
+                            </a>
+                            <div class="dropdown-menu" id="profile-dropdown">
                                 <div class="dropdown-item" id="switch-theme">
                                     @if(Context.Request.Cookies["theme"] == "dark")
                                     {
@@ -43,12 +45,14 @@
                             </div>
                         </li>
 
-                        <form class="form-inline my-2 my-lg-0 ml-lg-3 ml-xl-3">
-                            <input class="form-control" type="text" placeholder="Search"></input>
-                            <button class="btn btn-secondary" type="submit">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </button>
-                        </form>
+                        <li>
+                            <form class="input-group">
+                                <input class="form-control" type="text" placeholder="Search"></input>
+                                <button class="btn btn-secondary input-group-append" type="submit">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -61,7 +65,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer text-muted" style="border-top: 1px solid rgba(128, 128, 128, 0.25);">
         <div class="container">
             &copy; 2020 - coursework_itransition
         </div>
