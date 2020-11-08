@@ -1,11 +1,10 @@
-export namespace OUR.Models {
-    export class Chapter {
-        ID: string;
-        CompositionID: string;
-        // CreatedDate: Date;
-        // EditDate: Date;
-        CreationDT: string;
-        LastEditDT: string;
-        Likes: string[];
-    };
+import { Composition } from "./composition.js";
+
+export class Chapter {
+    ID: string;
+    CompositionID: string;
+    Composition: Composition;
+    CreationDT: string;
+    LastEditDT: string;
+    // Likes: string[];
 };
