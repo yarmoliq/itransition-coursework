@@ -12,23 +12,37 @@
         Composition
     </h3>
 </div>
+
+<style>
+    .size {
+        white-space: nowrap; /* Отменяем перенос текста */
+        overflow: hidden; /* Обрезаем содержимое */
+        text-overflow: ellipsis; /* Многоточие */
+    }
+    .size:hover {
+        white-space: normal; /* Обычный перенос текста */
+    }
+    table { table-layout: fixed; }
+    table th, table td { overflow: hidden; }
+</style>
+
 <div class="table-responsive table-striped">
     <table class="table">
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>LastEditDT</th>
-                <th></th>
+                <th style="width: 50%">Title</th>
+                <th style="width: 25%">Author</th>
+                <th style="width: 20%">LastEditDT</th>
+                <th style="width: 5%"></th>
             </tr>
         </thead>
         @foreach (var composition in Model._context.Compositions.Include(comp=>comp.Author).Include(comp=>comp.Chapters))
         {
             <tr>
-                <td><p>@composition.Title</p></td>
-                <td><p>@composition.Author.Name</p></td>
-                <td><p>@composition.LastEditDT</p></td> 
-                <td>
+                <td><p class="size">@composition.Title</p></td>
+                <td><p class="size">@composition.Author.Name</p></td>
+                <td col-1><p>@composition.LastEditDT</p></td> 
+                <td class="text-right">
                     <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#model-@composition.ID" >
                         <i class="fa fa-eye"></i>
                     </button>
