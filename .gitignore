@@ -7,3 +7,4 @@ app*.db*
 wwwroot/js
 .vscode
 Migrations
+node_modules
