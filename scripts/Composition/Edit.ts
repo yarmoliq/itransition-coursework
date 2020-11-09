@@ -51,7 +51,7 @@ function formChanged() {
     (<HTMLButtonElement>document.getElementById("btn-back"))
         .addEventListener("click", () => {
             if (confirm("you sure? :)")) {
-                history.go(-1);
+                location.href = decodeURIComponent(returnUrl);
             }
         });
 }
@@ -80,4 +80,14 @@ document.getElementById("btn-save").addEventListener("click", () => {
     sendRequest<string>("Composition", "UpdateComposition", "POST", composition)
         .then(response => console.log(response))
         .catch(err => console.log(err));
+});
+
+document.getElementById("btn-delete").addEventListener("click", () => {
+    sendRequest("Composition", "DeleteComposition", "POST", compositionID)
+        .then(response => console.log(response))
+        .catch(err => console.log(err));
+});
+
+document.getElementById("btn-add-chapter").addEventListener("click", () => {
+    location.href = location.origin + "/Chapter/New/" + compositionID + "/" + encodeURIComponent(location.href);
 });

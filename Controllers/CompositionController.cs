@@ -64,67 +64,67 @@ namespace coursework_itransition.Controllers
                 if (!(coursework_itransition.Utils.UserIsAuthor(this.User, composition) || this.User.IsInRole("Administrator")))
                     return RedirectToAction("NoEditRights");
 
-                return View(composition);
+                return View();
             }
 
             return RedirectToAction("CompNotFound");
         }
 
-        [HttpPost, ActionName("Edit")]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditPost(string id, string returnUrl, [Bind("Title,Summary,Genre")] Composition editedComp)
-        {
-            var comp = this._context.Compositions.Find(id);
-            if((System.Object)comp != null)
-            {
-                if(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator"))
-                {
-                    comp.LastEditDT = System.DateTime.UtcNow;
-                    comp.Title      = editedComp.Title;
-                    comp.Genre      = editedComp.Genre;
-                    comp.Summary    = editedComp.Summary;
+        // [HttpPost, ActionName("Edit")]
+        // [ValidateAntiForgeryToken]
+        // public IActionResult EditPost(string id, string returnUrl, [Bind("Title,Summary,Genre")] Composition editedComp)
+        // {
+        //     var comp = this._context.Compositions.Find(id);
+        //     if((System.Object)comp != null)
+        //     {
+        //         if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator"))
+        //         {
+        //             comp.LastEditDT = System.DateTime.UtcNow;
+        //             comp.Title      = editedComp.Title;
+        //             comp.Genre      = editedComp.Genre;
+        //             comp.Summary    = editedComp.Summary;
 
-                    this._context.Compositions.Update(comp);
-                    this._context.SaveChanges();
+        //             this._context.Compositions.Update(comp);
+        //             this._context.SaveChanges();
 
-                    if(returnUrl == null)
-                        return Redirect("~/");
-                    return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
-                }
-                else
-                {
-                    return RedirectToAction("NoEditRights");
-                }
-            }
+        //             if(returnUrl == null)
+        //                 return Redirect("~/");
+        //             return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
+        //         }
+        //         else
+        //         {
+        //             return RedirectToAction("NoEditRights");
+        //         }
+        //     }
 
-            return RedirectToAction("CompNotFound");
-        }
+        //     return RedirectToAction("CompNotFound");
+        // }
 
-        [HttpPost, Route("Composition/DeleteComp")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteComp(string id, string returnUrl = null)
-        {
-            if(id == null)
-                return RedirectToAction("CompNotFound");
+        // [HttpPost, Route("Composition/DeleteComp")]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> DeleteComp(string id, string returnUrl = null)
+        // {
+        //     if(id == null)
+        //         return RedirectToAction("CompNotFound");
 
-            var comp = await this._context.Compositions
-                                    .Include(c => c.Chapters)
-                                    .FirstOrDefaultAsync(c => c.ID == id);
+        //     var comp = await this._context.Compositions
+        //                             .Include(c => c.Chapters)
+        //                             .FirstOrDefaultAsync(c => c.ID == id);
 
-            if((System.Object)comp == null)
-                return RedirectToAction("CompNotFound");
+        //     if((System.Object)comp == null)
+        //         return RedirectToAction("CompNotFound");
 
-            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp))
-                return RedirectToAction("NoEditRights");
+        //     if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp))
+        //         return RedirectToAction("NoEditRights");
 
-            // check if deleted
-            this._context.Compositions.Remove(comp);
-            this._context.SaveChanges();
+        //     // check if deleted
+        //     this._context.Compositions.Remove(comp);
+        //     this._context.SaveChanges();
 
-            if (returnUrl == null)
-                return Redirect("~/");
-            return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
-        }
+        //     if (returnUrl == null)
+        //         return Redirect("~/");
+        //     return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
+        // }
 
         public async Task<IActionResult> Show(string id)
         {
@@ -140,8 +140,6 @@ namespace coursework_itransition.Controllers
 
             return View(comp);
         }
-
-//////////////////////////////////////////////////////////////////////////////////////////////
 
         private bool UpdateChapter(Chapter updated)
         {
@@ -194,6 +192,24 @@ namespace coursework_itransition.Controllers
 
             comp.LastEditDT = System.DateTime.UtcNow;
 
+            return "Success";
+        }
+
+        [HttpPost, Route("Composition/DeleteComposition")]
+        public async Task<string> DeleteComposition([FromBody]string id)
+        {
+            if (id == null)
+                return "Null received";
+
+            var comp = await this._context.Compositions
+                                    .Include(c => c.Chapters)
+                                    .FirstOrDefaultAsync(c => c.ID == id);
+
+            if ((System.Object)comp == null)
+                return "Composition not found";
+
+            this._context.Compositions.Remove(comp);
+            this._context.SaveChanges();
             return "Success";
         }
 
