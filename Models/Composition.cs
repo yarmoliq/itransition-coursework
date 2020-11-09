@@ -13,6 +13,7 @@ namespace coursework_itransition.Models
         
         public string AuthorID{ get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
         public ApplicationUser Author { get; set; }
 
         public string Title { get; set; }

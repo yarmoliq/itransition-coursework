@@ -141,20 +141,60 @@ namespace coursework_itransition.Controllers
             return View(comp);
         }
 
-        [HttpPost, Route("Composition/GetChapters")]
-        public async Task<Chapter[]> GetChapters([FromBody] string id)
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+        private bool UpdateChapter(Chapter updated)
+        {
+            if((System.Object)updated == null)
+                return false;
+
+            var chapter = this._context.Chapters.Find(updated.ID);
+
+            if((System.Object)chapter == null)
+                return false;
+
+            chapter.Title = updated.Title;
+            chapter.Order = updated.Order;
+            chapter.Contents = updated.Contents;
+            chapter.LastEditDT = System.DateTime.UtcNow;
+
+            this._context.SaveChanges();
+            return true;
+        }
+
+        [HttpPost, Route("Composition/GetComposition")]
+        public async Task<Composition> GetComposition([FromBody] string id)
         {
             var comp = await this._context.Compositions
                                     .Include(c => c.Chapters)
                                     .FirstOrDefaultAsync(c => c.ID == id);
 
+            return comp;
+        }
+
+        [HttpPost, Route("Composition/UpdateComposition")]
+        public async Task<string> UpdateComposition([FromBody] Composition updated)
+        {
+            if((System.Object)updated == null)
+                return "Null received";
+
+            var comp = await this._context.Compositions
+                                    .Include(c => c.Chapters)
+                                    .FirstOrDefaultAsync(c => c.ID == updated.ID);
+
             if((System.Object)comp == null)
-                return null;
+                return "Composition not found";
 
-            var result = new Chapter[comp.Chapters.Count];
-            comp.Chapters.CopyTo(result, 0);
+            comp.Title = updated.Title;
+            comp.Genre = updated.Genre;
+            comp.Summary = updated.Summary;
 
-            return result;
+            foreach(var chapter in updated.Chapters)
+                UpdateChapter(chapter);
+
+            comp.LastEditDT = System.DateTime.UtcNow;
+
+            return "Success";
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
