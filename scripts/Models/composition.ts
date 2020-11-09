@@ -1,12 +1,12 @@
 import { Chapter } from "./chapter";
 
 export class Composition {
-    ID: string;
-    AuthorID: string;
-    Title: string;
-    Summary: string;
-    CreationDT: string;
-    LastEditDT: string;
-    Genre: string;
-    Chapters: Chapter[];
+    id: string;
+    authorID: string;
+    title: string;
+    summary: string;
+    creationDT: string;
+    lastEditDT: string;
+    genre: string;
+    chapters: Chapter[];
 };

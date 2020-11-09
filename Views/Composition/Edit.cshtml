@@ -5,6 +5,7 @@
 
 @model coursework_itransition.Models.Composition
 
+
 <script type="module" src="~/js/Composition/Edit.js"></script>
 
 @if(Model == null)
@@ -38,19 +39,7 @@ else
 
                 <div class="table-responsive table-hover">
                     <table class="table">
-                        @foreach(var chapter in Model.Chapters)
-                        {
-                            <tr>
-                                <td>
-                                    @chapter.Title
-                                </td>
-                                <td>
-                                    <a asp-controller="Chapter" asp-action="Edit" asp-route-id="@chapter.ID" asp-route-returnUrl="@Url.ActionLink()" type="button" class="btn btn-secondary">
-                                        <i class="fa fa-edit"></i>
-                                    </a> 
-                                </td>
-                            </tr>
-                        }
+                        <tbody id="table-of-chapters"></tbody>
                     </table>
                 </div>
 
@@ -71,6 +60,8 @@ else
             </form>
         </div>
     </div>
+
+    <button id="save-order">SAVE ORDER</button>
 
 <form  id="form-delete" asp-controller="Composition" asp-action="DeleteComp"
                             asp-route-id="@ViewContext.RouteData.Values["id"]"

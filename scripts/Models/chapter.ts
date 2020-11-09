@@ -1,10 +1,10 @@
 import { Composition } from "./composition.js";
 
 export class Chapter {
-    ID: string;
-    CompositionID: string;
-    Composition: Composition;
-    CreationDT: string;
-    LastEditDT: string;
-    // Likes: string[];
+    id: string;
+    title: string;
+    compositionID: string;
+    creationDT: string;
+    lastEditDT: string;
+    order: number;
 };

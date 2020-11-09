@@ -141,12 +141,6 @@ namespace coursework_itransition.Controllers
             return View(comp);
         }
 
-
-        public class shit
-        {
-            public string id { get; set; }
-        };
-
         [HttpPost, Route("Composition/GetChapters")]
         public async Task<Chapter[]> GetChapters([FromBody] string id)
         {
