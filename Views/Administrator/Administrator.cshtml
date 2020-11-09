@@ -85,7 +85,7 @@
                                         <button type="button" class="btn btn-secondary">Make admin</button>       
                                       }       
                                       <form  asp-controller="Administrator" asp-action="DeleteUser"
-                                          asp-route-UserID="@ViewContext.RouteData.Values["user.Id"]">
+                                         asp-route-UserID="@user.Id">
                                           <button type="submit" class="btn btn-danger" >Delete user</button>       
                                       </form>
                                     </div>

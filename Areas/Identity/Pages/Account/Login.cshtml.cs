@@ -101,7 +101,7 @@ namespace coursework_itransition.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Invalid login or password attempt.");
                     return Page();
                 }
             }
