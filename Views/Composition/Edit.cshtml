@@ -59,11 +59,8 @@ else
                 </div>
 
                 <div class="form-group" align="center">
-                    <form  asp-controller="Composition" asp-action="DeleteComp"
-                            asp-route-id="@ViewContext.RouteData.Values["id"]"
-                            asp-route-returnUrl="@ViewContext.RouteData.Values["returnUrl"]">
-                        <button  type="submit" class="mr-2 ml-2 btn btn-danger">Delete</button>
-                    </form>
+                    
+                    <button  type="submit" class="mr-2 ml-2 btn btn-danger" form="form-delete">Delete</button>
                     <a href="javascript:history.go(-1)" type="button" class="mr-2 ml-2 btn btn-primary" onclick="return confirm('you sure? :)');">Cancel</a>
                     <input type="submit" value="Save" class="mr-2 ml-2 btn btn-success" 
                             asp-route-id="@ViewContext.RouteData.Values["id"]"
@@ -72,4 +69,9 @@ else
             </form>
         </div>
     </div>
+
+<form  id="form-delete" asp-controller="Composition" asp-action="DeleteComp"
+                            asp-route-id="@ViewContext.RouteData.Values["id"]"
+                            asp-route-returnUrl="@ViewContext.RouteData.Values["returnUrl"]">
+                    </form>
 }

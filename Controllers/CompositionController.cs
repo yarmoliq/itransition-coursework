@@ -100,7 +100,7 @@ namespace coursework_itransition.Controllers
             return RedirectToAction("CompNotFound");
         }
 
-        [HttpPost]
+        [HttpPost, Route("Composition/DeleteComp")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteComp(string id, string returnUrl = null)
         {
