@@ -54,12 +54,13 @@ namespace coursework_itransition.Controllers
         //     return lrn[0];
         // }
 
-        [HttpPost]
+        [HttpPost, Route("Administrator/DeleteUser")]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteUser(string UserID)
         {
             _context.Users.Remove(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
             _context.SaveChanges();
-            return Redirect("/");
+            return RedirectToAction("Administrator", "Administrator");
         }
 
         // [HttpPost]
