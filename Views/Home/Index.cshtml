@@ -7,83 +7,73 @@
     ViewData["Title"] = "Home Page";
 }
 
+<link rel="stylesheet" href="~/css/index.css"/>
+
 <div class="p-2 text-center bg-dark">     
     <h3 class="mb-2">
         Composition
     </h3>
 </div>
-
-<style>
-    .size {
-        white-space: nowrap; /* Отменяем перенос текста */
-        overflow: hidden; /* Обрезаем содержимое */
-        text-overflow: ellipsis; /* Многоточие */
-    }
-    .size:hover {
-        white-space: normal; /* Обычный перенос текста */
-    }
-    table { table-layout: fixed; }
-    table th, table td { overflow: hidden; }
-</style>
-
-<div class="table-responsive table-striped">
+<div class="table-striped table-responsive-sm">
     <table class="table">
         <thead>
             <tr>
-                <th style="width: 50%">Title</th>
-                <th style="width: 25%">Author</th>
-                <th style="width: 20%">LastEditDT</th>
-                <th style="width: 5%"></th>
+                <th class="th-Button" ></th>
+                <th class="th-Title" >Title</th>
+                <th class="th-Author" >Author</th>
+                <th class="th-LastEditDT" >LastEditDT</th>
             </tr>
         </thead>
-        @foreach (var composition in Model._context.Compositions.Include(comp=>comp.Author).Include(comp=>comp.Chapters))
-        {
-            <tr>
-                <td><p class="size">@composition.Title</p></td>
-                <td><p class="size">@composition.Author.Name</p></td>
-                <td col-1><p>@composition.LastEditDT</p></td> 
-                <td class="text-right">
-                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#model-@composition.ID" >
-                        <i class="fa fa-eye"></i>
-                    </button>
-                    <div class="modal fade bd-example-modal-lg" id="model-@composition.ID" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">         
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">@composition.Title</h5>
-                                    <div class="ml-auto d-flex align-items-center">
-                                        @if(UserIsAuthor(User, composition))
-                                        {  
-                                            <a class="mr-3" asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()">
-                                                Edit
-                                            </a>
-                                        }
-                                        <button type="button" class="ml-3 close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="container">
-                                        <div class="row">
+        <tboby>
+            @foreach (var composition in Model._context.Compositions.Include(comp=>comp.Author).Include(comp=>comp.Chapters))
+            {
+                <tr>
+                    <td>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#model-@composition.ID" >
+                            <i class="fa fa-eye"></i>
+                        </button>
+                        <div class="modal fade bd-example-modal-lg" id="model-@composition.ID" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">         
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">@composition.Title</h5>
+                                        <div class="ml-auto d-flex align-items-center">
+                                            @if(UserIsAuthor(User, composition))
+                                            {  
+                                                <a class="mr-3" asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()">
+                                                    Edit
+                                                </a>
+                                            }
+                                            <button type="button" class="ml-3 close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
-                                        <div class="row"> @composition.Summary </div>
-                                        <hr>
-                                        @{int i = 1;}
-                                        @foreach (var chapter in composition.Chapters)
-                                        {
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container">
                                             <div class="row">
-                                                <p>@i. @chapter.Title</p>
                                             </div>
-                                            ++i;
-                                        }
+                                            <div class="row"> @composition.Summary </div>
+                                            <hr>
+                                            @{int i = 1;}
+                                            @foreach (var chapter in composition.Chapters)
+                                            {
+                                                <div class="row">
+                                                    <p>@i. @chapter.Title</p>
+                                                </div>
+                                                ++i;
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-        }     
+                    </td>
+                    <td><p class="size">@composition.Title</p></td>
+                    <td><p class="size">@composition.Author.Name</p></td>
+                    <td><p>@composition.LastEditDT</p></td> 
+                </tr>
+            }   
+        </tboby>
     </table>    
 </div>

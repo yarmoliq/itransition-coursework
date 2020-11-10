@@ -1,0 +1,85 @@
+.modal-title{
+    width: 75%;
+}
+
+@media (min-width: 576px)
+{
+    .size{
+        overflow: hidden; 
+        text-overflow: ellipsis;
+    }
+
+    tr {
+        white-space: nowrap;
+    }
+
+    tr:hover {
+        white-space: normal; 
+        word-wrap:  break-word; /* Обычный перенос текста */
+        overflow-wrap: break-word;
+    }
+
+    table { 
+        table-layout: fixed; 
+        width: 100%;
+    }
+
+    table th, table td { overflow: hidden; }
+
+    th.th-Title{
+        width: 45%;
+    }
+
+    th.th-Author{
+        width: 25%;
+    }
+
+    th.th-LastEditDT{
+        width: 20%;
+    }
+
+    th.th-Button {
+        width: 10%;
+    }
+}
+
+@media (max-width: 576px)
+{
+    .size{
+        overflow: hidden; 
+        text-overflow: ellipsis;
+    }
+
+    tr {
+        white-space: nowrap;
+    }
+
+    tr:hover {
+        white-space: normal; 
+        word-wrap:  break-word;
+        overflow-wrap: break-word;
+    }
+
+    table { 
+        table-layout: fixed; 
+        width: 600px;
+    }
+
+    table th, table td { overflow: hidden; }
+
+    th.th-Title{
+        width: 300px;
+    }
+
+    th.th-Author{
+        width: 150px;
+    }
+
+    th.th-LastEditDT{
+        width: 100px;
+    }
+
+    th.th-Button {
+        width: 50px;
+    }
+}
