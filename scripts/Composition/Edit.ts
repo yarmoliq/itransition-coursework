@@ -86,7 +86,6 @@ $("#tbody-chapters").sortable({
 
 
 
-
 document.getElementById("btn-back").addEventListener("click", () => {
 
     if (formHasChanges) {
@@ -103,13 +102,34 @@ document.getElementById("btn-back").addEventListener("click", () => {
 });
 
 document.getElementById("btn-save").addEventListener("click", () => {
-    
-
     sendRequest<string>("Composition", "UpdateComposition", "POST", composition)
-        .then(response => console.log(response))
-        .catch(err => console.log(err));
+        .then(response => {
+            if (response == 'Success') {
+                formHasChanges = false;
+                original = new Composition(composition);
+                (<HTMLButtonElement>document.getElementById("btn-save")).disabled = true;
+                showAlert('Your changes have been successfully saved :)', true);
+            }
+            else showAlert('There was an error saving your changes :(', false, response);
+        })
+        .catch(err => showAlert('There was an error saving your changes :(', false, err));
 });
 
 document.getElementById("btn-add-chapter").addEventListener("click", () => {
     location.href = location.origin + "/Chapter/New/" + compositionID + "/" + encodeURIComponent(encodeURI(location.href));
 });
+
+
+
+
+function showAlert(message: string, good: boolean, moreData = null) {
+    $('.alert').text(message);
+    $('.alert').switchClass(good ? 'alert-warning' : 'alert-info', good ? 'alert-info' : 'alert-warning');
+    $('.alert').switchClass('hide', 'show');
+
+    setTimeout(() => {
+        $('.alert').switchClass('show', 'hide');
+    }, 5000);
+    
+    console.log("Alert: ", moreData);
+}
