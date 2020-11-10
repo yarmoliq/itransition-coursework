@@ -89,5 +89,5 @@ document.getElementById("btn-delete").addEventListener("click", () => {
 });
 
 document.getElementById("btn-add-chapter").addEventListener("click", () => {
-    location.href = location.origin + "/Chapter/New/" + compositionID + "/" + encodeURIComponent(location.href);
+    location.href = location.origin + "/Chapter/New/" + compositionID + "/" + encodeURIComponent(encodeURI(location.href));
 });
