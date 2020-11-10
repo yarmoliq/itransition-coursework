@@ -10,34 +10,72 @@ let genreSelect     = <HTMLSelectElement>   document.getElementById("select-genr
 let summaryTA       = <HTMLTextAreaElement> document.getElementById("textarea-summary");
 let tableOfChapters =                       document.getElementById("tbody-chapters");
 
+let original: Composition;
 let composition: Composition;
 
 sendRequest<Composition>("Composition", "GetComposition", "POST", compositionID)
     .then(comp => {
-        composition = { ...comp };
-
+        comp.chapters.sort((c1, c2) => c1.order - c2.order);
+        original    = new Composition(comp);
+        composition = new Composition(comp);
+        
         titleInput.value    = composition.title;
         genreSelect.value   = composition.genre;
         summaryTA.value     = composition.summary;
-
-        composition.chapters.sort((c1, c2) => c1.order - c2.order);
+    
         composition.chapters.forEach((chapter: Chapter) => {
             let tr = document.createElement("tr");
 
             let td = document.createElement("td");
             td.innerHTML = chapter.title;
             tr.appendChild(td);
-
+            
             tr.id = chapter.id;
             tr.setAttribute("data-order", chapter.order.toString());
-
+            
             tableOfChapters.appendChild(tr);
         });
 
-        (<HTMLButtonElement>document.getElementById("btn-add-chapter")).disabled = false;
-        (<HTMLButtonElement>document.getElementById("btn-delete")).disabled      = false;
+        (<HTMLButtonElement>document.getElementById("btn-add-chapter")) .disabled = false;
+        (<HTMLButtonElement>document.getElementById("btn-delete"))      .disabled = false;
     })
     .catch(err => console.log(err));
+    
+
+
+
+function updateComposition() {
+    composition.title = titleInput.value;
+    composition.genre = genreSelect.value;
+    composition.summary = summaryTA.value;
+
+    let newOrder: string[] = [];
+
+    tableOfChapters.childNodes.forEach(tr => newOrder.push((<HTMLElement>tr).id));
+
+    newOrder.forEach((id: string, i: number) => {
+        composition.chapters.find(c => c.id == id).order = i;
+    });
+}
+
+let formHasChanges: boolean = false;
+    
+function formChanged() {
+    updateComposition();
+
+    if (Composition.equal(composition, original)) {
+        formHasChanges = false;
+        (<HTMLButtonElement>document.getElementById("btn-save")).disabled = true;
+    }
+    else {
+        formHasChanges = true;
+        (<HTMLButtonElement>document.getElementById("btn-save")).disabled = false;
+    }
+}
+
+titleInput  .addEventListener("change", formChanged);
+genreSelect .addEventListener("change", formChanged);
+summaryTA   .addEventListener("change", formChanged);
 
 $("#tbody-chapters").sortable({
     items: "> tr",
@@ -46,44 +84,28 @@ $("#tbody-chapters").sortable({
     stop: formChanged
 }).disableSelection();
 
-function formChanged() {
-    (<HTMLButtonElement>document.getElementById("btn-save")).disabled = false;
-    (<HTMLButtonElement>document.getElementById("btn-back"))
-        .addEventListener("click", () => {
-            if (confirm("you sure? :)")) {
-                location.href = decodeURIComponent(returnUrl);
-            }
-        });
-}
 
-titleInput .addEventListener("change", formChanged);
-genreSelect.addEventListener("change", formChanged);
-summaryTA.addEventListener("change", formChanged);
 
-document.getElementById("btn-save").addEventListener("click", () => {
-    composition.title   = titleInput.value;
-    composition.genre   = genreSelect.value;
-    composition.summary = summaryTA.value;
 
-    let newOrder: string[] = [];
+document.getElementById("btn-back").addEventListener("click", () => {
 
-    tableOfChapters.childNodes.forEach(tr => newOrder.push((<HTMLElement>tr).id));
-
-    for (let i = 0; i < newOrder.length; ++i) {
-        composition.chapters.forEach(c => {
-            if (c.id == newOrder[i]) {
-                c.order = i;
-            }
-        });
+    if (formHasChanges) {
+        if (!confirm("You have unsaved changes. Are you sure you want to leave this page?")) {
+            return;
+        }
     }
 
-    sendRequest<string>("Composition", "UpdateComposition", "POST", composition)
-        .then(response => console.log(response))
-        .catch(err => console.log(err));
+    if (returnUrl != 'undefined') {
+        location.href = location.origin;
+    }
+
+    location.href = decodeURIComponent(returnUrl);
 });
 
-document.getElementById("btn-delete").addEventListener("click", () => {
-    sendRequest("Composition", "DeleteComposition", "POST", compositionID)
+document.getElementById("btn-save").addEventListener("click", () => {
+    
+
+    sendRequest<string>("Composition", "UpdateComposition", "POST", composition)
         .then(response => console.log(response))
         .catch(err => console.log(err));
 });
