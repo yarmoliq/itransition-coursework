@@ -99,6 +99,11 @@ namespace coursework_itransition
                     name: "administrator",
                     pattern: "Administrator/{action}/",
                     defaults: new { controller = "Administrator", action = "Administrator" });
+            
+                endpoints.MapControllerRoute(
+                    name: "deadends",
+                    pattern: "Deadends/Index/{message?}",
+                    defaults: new { controller = "Deadends", action = "Index" });
                 
                 endpoints.MapControllerRoute(
                     name: "default",

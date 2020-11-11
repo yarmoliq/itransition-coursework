@@ -44,12 +44,12 @@ namespace coursework_itransition.Controllers
             if ((System.Object)composition != null)
             {
                 if (!(coursework_itransition.Utils.UserIsAuthor(this.User, composition) || this.User.IsInRole("Administrator")))
-                    return RedirectToAction("NoEditRights");
+                    return RedirectToAction("Index", "Deadends", new { message = "You have no rights to edit this composition" });
 
                 return View();
             }
 
-            return RedirectToAction("CompNotFound");
+            return RedirectToAction("Index", "Deadends", new { message = "Composition was not found." });
         }
 
         [HttpPost]
@@ -73,14 +73,14 @@ namespace coursework_itransition.Controllers
         public async Task<IActionResult> Show(string id)
         {
             if(id == null)
-                return RedirectToAction("CompNotFound");
+                return RedirectToAction("Index", "Deadends", new { message = "No ID received" });
 
             var comp = await this._context.Compositions
                                     .Include(c => c.Chapters)
                                     .FirstOrDefaultAsync(c => c.ID == id);
 
             if ((System.Object)comp == null)
-                return RedirectToAction("CompNotFound");
+                return RedirectToAction("Index", "Deadends", new { message = "Composition was not found" });
 
             return View(comp);
         }

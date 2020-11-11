@@ -32,12 +32,9 @@ namespace coursework_itransition.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddNewChapter(string compID, string returnUrl, [Bind("Title,Contents")] Chapter data)
         {
-            if(compID == null)
-                return Content("no id");
-
             var comp = this._context.Compositions.Find(compID);
             if((System.Object)comp == null)
-                return Content("no composition with such id found");
+                return RedirectToAction("Index", "Deadends", new { message = "Composition for the chapter was not found." });
 
             var newChapter = new Chapter();
             newChapter.CreationDT = System.DateTime.UtcNow;
@@ -61,10 +58,10 @@ namespace coursework_itransition.Controllers
         {
             var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
             if((System.Object)chapter == null)
-                return Content("chapter not found");
+                return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
 
             if(!coursework_itransition.Utils.UserIsAuthor(this.User, chapter.Composition.AuthorID))
-                return Content("No rights");
+                return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
 
             chapter.Title       = data.Title;
             chapter.Contents    = data.Contents;
@@ -72,6 +69,24 @@ namespace coursework_itransition.Controllers
                                 = System.DateTime.UtcNow;
 
             this._context.Chapters.Update(chapter);
+            this._context.SaveChanges();
+
+            if (returnUrl == null)
+                return Redirect("~/");
+            return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
+        }
+
+        [HttpPost, Route("Chapter/Delete/{id}/{returnUrl?}")]
+        public async System.Threading.Tasks.Task<IActionResult> DeleteChapter(string id, string returnUrl)
+        {
+            var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
+            if ((System.Object)chapter == null)
+                return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
+
+            if (!coursework_itransition.Utils.UserIsAuthor(this.User, chapter.Composition.AuthorID))
+                return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
+
+            this._context.Chapters.Remove(chapter);
             this._context.SaveChanges();
 
             if (returnUrl == null)

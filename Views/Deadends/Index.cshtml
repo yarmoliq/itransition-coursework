@@ -1,0 +1,6 @@
+@{ ViewData["Title"] = "error"; }
+
+<p class="h2">An error occured while proccessing your request...</p>
+<p>@ViewContext.RouteData.Values["message"]</p>
+<a asp-controller="Home" asp-action="Index" class="btn btn-primary mr-2">Home</a>
+<a href="javascript:history.go(-1)" class="btn btn-primary ml-2">Back</a>

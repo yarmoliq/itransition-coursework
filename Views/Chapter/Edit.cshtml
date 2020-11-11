@@ -27,8 +27,9 @@
                         <textarea id="textarea-contents" class="form-control" asp-for="Contents" class="form-control" rows="10"></textarea>
                     </div>
                     <div class="form-group" align="center">
-                        <a href="javascript:history.go(-1)" type="button" class="btn btn-primary" onclick="return confirm('you sure? :)');">Cancel</a>
-                        <input type="submit" value="Save" class="btn btn-success" 
+                        <button  type="submit" class="mr-2 ml-2 btn btn-danger" form="form-delete">Delete</button>
+                        <a href="javascript:history.go(-1)" type="button" class="btn btn-primary">Back</a>
+                        <input type="submit" value="Save and close" class="mr-2 ml-2 btn btn-success" id="btn-save"
                                 asp-route-id="@ViewContext.RouteData.Values["id"]"
                                 asp-route-returnUrl="@ViewContext.RouteData.Values["returnUrl"]">
                     </div>
@@ -42,6 +43,19 @@
         </div>
     </div>
 </div>
+
+<form  id="form-delete" asp-controller="Chapter" asp-action="Delete"
+                            asp-route-id="@ViewContext.RouteData.Values["id"]"
+                            asp-route-returnUrl="@ViewContext.RouteData.Values["returnUrl"]">
+                    </form>
+
+<script>
+    window.onbeforeunload = () => "Are you sure you want to leave this page?";
+
+    document.getElementById("btn-save").addEventListener('click', ()=>{
+        window.onbeforeunload = null;
+    });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script type="module" src="~/js/Chapter/markdownTab.js"></script>
