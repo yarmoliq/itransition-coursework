@@ -7,6 +7,7 @@
 
 <link rel="stylesheet" href="~/css/administrator.css"/>
 
+
 <div class="p-2 text-center bg-dark">
     <h3 class="mb-2">
         Users
@@ -57,10 +58,7 @@
                                                         {
                                                             <a type="submit" class="dropdown-item btn">Make admin</a>
                                                         }
-                                                        <form asp-controller="Administrator" asp-action="DeleteUser"
-                                                            asp-route-UserID="@user.Id">
-                                                            <a type="submit" class="dropdown-item btn btn-danger" >Delete user</a>
-                                                        </form>
+                                                        <a type="button" class="dropdown-item btn btn-danger" asp-controller="Administrator" asp-action="DeleteUser" asp-route-UserID="@user.Id">Delete user</a>
                                                     </div>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
@@ -69,16 +67,16 @@
                                             </div>
                                         </div>
                                         <div class="modal-body">
-                                            <table>
-                                                <tr>
-                                                    <td>EMAIL:</td>
-                                                    <td>@user.Email</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>USER ID:</td>
-                                                    <td>@user.Id</td>
-                                                </tr>
-                                            </table>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">EMAIL:</div>
+                                                        <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9 size">@user.Email</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">USER ID:</div>
+                                                        <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9 size">@user.Id</div>
+                                                    </div>
+                                                </div>
                                             @if(user.Compositions.Count > 0)
                                             {
                                                 <div class="p-2 text-center bg-dark">
@@ -91,10 +89,10 @@
                                                         @foreach (var composition in user.Compositions)
                                                         {
                                                             <tr>
-                                                                <td>
-                                                                    <div>@composition.Title</div>
+                                                                <td class="th-Tittle">
+                                                                    <div class="size">@composition.Title</div>
                                                                 </td>
-                                                                <td class="text-right">
+                                                                <td class="th-Buttons-Inside">
                                                                     <button type="button" class="btn btn-secondary">
                                                                         <i class="fa fa-eye"></i>
                                                                     </button>

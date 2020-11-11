@@ -92,8 +92,8 @@ namespace coursework_itransition
             
                 endpoints.MapControllerRoute(
                     name: "administrator",
-                    pattern: "Administrator/{action}/",
-                    defaults: new { controller = "Administrator", action = "Administrator" });
+                    pattern: "Administrator/{action}/{UserID}",
+                    defaults: new { controller = "Administrator", action = "DeleteUser" });
                 
                 endpoints.MapControllerRoute(
                     name: "default",
