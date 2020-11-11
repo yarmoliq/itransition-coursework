@@ -2,16 +2,13 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using coursework_itransition.Models;
-
 using Microsoft.AspNetCore.Authorization;
-
 using coursework_itransition.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
 using Identity.Models;
-using System.Linq; 
+using System.Linq;
+using coursework_itransition.Models;
 
 namespace coursework_itransition.Controllers
 {
@@ -60,15 +57,48 @@ namespace coursework_itransition.Controllers
         {
             _context.Users.Remove(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
             _context.SaveChanges();
+            // _userManager.DeleteAsync(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
             return RedirectToAction("Administrator", "Administrator");
         }
 
-        // [HttpPost]
-        // public IActionResult DeleteUser(ApplicationUser User)
-        // {
-        //     _context.Users.Remove(User);
-        //     _context.SaveChanges();
-        //     return Redirect("/");
-        // }
+        public IActionResult BanUser(string UserID)
+        {
+            var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
+            user.LockoutEnd = System.DateTime.Now.AddHours(365 * 24 * 150);
+            _context.SaveChanges();
+            return RedirectToAction("Administrator", "Administrator");
+        }
+
+        public IActionResult UnBanUser(string UserID)
+        {
+            var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
+            user.LockoutEnd = null;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return RedirectToAction("Administrator", "Administrator");
+        }
+
+        public async Task<IActionResult> MakeAdmin(string UserID)
+        {
+            var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
+            var listRoleUser = await _userManager.GetRolesAsync(user);
+            if(listRoleUser.IndexOf("Administrator") == -1)
+            {
+                await _userManager.AddToRoleAsync(user, "Administrator");
+            }
+            return RedirectToAction("Administrator", "Administrator");
+        }
+
+        public async Task<IActionResult> RemoveAdminStatus(string UserID)
+        {
+            var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
+            var listRoleUser = await _userManager.GetRolesAsync(user);
+            var num = listRoleUser.IndexOf("Administrator");
+            if(num != -1)
+            {
+                await _userManager.RemoveFromRoleAsync(user, "Administrator");
+            }
+            return RedirectToAction("Administrator", "Administrator");
+        }
     }
 }
