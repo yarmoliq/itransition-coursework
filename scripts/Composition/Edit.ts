@@ -101,24 +101,41 @@ document.getElementById("btn-back").addEventListener("click", () => {
     location.href = decodeURIComponent(returnUrl);
 });
 
-document.getElementById("btn-save").addEventListener("click", () => {
-    sendRequest<string>("Composition", "UpdateComposition", "POST", composition)
-        .then(response => {
-            if (response == 'Success') {
-                formHasChanges = false;
-                original = new Composition(composition);
-                (<HTMLButtonElement>document.getElementById("btn-save")).disabled = true;
-                showAlert('Your changes have been successfully saved :)', true);
-            }
-            else showAlert('There was an error saving your changes :(', false, response);
-        })
-        .catch(err => showAlert('There was an error saving your changes :(', false, err));
-});
-
 document.getElementById("btn-add-chapter").addEventListener("click", () => {
     location.href = location.origin + "/Chapter/New/" + compositionID + "/" + encodeURIComponent(encodeURI(location.href));
 });
 
+document.getElementById("btn-save").addEventListener("click", () => {
+    sendRequest<string>("Composition", "UpdateComposition", "POST", composition)
+    .then(response => {
+        if (response == 'Success') {
+            formHasChanges = false;
+            original = new Composition(composition);
+            (<HTMLButtonElement>document.getElementById("btn-save")).disabled = true;
+            showAlert('Your changes have been successfully saved :)', true);
+        }
+        else showAlert('There was an error saving your changes :(', false, response);
+    })
+    .catch(err => showAlert('There was an error saving your changes :(', false, err));
+});
+
+document.getElementById("btn-delete").addEventListener("click", () => {
+    if (confirm('Are you sure you want to delete this composition?')) {
+        sendRequest<string>("Composition", "DeleteComposition", "POST", compositionID)
+            .then(response => {
+                if (response == 'Success') {
+                    if (returnUrl != 'undefined') {
+                        location.href = location.origin;
+                    }
+
+                    location.href = decodeURIComponent(returnUrl);
+                }
+
+                showAlert('There was an error deleteing your composition :(', false, response);
+            })
+            .catch(err => showAlert('There was an error deleteing your composition :(', false, err));
+    }
+});
 
 
 
