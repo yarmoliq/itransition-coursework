@@ -8,3 +8,4 @@ wwwroot/js
 .vscode
 Migrations
 node_modules
+package-lock.json
