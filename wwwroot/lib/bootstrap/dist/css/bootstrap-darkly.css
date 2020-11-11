@@ -190,6 +190,10 @@ samp {
 }
 
 pre {
+  padding: 5px;
+  border-radius: 7px;
+  background:rgba(128, 128, 128, 0.25);
+
   margin-top: 0;
   margin-bottom: 1rem;
   overflow: auto;

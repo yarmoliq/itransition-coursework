@@ -1,34 +1,47 @@
-@{
-    ViewData["Title"] = "Edit";
-}
+@{ ViewData["Title"] = "Edit"; }
 
 @model coursework_itransition.Models.Chapter
 
-@if(Model == null)
-{
-    <h2>Something went wrong :(</h2>
-    <a href='javascript:history.go(-1)' type="button" class="btn btn-primary">Back</a>
-    <a asp-controller="Home" asp-action="Index" type="button" class="btn btn-primary">Home</a>
-}
-else
-{
-    <div class="row justify-content-center">
-        <div class="col-lg-9 col-xl-9">
-            <form asp-action="New">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <input asp-for="Title" class="form-control" placeholder="Chapter title" required>
-                </div>
-                <div class="form-group">
-                    <textarea class="form-control" asp-for="Contents" class="form-control" rows="10"></textarea>
-                </div>
-                <div class="form-group" align="center">
-                    <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary" onclick="return confirm('you sure? :)');">Cancel</a>
-                    <input type="submit" value="Save" class="btn btn-primary" 
-                            asp-route-id="@ViewContext.RouteData.Values["id"]"
-                            asp-route-returnUrl="@ViewContext.RouteData.Values["returnUrl"]">
-                </div>
-            </form>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Text:wght@600&display=swap" rel="stylesheet">
+
+<div class="row justify-content-center">
+    <div class="col-lg-9 col-xl-9">
+       <ul class="nav nav-tabs mb-3 d-flex">
+            <li class="nav-item text-center" style="width: 50%;">
+                <a class="nav-link active" data-toggle="tab" href="#tab-content-raw">Write</a>
+            </li>
+            <li class="nav-item text-center" style="width: 50%;">
+                <a class="nav-link" data-toggle="tab" href="#tab-content-md" id="tab-md">
+                    <i class="fab fa-markdown mr-2"></i>Preview
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-content-raw">
+                <form asp-action="New">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <input id="input-title" asp-for="Title" class="form-control" placeholder="Chapter title" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="textarea-contents" class="form-control" asp-for="Contents" class="form-control" rows="10"></textarea>
+                    </div>
+                    <div class="form-group" align="center">
+                        <a href="javascript:history.go(-1)" type="button" class="btn btn-primary" onclick="return confirm('you sure? :)');">Cancel</a>
+                        <input type="submit" value="Save" class="btn btn-success" 
+                                asp-route-id="@ViewContext.RouteData.Values["id"]"
+                                asp-route-returnUrl="@ViewContext.RouteData.Values["returnUrl"]">
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="tab-content-md">
+                <p class="display-3 text-center" style="font-family: Big Shoulders Stencil Text;" id="md-preview-title"></p>
+                <hr style="border-top: 3px solid rgba(128, 128, 128, 0.25);">
+                <div id="md-preview-contents"></div>
+            </div>
         </div>
     </div>
-}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script type="module" src="~/js/Chapter/markdownTab.js"></script>
