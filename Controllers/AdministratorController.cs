@@ -51,34 +51,40 @@ namespace coursework_itransition.Controllers
         //     return lrn[0];
         // }
 
-        [HttpPost, Route("Administrator/DeleteUser")]
+        [HttpPost, Route("Administrator/DeleteUser/{UserID?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteUser(string UserID)
+        public IActionResult ActionWithUser(string UserID, string action)
+        {
+            var method = (typeof(AdministratorController)).GetMethod(action);
+            string[] objects = new string[1];
+            objects[0] = action;
+            method.Invoke(this, objects);
+            return RedirectToAction("Administrator", "Administrator");
+        }
+
+        public void DeleteUser(string UserID)
         {
             _context.Users.Remove(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
             _context.SaveChanges();
             // _userManager.DeleteAsync(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
-            return RedirectToAction("Administrator", "Administrator");
         }
 
-        public IActionResult BanUser(string UserID)
+        public void BanUser(string UserID)
         {
             var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
             user.LockoutEnd = System.DateTime.Now.AddHours(365 * 24 * 150);
             _context.SaveChanges();
-            return RedirectToAction("Administrator", "Administrator");
         }
 
-        public IActionResult UnBanUser(string UserID)
+        public void UnBanUser(string UserID)
         {
             var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
             user.LockoutEnd = null;
             _context.Users.Update(user);
             _context.SaveChanges();
-            return RedirectToAction("Administrator", "Administrator");
         }
 
-        public async Task<IActionResult> MakeAdmin(string UserID)
+        public async void MakeAdmin(string UserID)
         {
             var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
             var listRoleUser = await _userManager.GetRolesAsync(user);
@@ -86,10 +92,9 @@ namespace coursework_itransition.Controllers
             {
                 await _userManager.AddToRoleAsync(user, "Administrator");
             }
-            return RedirectToAction("Administrator", "Administrator");
         }
 
-        public async Task<IActionResult> RemoveAdminStatus(string UserID)
+        public async void RemoveAdminStatus(string UserID)
         {
             var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
             var listRoleUser = await _userManager.GetRolesAsync(user);
@@ -98,7 +103,6 @@ namespace coursework_itransition.Controllers
             {
                 await _userManager.RemoveFromRoleAsync(user, "Administrator");
             }
-            return RedirectToAction("Administrator", "Administrator");
         }
     }
 }
