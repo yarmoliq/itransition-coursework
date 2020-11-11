@@ -65,10 +65,12 @@ function formChanged() {
 
     if (Composition.equal(composition, original)) {
         formHasChanges = false;
+        window.onbeforeunload = null;
         (<HTMLButtonElement>document.getElementById("btn-save")).disabled = true;
     }
     else {
         formHasChanges = true;
+        window.onbeforeunload = () => 'You have unsaved changes';
         (<HTMLButtonElement>document.getElementById("btn-save")).disabled = false;
     }
 }
@@ -87,9 +89,6 @@ $("#tbody-chapters").sortable({
 
 
 document.getElementById("btn-back").addEventListener("click", () => {
-    if (formHasChanges && !confirm("You have unsaved changes. Are you sure you want to leave this page?"))
-        return;
-
     if (returnUrl != 'undefined')
         location.href = location.origin;
 
@@ -104,9 +103,8 @@ document.getElementById("btn-save").addEventListener("click", () => {
     sendRequest<string>("Composition", "Update", "POST", composition)
     .then(response => {
         if (response == 'Success') {
-            formHasChanges = false;
             original = new Composition(composition);
-            (<HTMLButtonElement>document.getElementById("btn-save")).disabled = true;
+            formChanged();
             showAlert('Your changes have been successfully saved :)', true);
         }
         else showAlert('There was an error saving your changes :(', false, response);
@@ -124,7 +122,6 @@ document.getElementById("btn-delete").addEventListener("click", () => {
                 if (returnUrl != 'undefined') {
                     location.href = location.origin;
                 }
-
                 location.href = decodeURIComponent(returnUrl);
             }
 

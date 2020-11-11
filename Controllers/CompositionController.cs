@@ -85,25 +85,6 @@ namespace coursework_itransition.Controllers
             return View(comp);
         }
 
-        private bool UpdateChapter(Chapter updated)
-        {
-            if((System.Object)updated == null)
-                return false;
-
-            var chapter = this._context.Chapters.Find(updated.ID);
-
-            if((System.Object)chapter == null)
-                return false;
-
-            chapter.Title = updated.Title;
-            chapter.Order = updated.Order;
-            chapter.Contents = updated.Contents;
-            chapter.LastEditDT = System.DateTime.UtcNow;
-
-            this._context.SaveChanges();
-            return true;
-        }
-
         [HttpPost, Route("Composition/Get")]
         public async Task<Composition> Get([FromBody] string id)
         {
@@ -135,8 +116,18 @@ namespace coursework_itransition.Controllers
             comp.Genre      = updated.Genre;
             comp.Summary    = updated.Summary;
 
-            foreach(var chapter in updated.Chapters)
-                UpdateChapter(chapter);
+            foreach(var chapter in comp.Chapters)
+            {
+                Chapter match = null;
+                foreach(var c in updated.Chapters)
+                    if(chapter.ID == c.ID)
+                        match = c;
+
+                if(match == null)
+                    return "Bad chapters info";
+
+                chapter.Order = match.Order;
+            }
 
             comp.LastEditDT = System.DateTime.UtcNow;
 

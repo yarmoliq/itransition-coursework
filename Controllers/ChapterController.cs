@@ -25,10 +25,10 @@ namespace coursework_itransition.Controllers
 
         public IActionResult New(string compID, string returnUrl = null) => View();
 
-        [Route("Chapter/Edit/{id?}/{returnUrl?}")]
+        [Route("Chapter/Edit/{id}/{returnUrl?}")]
         public IActionResult Edit(string id, string returnUrl = null) => View(this._context.Chapters.Find(id));
 
-        [HttpPost, ActionName("New")]
+        [HttpPost, Route("Chapter/New/{compID}/{returnUrl?}")]
         [ValidateAntiForgeryToken]
         public IActionResult AddNewChapter(string compID, string returnUrl, [Bind("Title,Contents")] Chapter data)
         {
@@ -55,7 +55,7 @@ namespace coursework_itransition.Controllers
             return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
         }
 
-        [HttpPost, Route("Chapter/Edit/{id?}/{returnUrl?}")]
+        [HttpPost, Route("Chapter/Edit/{id}/{returnUrl?}")]
         [ValidateAntiForgeryToken]
         public async System.Threading.Tasks.Task<IActionResult> EditChapter(string id, string returnUrl, [Bind("Title,Contents")] Chapter data)
         {
@@ -68,7 +68,8 @@ namespace coursework_itransition.Controllers
 
             chapter.Title       = data.Title;
             chapter.Contents    = data.Contents;
-            chapter.LastEditDT  = System.DateTime.UtcNow;
+            chapter.LastEditDT  = chapter.Composition.LastEditDT
+                                = System.DateTime.UtcNow;
 
             this._context.Chapters.Update(chapter);
             this._context.SaveChanges();

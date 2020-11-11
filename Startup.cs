@@ -82,7 +82,12 @@ namespace coursework_itransition
             {
                 endpoints.MapControllerRoute(
                     name: "chapter",
-                    pattern: "Chapter/{action}/{compID?}/{returnUrl?}",
+                    pattern: "Chapter/{action}/{compID}/{returnUrl?}",
+                    defaults: new { controller = "Chapter", action = "New" });
+            
+                endpoints.MapControllerRoute(
+                    name: "chapter-edit",
+                    pattern: "Chapter/{action}/{id}/{returnUrl?}",
                     defaults: new { controller = "Chapter", action = "New" });
             
                 endpoints.MapControllerRoute(
