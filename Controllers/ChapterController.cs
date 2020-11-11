@@ -93,5 +93,11 @@ namespace coursework_itransition.Controllers
                 return Redirect("~/");
             return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
         }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }   
 }

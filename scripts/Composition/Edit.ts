@@ -25,10 +25,20 @@ sendRequest<Composition>("Composition", "Get", "POST", compositionID)
     
         composition.chapters.forEach((chapter: Chapter) => {
             let tr = document.createElement("tr");
+            
+            let td1 = document.createElement("td");
+            let a = document.createElement("a");
+            a.href = location.origin + "/Chapter/Edit/" + chapter.id + "/" + encodeURIComponent(encodeURI(location.href));
+            a.type = "button";
+            a.classList.add("btn");
+            a.classList.add("btn-secondary");
+            a.innerHTML = '<i class="fa fa-edit"></i>';
+            td1.appendChild(a);
+            tr.appendChild(td1);
 
-            let td = document.createElement("td");
-            td.innerHTML = chapter.title;
-            tr.appendChild(td);
+            let td2 = document.createElement("td");
+            td2.innerHTML = chapter.title;
+            tr.appendChild(td2);
             
             tr.id = chapter.id;
             tr.setAttribute("data-order", chapter.order.toString());
