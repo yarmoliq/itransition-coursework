@@ -6,10 +6,9 @@ let previewTitle: HTMLParagraphElement          = <HTMLParagraphElement>document
 let previewContents: HTMLDivElement             = <HTMLParagraphElement>document.getElementById("md-preview-contents");
 
 tabMD.addEventListener('click', () => {
-    console.log("HERE");
     const title     : string = inputTitle.value;
     const contents  : string = textareaContents.value;
 
-    previewTitle.innerHTML      = title;
-    previewContents.innerHTML   = contents;
+    previewTitle.innerHTML = title;
+    previewContents.innerHTML = marked(contents);
 });

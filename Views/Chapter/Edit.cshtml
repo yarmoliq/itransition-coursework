@@ -2,16 +2,18 @@
 
 @model coursework_itransition.Models.Chapter
 
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Text:wght@600&display=swap" rel="stylesheet">
+
 <div class="row justify-content-center">
     <div class="col-lg-9 col-xl-9">
         
        <ul class="nav nav-tabs mb-3 d-flex">
             <li class="nav-item text-center" style="width: 50%;">
-                <a class="nav-link active" data-toggle="tab" href="#tab-content-raw">Raw</a>
+                <a class="nav-link active" data-toggle="tab" href="#tab-content-raw">Write</a>
             </li>
             <li class="nav-item text-center" style="width: 50%;">
                 <a class="nav-link" data-toggle="tab" href="#tab-content-md" id="tab-md">
-                    <i class="fab fa-markdown"></i>Markdown
+                    <i class="fab fa-markdown mr-2"></i>Preview
                 </a>
             </li>
         </ul>
@@ -34,12 +36,13 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="tab-content-md">
-                <p class="h1 text-center" id="md-preview-title"></p>
-                <hr>
+                <p class="display-3 text-center" style="font-family: Big Shoulders Stencil Text;" id="md-preview-title"></p>
+                <hr style="border-top: 3px solid rgba(128, 128, 128, 0.25);">
                 <div id="md-preview-contents"></div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="~/js/Chapter/Edit.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script type="module" src="~/js/Chapter/Edit.js"></script>
