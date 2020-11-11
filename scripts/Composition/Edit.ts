@@ -13,7 +13,7 @@ let tableOfChapters =                       document.getElementById("tbody-chapt
 let original: Composition;
 let composition: Composition;
 
-sendRequest<Composition>("Composition", "GetComposition", "POST", compositionID)
+sendRequest<Composition>("Composition", "Get", "POST", compositionID)
     .then(comp => {
         comp.chapters.sort((c1, c2) => c1.order - c2.order);
         original    = new Composition(comp);
@@ -39,7 +39,7 @@ sendRequest<Composition>("Composition", "GetComposition", "POST", compositionID)
         (<HTMLButtonElement>document.getElementById("btn-add-chapter")) .disabled = false;
         (<HTMLButtonElement>document.getElementById("btn-delete"))      .disabled = false;
     })
-    .catch(err => console.log(err));
+    .catch(err => showAlert('ERROR LOADING COMPOSITION!', false, err));
     
 
 
@@ -87,16 +87,11 @@ $("#tbody-chapters").sortable({
 
 
 document.getElementById("btn-back").addEventListener("click", () => {
+    if (formHasChanges && !confirm("You have unsaved changes. Are you sure you want to leave this page?"))
+        return;
 
-    if (formHasChanges) {
-        if (!confirm("You have unsaved changes. Are you sure you want to leave this page?")) {
-            return;
-        }
-    }
-
-    if (returnUrl != 'undefined') {
+    if (returnUrl != 'undefined')
         location.href = location.origin;
-    }
 
     location.href = decodeURIComponent(returnUrl);
 });
@@ -106,7 +101,7 @@ document.getElementById("btn-add-chapter").addEventListener("click", () => {
 });
 
 document.getElementById("btn-save").addEventListener("click", () => {
-    sendRequest<string>("Composition", "UpdateComposition", "POST", composition)
+    sendRequest<string>("Composition", "Update", "POST", composition)
     .then(response => {
         if (response == 'Success') {
             formHasChanges = false;
@@ -120,21 +115,22 @@ document.getElementById("btn-save").addEventListener("click", () => {
 });
 
 document.getElementById("btn-delete").addEventListener("click", () => {
-    if (confirm('Are you sure you want to delete this composition?')) {
-        sendRequest<string>("Composition", "DeleteComposition", "POST", compositionID)
-            .then(response => {
-                if (response == 'Success') {
-                    if (returnUrl != 'undefined') {
-                        location.href = location.origin;
-                    }
+    if (!confirm('Are you sure you want to delete this composition?'))
+        return;
 
-                    location.href = decodeURIComponent(returnUrl);
+    sendRequest<string>("Composition", "Delete", "POST", compositionID)
+        .then(response => {
+            if (response == 'Success') {
+                if (returnUrl != 'undefined') {
+                    location.href = location.origin;
                 }
 
-                showAlert('There was an error deleteing your composition :(', false, response);
-            })
-            .catch(err => showAlert('There was an error deleteing your composition :(', false, err));
-    }
+                location.href = decodeURIComponent(returnUrl);
+            }
+
+            showAlert('There was an error deleteing your composition :(', false, response);
+        })
+        .catch(err => showAlert('There was an error deleteing your composition :(', false, err));
 });
 
 

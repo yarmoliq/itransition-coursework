@@ -35,24 +35,6 @@ namespace coursework_itransition.Controllers
         public IActionResult NoEditRights() => View();
         public IActionResult CompNotFound() => View();
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult New([Bind("Title,Summary,Genre")] Composition comp)
-        {
-            var newComp = new Composition();
-            newComp.CreationDT = System.DateTime.UtcNow;
-            newComp.LastEditDT = System.DateTime.UtcNow;
-            newComp.AuthorID = coursework_itransition.Utils.GetUserID(this.User);
-            newComp.Title = comp.Title;
-            newComp.Summary = comp.Summary;
-            newComp.Genre = comp.Genre;
-
-            _context.Add<Composition>(newComp);
-            _context.SaveChanges();
-
-            return RedirectToRoute("composition", new { controller = "Composition", action = "Edit", id = newComp.ID });
-        }
-
         public async Task<IActionResult> Edit(string id, string returnUrl)
         {
             var composition = await this._context.Compositions
@@ -70,61 +52,23 @@ namespace coursework_itransition.Controllers
             return RedirectToAction("CompNotFound");
         }
 
-        // [HttpPost, ActionName("Edit")]
-        // [ValidateAntiForgeryToken]
-        // public IActionResult EditPost(string id, string returnUrl, [Bind("Title,Summary,Genre")] Composition editedComp)
-        // {
-        //     var comp = this._context.Compositions.Find(id);
-        //     if((System.Object)comp != null)
-        //     {
-        //         if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator"))
-        //         {
-        //             comp.LastEditDT = System.DateTime.UtcNow;
-        //             comp.Title      = editedComp.Title;
-        //             comp.Genre      = editedComp.Genre;
-        //             comp.Summary    = editedComp.Summary;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult New([Bind("Title,Summary,Genre")] Composition comp)
+        {
+            var newComp = new Composition();
+            newComp.CreationDT = System.DateTime.UtcNow;
+            newComp.LastEditDT = System.DateTime.UtcNow;
+            newComp.AuthorID = coursework_itransition.Utils.GetUserID(this.User);
+            newComp.Title = comp.Title;
+            newComp.Summary = comp.Summary;
+            newComp.Genre = comp.Genre;
 
-        //             this._context.Compositions.Update(comp);
-        //             this._context.SaveChanges();
+            _context.Add<Composition>(newComp);
+            _context.SaveChanges();
 
-        //             if(returnUrl == null)
-        //                 return Redirect("~/");
-        //             return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
-        //         }
-        //         else
-        //         {
-        //             return RedirectToAction("NoEditRights");
-        //         }
-        //     }
-
-        //     return RedirectToAction("CompNotFound");
-        // }
-
-        // [HttpPost, Route("Composition/DeleteComp")]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> DeleteComp(string id, string returnUrl = null)
-        // {
-        //     if(id == null)
-        //         return RedirectToAction("CompNotFound");
-
-        //     var comp = await this._context.Compositions
-        //                             .Include(c => c.Chapters)
-        //                             .FirstOrDefaultAsync(c => c.ID == id);
-
-        //     if((System.Object)comp == null)
-        //         return RedirectToAction("CompNotFound");
-
-        //     if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp))
-        //         return RedirectToAction("NoEditRights");
-
-        //     // check if deleted
-        //     this._context.Compositions.Remove(comp);
-        //     this._context.SaveChanges();
-
-        //     if (returnUrl == null)
-        //         return Redirect("~/");
-        //     return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
-        // }
+            return RedirectToRoute("composition", new { controller = "Composition", action = "Edit", id = newComp.ID });
+        }
 
         public async Task<IActionResult> Show(string id)
         {
@@ -160,8 +104,8 @@ namespace coursework_itransition.Controllers
             return true;
         }
 
-        [HttpPost, Route("Composition/GetComposition")]
-        public async Task<Composition> GetComposition([FromBody] string id)
+        [HttpPost, Route("Composition/Get")]
+        public async Task<Composition> Get([FromBody] string id)
         {
             var comp = await this._context.Compositions
                                     .Include(c => c.Chapters)
@@ -170,8 +114,8 @@ namespace coursework_itransition.Controllers
             return comp;
         }
 
-        [HttpPost, Route("Composition/UpdateComposition")]
-        public async Task<string> UpdateComposition([FromBody] Composition updated)
+        [HttpPost, Route("Composition/Update")]
+        public async Task<string> Update([FromBody] Composition updated)
         {
             if((System.Object)updated == null)
                 return "Null received";
@@ -183,9 +127,13 @@ namespace coursework_itransition.Controllers
             if((System.Object)comp == null)
                 return "Composition not found";
 
-            comp.Title = updated.Title;
-            comp.Genre = updated.Genre;
-            comp.Summary = updated.Summary;
+
+            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp))
+                return "You have no edit rights";
+
+            comp.Title      = updated.Title;
+            comp.Genre      = updated.Genre;
+            comp.Summary    = updated.Summary;
 
             foreach(var chapter in updated.Chapters)
                 UpdateChapter(chapter);
@@ -195,8 +143,8 @@ namespace coursework_itransition.Controllers
             return "Success";
         }
 
-        [HttpPost, Route("Composition/DeleteComposition")]
-        public async Task<string> DeleteComposition([FromBody]string id)
+        [HttpPost, Route("Composition/Delete")]
+        public async Task<string> Delete([FromBody]string id)
         {
             if (id == null)
                 return "Null received";
@@ -207,6 +155,9 @@ namespace coursework_itransition.Controllers
 
             if ((System.Object)comp == null)
                 return "Composition not found";
+
+            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp))
+                return "You have no edit rights";
 
             this._context.Compositions.Remove(comp);
             this._context.SaveChanges();
