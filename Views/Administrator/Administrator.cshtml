@@ -44,29 +44,29 @@
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                         @if (user.LockoutEnabled)
                                                         {
-                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-action="Ban">
+                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-stringAction="BanUser">
                                                                 <button type="submit" class="dropdown-item btn">Ban</button>
                                                             </form>
                                                         }
                                                         else
                                                         {
-                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-action="UnBan">
+                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-stringAction="UnBanUser">
                                                                 <button type="submit" class="dropdown-item btn">Unban</button>
                                                             </form>
                                                         }
                                                         @if(await Model._userManager.IsInRoleAsync(user,"Administrator"))
                                                         {
-                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-action="RemoveAdminStatus">
+                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-stringAction="RemoveAdminStatus">
                                                                 <button type="submit" class="dropdown-item btn">Remove admin status</button>
                                                             </form>
                                                         }
                                                         else
                                                         {
-                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-action="MakeAdmin">
+                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-stringAction="MakeAdmin">
                                                                 <button type="submit" class="dropdown-item btn">Make admin</button>
                                                             </form>
                                                         }
-                                                        <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-action="DeleteUser">
+                                                        <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-stringAction="DeleteUser">
                                                             <button  type="submit" class="dropdown-item btn btn-danger">Delete user</button>
                                                         </form>
                                                     </div>

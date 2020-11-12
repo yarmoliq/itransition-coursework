@@ -53,20 +53,20 @@ namespace coursework_itransition.Controllers
 
         [HttpPost, Route("Administrator/DeleteUser/{UserID?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult ActionWithUser(string UserID, string action)
+        public IActionResult ActionWithUser(string UserID, string stringAction)
         {
-            var method = (typeof(AdministratorController)).GetMethod(action);
+            var method = (typeof(AdministratorController)).GetMethod(stringAction);
             string[] objects = new string[1];
-            objects[0] = action;
+            objects[0] = UserID;
             method.Invoke(this, objects);
             return RedirectToAction("Administrator", "Administrator");
         }
 
         public void DeleteUser(string UserID)
         {
-            _context.Users.Remove(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
-            _context.SaveChanges();
-            // _userManager.DeleteAsync(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
+            // _context.Users.Remove(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
+            // _context.SaveChanges();
+            _userManager.DeleteAsync(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
         }
 
         public void BanUser(string UserID)

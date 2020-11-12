@@ -92,7 +92,7 @@ namespace coursework_itransition
             
                 endpoints.MapControllerRoute(
                     name: "administrator",
-                    pattern: "Administrator/{action}/{UserID}/{action}",
+                    pattern: "Administrator/{action}/{UserID}/{stringAction}",
                     defaults: new { controller = "Administrator", action = "ActionWithUser" });
                 
                 endpoints.MapControllerRoute(
