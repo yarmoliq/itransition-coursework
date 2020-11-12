@@ -130,6 +130,7 @@ namespace coursework_itransition.Controllers
             }
 
             comp.LastEditDT = System.DateTime.UtcNow;
+            this._context.SaveChanges();
 
             return "Success";
         }

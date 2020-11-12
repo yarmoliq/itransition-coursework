@@ -18,7 +18,7 @@ sendRequest<Composition>("Composition", "Get", "POST", compositionID)
         comp.chapters.sort((c1, c2) => c1.order - c2.order);
         original    = new Composition(comp);
         composition = new Composition(comp);
-        
+
         titleInput.value    = composition.title;
         genreSelect.value   = composition.genre;
         summaryTA.value     = composition.summary;
@@ -41,7 +41,6 @@ sendRequest<Composition>("Composition", "Get", "POST", compositionID)
             tr.appendChild(td2);
             
             tr.id = chapter.id;
-            tr.setAttribute("data-order", chapter.order.toString());
             
             tableOfChapters.appendChild(tr);
         });
@@ -55,8 +54,8 @@ sendRequest<Composition>("Composition", "Get", "POST", compositionID)
 
 
 function updateComposition() {
-    composition.title = titleInput.value;
-    composition.genre = genreSelect.value;
+    composition.title   = titleInput.value;
+    composition.genre   = genreSelect.value;
     composition.summary = summaryTA.value;
 
     let newOrder: string[] = [];

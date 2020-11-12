@@ -30,19 +30,24 @@ namespace coursework_itransition.Controllers
 
         [HttpPost, Route("Chapter/New/{compID}/{returnUrl?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult AddNewChapter(string compID, string returnUrl, [Bind("Title,Contents")] Chapter data)
+        public async System.Threading.Tasks.Task<IActionResult> AddNewChapter(string compID, string returnUrl, [Bind("Title,Contents")] Chapter data)
         {
-            var comp = this._context.Compositions.Find(compID);
+            var comp = await this._context.Compositions
+                                                .Include(c => c.Chapters)
+                                                .FirstOrDefaultAsync(c => c.ID == compID);
             if((System.Object)comp == null)
                 return RedirectToAction("Index", "Deadends", new { message = "Composition for the chapter was not found." });
 
             var newChapter = new Chapter();
-            newChapter.CreationDT = System.DateTime.UtcNow;
-            newChapter.LastEditDT = System.DateTime.UtcNow;
-            newChapter.CompositionID = compID;
-            newChapter.Title = data.Title;
-            newChapter.Contents = data.Contents;
-            newChapter.Composition = comp;
+            newChapter.CreationDT       = System.DateTime.UtcNow;
+            newChapter.LastEditDT       = System.DateTime.UtcNow;
+            newChapter.CompositionID    = compID;
+            newChapter.Title            = data.Title;
+            newChapter.Contents         = data.Contents;
+            newChapter.Order            = comp.Chapters.Count;
+            newChapter.Composition      = comp;
+
+            comp.LastEditDT             = System.DateTime.UtcNow;
 
             this._context.Chapters.Add(newChapter);
             this._context.SaveChanges();
