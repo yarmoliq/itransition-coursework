@@ -41,7 +41,6 @@ sendRequest<Composition>("Composition", "Get", "POST", compositionID)
             li.appendChild(span);
             
             li.id = chapter.id;
-            li.setAttribute("data-order", chapter.order.toString());
             sortable.appendChild(li);
         });
 
