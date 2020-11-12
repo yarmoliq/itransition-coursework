@@ -8,7 +8,7 @@ const returnUrl     : string = decodeURIComponent(location.pathname.split("/")[4
 let titleInput      = <HTMLInputElement>    document.getElementById("input-title");
 let genreSelect     = <HTMLSelectElement>   document.getElementById("select-genre");
 let summaryTA       = <HTMLTextAreaElement> document.getElementById("textarea-summary");
-let tableOfChapters =                       document.getElementById("tbody-chapters");
+let sortable        =                       document.getElementById("sortable");
 
 let original: Composition;
 let composition: Composition;
@@ -24,25 +24,24 @@ sendRequest<Composition>("Composition", "Get", "POST", compositionID)
         summaryTA.value     = composition.summary;
     
         composition.chapters.forEach((chapter: Chapter) => {
-            let tr = document.createElement("tr");
-            
-            let td1 = document.createElement("td");
+            let li = document.createElement("li");
+            li.classList.add ("list-group-item");
+            li.classList.add("custom-fixed");
+
             let a = document.createElement("a");
             a.href = location.origin + "/Chapter/Edit/" + chapter.id + "/" + encodeURIComponent(encodeURI(location.href));
             a.type = "button";
             a.classList.add("btn");
             a.classList.add("btn-secondary");
             a.innerHTML = '<i class="fa fa-edit"></i>';
-            td1.appendChild(a);
-            tr.appendChild(td1);
-
-            let td2 = document.createElement("td");
-            td2.innerHTML = chapter.title;
-            tr.appendChild(td2);
+            li.appendChild(a);
+            let span = document.createElement("span");
+            span.setAttribute("style", "margin-left: 40px;")
+            span.innerText = chapter.title;
+            li.appendChild(span);
             
-            tr.id = chapter.id;
-            
-            tableOfChapters.appendChild(tr);
+            li.id = chapter.id;
+            sortable.appendChild(li);
         });
 
         (<HTMLButtonElement>document.getElementById("btn-add-chapter")) .disabled = false;
@@ -59,8 +58,7 @@ function updateComposition() {
     composition.summary = summaryTA.value;
 
     let newOrder: string[] = [];
-
-    tableOfChapters.childNodes.forEach(tr => newOrder.push((<HTMLElement>tr).id));
+    sortable.childNodes.forEach(li => newOrder.push((<HTMLElement>li).id));
 
     newOrder.forEach((id: string, i: number) => {
         composition.chapters.find(c => c.id == id).order = i;
@@ -88,8 +86,8 @@ titleInput  .addEventListener("change", formChanged);
 genreSelect .addEventListener("change", formChanged);
 summaryTA   .addEventListener("change", formChanged);
 
-$("#tbody-chapters").sortable({
-    items: "> tr",
+$("#sortable").sortable({
+    items: "> li",
     appendTo: "parent",
     helper: "clone",
     stop: formChanged
