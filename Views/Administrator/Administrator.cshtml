@@ -42,32 +42,24 @@
                                                     <a class="h4 mr-3 dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                        @if (user.LockoutEnabled)
-                                                        {
-                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-stringAction="BanUser">
-                                                                <button type="submit" class="dropdown-item btn">Ban</button>
-                                                            </form>
-                                                        }
-                                                        else
-                                                        {
-                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-stringAction="UnBanUser">
-                                                                <button type="submit" class="dropdown-item btn">Unban</button>
-                                                            </form>
-                                                        }
-                                                        @if(await Model._userManager.IsInRoleAsync(user,"Administrator"))
-                                                        {
-                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-stringAction="RemoveAdminStatus">
-                                                                <button type="submit" class="dropdown-item btn">Remove admin status</button>
-                                                            </form>
-                                                        }
-                                                        else
-                                                        {
-                                                            <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-stringAction="MakeAdmin">
-                                                                <button type="submit" class="dropdown-item btn">Make admin</button>
-                                                            </form>
-                                                        }
-                                                        <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-stringAction="DeleteUser">
-                                                            <button  type="submit" class="dropdown-item btn btn-danger">Delete user</button>
+                                                        <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-UserID="@user.Id" asp-route-pointOfStart="@Model._pointOfStart">
+                                                            @if (user.LockoutEnabled)
+                                                            {
+                                                                <button type="submit" class="dropdown-item btn" name="stringAction" value="BanUser">Ban</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button type="submit" class="dropdown-item btn" name="stringAction" value="UnBanUser">Unban</button>
+                                                            }
+                                                            @if(await Model._userManager.IsInRoleAsync(user,"Administrator"))
+                                                            {
+                                                                <button type="submit" class="dropdown-item btn" name="stringAction" value="RemoveAdminStatus">Remove admin status</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button type="submit" class="dropdown-item btn" name="stringAction" value="MakeAdmin">Make admin</button>
+                                                            }
+                                                            <button  type="submit" class="dropdown-item btn btn-danger" name="stringAction" value="DeleteUser">Delete user</button>
                                                         </form>
                                                     </div>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">

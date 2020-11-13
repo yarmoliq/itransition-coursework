@@ -19,7 +19,7 @@ namespace coursework_itransition.Controllers
         public readonly ILogger<HomeController> _logger;
         public readonly RoleManager<IdentityRole> _roleManager;
         public readonly UserManager<ApplicationUser> _userManager;
-
+        public int _pointOfStart{ get; set; }
 
         public AdministratorController(ApplicationDbContext context,
             ILogger<HomeController> logger,
@@ -31,9 +31,9 @@ namespace coursework_itransition.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
         }
-
-        public IActionResult Administrator()
+        public IActionResult Administrator(int pointOfStart = 0)
         {
+            _pointOfStart = pointOfStart;
             return View(this);
         }
 
@@ -51,15 +51,20 @@ namespace coursework_itransition.Controllers
         //     return lrn[0];
         // }
 
-        [HttpPost, Route("Administrator/DeleteUser/{UserID?}")]
+        bool UserIsBan()
+        {
+            return false;
+        }
+
+        [HttpPost, Route("Administrator/ActionWithUser/{UserID?}/{pointOfStart?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult ActionWithUser(string UserID, string stringAction)
+        public IActionResult ActionWithUser(string UserID, string stringAction, int? pointOfStart)
         {
             var method = (typeof(AdministratorController)).GetMethod(stringAction);
             string[] objects = new string[1];
             objects[0] = UserID;
             method.Invoke(this, objects);
-            return RedirectToAction("Administrator", "Administrator");
+            return RedirectToAction("Administrator", "Administrator", pointOfStart);
         }
 
         public void DeleteUser(string UserID)
@@ -88,7 +93,7 @@ namespace coursework_itransition.Controllers
         {
             var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
             var listRoleUser = await _userManager.GetRolesAsync(user);
-            if(listRoleUser.IndexOf("Administrator") == -1)
+            if(listRoleUser == null || listRoleUser.IndexOf("Administrator") == -1)
             {
                 await _userManager.AddToRoleAsync(user, "Administrator");
             }
@@ -98,8 +103,7 @@ namespace coursework_itransition.Controllers
         {
             var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
             var listRoleUser = await _userManager.GetRolesAsync(user);
-            var num = listRoleUser.IndexOf("Administrator");
-            if(num != -1)
+            if(listRoleUser != null && listRoleUser.IndexOf("Administrator") != -1)
             {
                 await _userManager.RemoveFromRoleAsync(user, "Administrator");
             }
