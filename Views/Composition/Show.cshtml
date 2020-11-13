@@ -1,20 +1,55 @@
-@{
-    ViewData["Title"] = Model.Title;
-}
+@{ ViewData["Title"] = Model.Title; }
 
 @model coursework_itransition.Models.Composition
 
-@if(@Model == null)
-{
-    <h1>problems</h1>
-}
-else
-{
-    <h1>@Model.Title</h1>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Text:wght@600&display=swap" rel="stylesheet">
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="text-muted">Author: @Model.Author.Name</div>
+            <div class="text-muted">Created: UTC @Model.CreationDT</div>
+            <div class="text-muted">Last edit: UTC @Model.LastEditDT</div>
+        </div>
+        @if(coursework_itransition.Utils.UserIsAuthor(User, Model) || User.IsInRole("Administrator"))
+        {
+            <div class="col-auto align-self-center">
+                <a asp-controller="Composition" asp-action="Edit" asp-route-id="@Model.ID" asp-route-returnUrl="@Url.ActionLink()">
+                    Edit
+                </a>
+            </div>
+        }
+    </div>
+    
+    <p class="display-4 text-center" style="font-family: Big Shoulders Stencil Text;">@Model.Title</p>
+    <p class="text-center">@Model.Genre</p>
+
+    <h4 class="text-center">Summary</h4>
     <p>@Model.Summary</p>
-    @foreach (var chapter in Model.Chapters)
-    {
-        <h3>@chapter.Title</h3>
-        <p>@chapter.Contents</p>
+
+    @{
+        var sortedChapters = Model.Chapters.ToList();
+        sortedChapters.Sort((c1,c2)=> c1.Order.CompareTo(c2.Order));
     }
-}
+
+    <h4 class="text-center">Contents</h4>
+    <ol>
+        @foreach (var chapter in sortedChapters)
+        {
+            <li>
+            <a href="#@chapter.ID">@chapter.Title</a>
+            </li>
+        }
+    </ol>
+
+    @foreach (var chapter in sortedChapters)
+    {
+        <hr style="border-top: 3px solid rgba(128, 128, 128, 0.25);">
+        <p id="@chapter.ID" class="h2 text-center" style="font-family: Big Shoulders Stencil Text;">@chapter.Title</p>
+        <hr style="border-top: 3px solid rgba(128, 128, 128, 0.25);">
+        <p class="chapter-contents">@chapter.Contents</p>
+    }
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script type="module" src="~/js/Composition/markdown.js"></script>

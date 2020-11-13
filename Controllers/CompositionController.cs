@@ -71,6 +71,7 @@ namespace coursework_itransition.Controllers
             return RedirectToRoute("composition", new { controller = "Composition", action = "Edit", id = newComp.ID });
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Show(string id)
         {
             if(id == null)
@@ -78,6 +79,7 @@ namespace coursework_itransition.Controllers
 
             var comp = await this._context.Compositions
                                     .Include(c => c.Chapters)
+                                    .Include(c => c.Author)
                                     .FirstOrDefaultAsync(c => c.ID == id);
 
             if ((System.Object)comp == null)
