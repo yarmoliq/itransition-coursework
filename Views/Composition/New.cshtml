@@ -9,7 +9,7 @@
         <form asp-action="New" asp-route-UserID="@ViewContext.RouteData.Values["UserID"]" method="POST">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="Title" class="form-control" placeholder="Composition title" required>
+                <input minlength="1" maxlength="80" asp-for="Title" class="form-control" placeholder="Composition title" required>
             </div>
             <div class="form-group">
               <select asp-for="Genre" class="form-control" required>

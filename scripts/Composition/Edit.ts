@@ -96,8 +96,10 @@ $("#sortable").sortable({
 
 
 document.getElementById("btn-back").addEventListener("click", () => {
-    if (returnUrl != 'undefined')
+    if (returnUrl == 'undefined' || returnUrl == undefined){
         location.href = location.origin;
+        return;
+    }
 
     location.href = decodeURIComponent(returnUrl);
 });
@@ -123,11 +125,15 @@ document.getElementById("btn-delete").addEventListener("click", () => {
     if (!confirm('Are you sure you want to delete this composition?'))
         return;
 
+    window.onbeforeunload = null;
+    
     sendRequest<string>("Composition", "Delete", "POST", compositionID)
         .then(response => {
             if (response == 'Success') {
-                if (returnUrl != 'undefined') {
+                if (returnUrl == 'undefined' || returnUrl == undefined) {
+                    console.log("going to ", location.origin);
                     location.href = location.origin;
+                    return;
                 }
                 location.href = decodeURIComponent(returnUrl);
             }

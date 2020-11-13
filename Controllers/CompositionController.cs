@@ -35,13 +35,13 @@ namespace coursework_itransition.Controllers
         public IActionResult New(string UserID = null) => View();
         public async Task<IActionResult> Edit(string id, string returnUrl)
         {
-            var composition = await this._context.Compositions
+            var comp = await this._context.Compositions
                                     .Include(c => c.Chapters)
                                     .FirstOrDefaultAsync(c => c.ID == id);
 
-            if ((System.Object)composition != null)
+            if ((System.Object)comp != null)
             {
-                if (!(coursework_itransition.Utils.UserIsAuthor(this.User, composition) || this.User.IsInRole("Administrator")))
+                if (!(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator")))
                     return RedirectToAction("Index", "Deadends", new { message = "You have no rights to edit this composition" });
 
                 return View();
@@ -110,7 +110,7 @@ namespace coursework_itransition.Controllers
                 return "Composition not found";
 
 
-            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp) || !this.User.IsInRole("Administrator"))
+            if(!(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator")))
                 return "You have no edit rights";
 
             comp.Title      = updated.Title;
@@ -149,7 +149,7 @@ namespace coursework_itransition.Controllers
             if ((System.Object)comp == null)
                 return "Composition not found";
 
-            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp) || !this.User.IsInRole("Administrator"))
+            if(!(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator")))
                 return "You have no rights";
 
             this._context.Compositions.Remove(comp);
