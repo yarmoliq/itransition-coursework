@@ -13,8 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using coursework_itransition.Hubs;
-
 using Identity.Models;
+using ReflectionIT.Mvc.Paging;
 
 namespace coursework_itransition
 {
@@ -49,6 +49,12 @@ namespace coursework_itransition
             });
                 
             services.AddControllersWithViews();
+            
+            services.AddPaging(options => {
+                options.ViewName = "Bootstrap4";
+                options.PageParameterName = "pageindex";
+            });
+            
             services.AddRazorPages();
             services.AddSignalR();
             services.AddHttpContextAccessor();
@@ -92,12 +98,12 @@ namespace coursework_itransition
             
                 endpoints.MapControllerRoute(
                     name: "actionwithuser",
-                    pattern: "Administrator/{action}/{UserID}/{stringAction}/{pointOfStart?}",
+                    pattern: "Administrator/{action}/{UserID}/{stringAction}",
                     defaults: new { controller = "Administrator", action = "ActionWithUser" });
                 
                 endpoints.MapControllerRoute(
                     name: "administrator",
-                    pattern: "Administrator/{action}/{pointOfStart?}",
+                    pattern: "Administrator/{action}",
                     defaults: new { controller = "Administrator", action = "Administrator" });
             
                 endpoints.MapControllerRoute(

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Identity.Models;
 using System.Linq;
 using coursework_itransition.Models;
+using ReflectionIT.Mvc.Paging;
 
 namespace coursework_itransition.Controllers
 {
@@ -19,7 +20,9 @@ namespace coursework_itransition.Controllers
         public readonly ILogger<HomeController> _logger;
         public readonly RoleManager<IdentityRole> _roleManager;
         public readonly UserManager<ApplicationUser> _userManager;
-        public int _pointOfStart{ get; set; }
+        public readonly IOrderedQueryable<ApplicationUser> sortedUsers;
+
+        public ReflectionIT.Mvc.Paging.PagingList<ApplicationUser> partofUsers;
 
         public AdministratorController(ApplicationDbContext context,
             ILogger<HomeController> logger,
@@ -30,10 +33,12 @@ namespace coursework_itransition.Controllers
             _logger = logger;
             _roleManager = roleManager;
             _userManager = userManager;
+            sortedUsers = _context.Users.Include(comp=>comp.Compositions).AsNoTracking().OrderBy(s=>s.Email);
         }
-        public IActionResult Administrator(int pointOfStart = 0)
+        public async Task<IActionResult> Administrator(int pageindex = 1)
         {
-            _pointOfStart = pointOfStart;
+            partofUsers = await PagingList.CreateAsync(sortedUsers, 10, pageindex);
+            partofUsers.Action = "Administrator";
             return View(this);
         }
 
@@ -43,28 +48,23 @@ namespace coursework_itransition.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        
         // public async Task<string> RoleFind(string UserID)
+        
         // {
         //     var u = await _context.Users.FindAsync(UserID);
         //     var lrn = await _userManager.GetRolesAsync(u);
         //     return lrn[0];
         // }
 
-        bool UserIsBan()
-        {
-            return false;
-        }
-
-        [HttpPost, Route("Administrator/ActionWithUser/{UserID?}/{pointOfStart?}")]
+        [HttpPost, Route("Administrator/ActionWithUser/{UserID?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult ActionWithUser(string UserID, string stringAction, int? pointOfStart)
+        public IActionResult ActionWithUser(string UserID, string stringAction)
         {
             var method = (typeof(AdministratorController)).GetMethod(stringAction);
             string[] objects = new string[1];
             objects[0] = UserID;
             method.Invoke(this, objects);
-            return RedirectToAction("Administrator", "Administrator", pointOfStart);
+            return RedirectToAction("Administrator", "Administrator");
         }
 
         public void DeleteUser(string UserID)
