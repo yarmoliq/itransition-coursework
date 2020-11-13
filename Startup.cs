@@ -96,6 +96,11 @@ namespace coursework_itransition
                     defaults: new { controller = "Composition", action = "New" });
             
                 endpoints.MapControllerRoute(
+                    name: "composition-admin",
+                    pattern: "Composition/{action}/{UserID?}",
+                    defaults: new { controller = "Composition", action = "New" });
+            
+                endpoints.MapControllerRoute(
                     name: "administrator",
                     pattern: "Administrator/{action}/",
                     defaults: new { controller = "Administrator", action = "Administrator" });

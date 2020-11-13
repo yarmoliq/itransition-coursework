@@ -31,10 +31,8 @@ namespace coursework_itransition.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult New() => View();
-        public IActionResult NoEditRights() => View();
-        public IActionResult CompNotFound() => View();
-
+        [Route("Composition/New/{UserID?}")]
+        public IActionResult New(string UserID = null) => View();
         public async Task<IActionResult> Edit(string id, string returnUrl)
         {
             var composition = await this._context.Compositions
@@ -52,14 +50,17 @@ namespace coursework_itransition.Controllers
             return RedirectToAction("Index", "Deadends", new { message = "Composition was not found." });
         }
 
-        [HttpPost]
+        [HttpPost, Route("Composition/New/{UserID?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult New([Bind("Title,Summary,Genre")] Composition comp)
+        public IActionResult New([Bind("Title,Summary,Genre")] Composition comp, string UserID = null)
         {
             var newComp = new Composition();
             newComp.CreationDT = System.DateTime.UtcNow;
             newComp.LastEditDT = System.DateTime.UtcNow;
-            newComp.AuthorID = coursework_itransition.Utils.GetUserID(this.User);
+            if(UserID == null)
+                newComp.AuthorID = coursework_itransition.Utils.GetUserID(this.User);
+            else
+                newComp.AuthorID = UserID;
             newComp.Title = comp.Title;
             newComp.Summary = comp.Summary;
             newComp.Genre = comp.Genre;
@@ -109,7 +110,7 @@ namespace coursework_itransition.Controllers
                 return "Composition not found";
 
 
-            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp))
+            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp) || !this.User.IsInRole("Administrator"))
                 return "You have no edit rights";
 
             comp.Title      = updated.Title;
@@ -148,8 +149,8 @@ namespace coursework_itransition.Controllers
             if ((System.Object)comp == null)
                 return "Composition not found";
 
-            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp))
-                return "You have no edit rights";
+            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp) || !this.User.IsInRole("Administrator"))
+                return "You have no rights";
 
             this._context.Compositions.Remove(comp);
             this._context.SaveChanges();
