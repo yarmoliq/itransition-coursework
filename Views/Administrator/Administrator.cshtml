@@ -2,14 +2,26 @@
     ViewData["Title"] = "Admin";
 }
 
-@model coursework_itransition.Controllers.AdministratorController
+@using ReflectionIT.Mvc.Paging
+@using Microsoft.IdentityModel
+@using Identity.Models;
+@using Microsoft.AspNetCore.Identity;
+@model PagingList<ApplicationUser>
 @using Microsoft.EntityFrameworkCore
+@addTagHelper *, ReflectionIT.Mvc.Paging
+@inject UserManager<ApplicationUser> UserManager
+
 
 <link rel="stylesheet" href="~/css/administrator.css"/>
 
+
+<nav aria-label="Users navigation">
+    <vc:pager paging-list="@Model"></vc:pager>
+</nav>
+
 <div class="p-2 text-center bg-dark">
     <h3 class="mb-2">
-        Users
+            Users
     </h3>
 </div>
 <div class="table-striped table-responsive-sm">
@@ -24,7 +36,7 @@
                 </tr>
             </thead>
             <tboby>
-                @foreach (var user in Model._context.Users.Include(comp=>comp.Compositions))
+                @foreach (var user in Model)
                 {
                     <tr>
                         <td>
@@ -41,26 +53,25 @@
                                                     <a class="h4 mr-3 dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                        <a asp-controller="Composition" asp-action="New" asp-route-UserID="@user.Id" type="submit" class="dropdown-item btn">New composition</a>
-                                                        @if (user.LockoutEnabled)
-                                                        {
-                                                            <a type="submit" class="dropdown-item btn">Ban</a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a type="submit" class="dropdown-item btn">Unban</a>
-                                                        }
-                                                        @if(await Model._userManager.IsInRoleAsync(user,"Administrator"))
-                                                        {
-                                                            <a type="submit" class="dropdown-item btn">Remove admin status</a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a type="submit" class="dropdown-item btn">Make admin</a>
-                                                        }
-                                                        <form asp-controller="Administrator" asp-action="DeleteUser"
-                                                            asp-route-UserID="@user.Id">
-                                                            <a type="submit" class="dropdown-item btn btn-danger" >Delete user</a>
+                                                        <form asp-controller="Administrator" asp-action="ActionWithUser" method="post" asp-route-pageindex="@Model.PageIndex" asp-route-UserID="@user.Id">
+                                                            <a asp-controller="Composition" asp-action="New" asp-route-UserID="@user.Id" type="submit" class="dropdown-item btn">New composition</a>
+                                                            @if (user.LockoutEnd == null || user.LockoutEnd <= DateTime.Now)
+                                                            {
+                                                                <button type="submit" class="dropdown-item btn" name="stringAction" value="BanUser">Ban</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button type="submit" class="dropdown-item btn" name="stringAction" value="UnBanUser">Unban</button>
+                                                            }
+                                                            @if(await UserManager.IsInRoleAsync(user,"Administrator"))
+                                                            {
+                                                                <button type="submit" class="dropdown-item btn" name="stringAction" value="RemoveAdminStatus">Remove admin status</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button type="submit" class="dropdown-item btn" name="stringAction" value="MakeAdmin">Make admin</button>
+                                                            }
+                                                            <button  type="submit" class="dropdown-item btn btn-danger" name="stringAction" value="DeleteUser">Delete user</button>
                                                         </form>
                                                     </div>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -70,16 +81,16 @@
                                             </div>
                                         </div>
                                         <div class="modal-body">
-                                            <table>
-                                                <tr>
-                                                    <td>EMAIL:</td>
-                                                    <td>@user.Email</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>USER ID:</td>
-                                                    <td>@user.Id</td>
-                                                </tr>
-                                            </table>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">EMAIL:</div>
+                                                        <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9 size">@user.Email</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">USER ID:</div>
+                                                        <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9 size">@user.Id</div>
+                                                    </div>
+                                                </div>
                                             @if(user.Compositions.Count > 0)
                                             {
                                                 <div class="p-2 text-center bg-dark">
@@ -92,10 +103,10 @@
                                                         @foreach (var composition in user.Compositions)
                                                         {
                                                             <tr>
-                                                                <td>
-                                                                    <div>@composition.Title</div>
+                                                                <td class="th-Tittle">
+                                                                    <div class="size">@composition.Title</div>
                                                                 </td>
-                                                                <td class="text-right">
+                                                                <td class="th-Buttons-Inside">
                                                                     <button type="button" class="btn btn-secondary">
                                                                         <i class="fa fa-eye"></i>
                                                                     </button>
@@ -123,7 +134,7 @@
                         <td><p class="size">@user.Name</p></td>
                         <td><p class="size">@user.Email</p></td>
                         <td>
-                            @if (user.LockoutEnabled)
+                            @if (user.LockoutEnd == null || user.LockoutEnd <= DateTime.Now)
                             {
                                 <p>not ban</p>
                             }
@@ -131,8 +142,8 @@
                             {
                                 <p>ban</p>
                             }
-                        </td>
-                        @if(await Model._userManager.IsInRoleAsync(user,"Administrator"))
+                        </td>                 
+                        @if(await UserManager.IsInRoleAsync(user,"Administrator"))
                         {
                         <td>Yes</td>
                         }
@@ -140,8 +151,12 @@
                         {
                         <td></td>
                         }
-                    </tr>
+                        </tr>
                 }
             </tbody>
         </table>
 </div>
+
+<nav aria-label="Users navigation">
+    <vc:pager paging-list="@Model" />
+</nav>

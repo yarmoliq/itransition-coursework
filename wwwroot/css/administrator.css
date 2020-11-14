@@ -3,50 +3,60 @@
     width: 75%;
 }
 
-@media (min-width: 576px)
-{
-    .size{
-        overflow: hidden; 
-        text-overflow: ellipsis;
-    }
+.text{
+    word-wrap:  break-word;
+    overflow-wrap: break-word;
+}
 
-    table.resizeble tr {
-        white-space: nowrap;
-    }
+.size{
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
 
-    table.resizeble tr:hover {
-        white-space: normal; 
-        word-wrap:  break-word; /* Обычный перенос текста */
-        overflow-wrap: break-word;
-    }
+table.resizeble tr {
+    white-space: nowrap;
+}
 
-    table.resizeble { 
-        table-layout: fixed; 
-        width: 100%;
-    }
+table.resizeble tr:hover {
+    white-space: normal; 
+    word-wrap:  break-word;
+    overflow-wrap: break-word;
+}
 
-    table.resizeble th, table.resizeble td { overflow: hidden; }
+table.resizeble { 
+    table-layout: fixed; 
+    width: 100%;
+}
 
-    table.resizeble .th-Name{
-        width: 40%;
-    }
+table.resizeble th, table.resizeble td { overflow: hidden; }
 
-    table.resizeble .th-Status{
-        width: 10%;
-    }
+table.resizeble .th-Name{
+    width: 40%;
+}
+
+table.resizeble .th-Status{
+    width: 10%;
+}
 
 
-    table.resizeble .th-Email{
-        width: 30%;
-    }
+table.resizeble .th-Email{
+    width: 30%;
+}
 
-    table.resizeble .th-Admin{
-        width: 10%;
-    }
+table.resizeble .th-Admin{
+    width: 10%;
+}
 
-    table.resizeble .th-Buttons {
-        width: 10%;
-    }
+table.resizeble .th-Buttons {
+    width: 10%;
+}
+
+table.resizeble .th-Tittle {
+    width: 70%;
+}
+
+table.resizeble .th-Buttons-Inside {
+    width: 30%;
 }
 
 @media (max-width: 576px)
@@ -68,29 +78,36 @@
 
     table.resizeble table { 
         table-layout: fixed; 
-        width: 600px;
     }
 
     table.resizeble th, tatable.resizebleble td { overflow: hidden; }
 
     table.resizeble .th-Name{
-        width: 240px;
+        width: 25%;
     }
-
+    
     table.resizeble .th-Status{
-        width: 60px;
+        width: 25%;
     }
-
-
+    
+    
     table.resizeble .th-Email{
-        width: 180px;
+        width: 25%;
     }
-
+    
     table.resizeble .th-Admin{
-        width: 60px;
+        width: 25%;
+    }
+    
+    table.resizeble .th-Buttons {
+        width: 15%;
+    }
+    
+    table.resizeble .th-Tittle {
+        width: 70%;
     }
 
-    table.resizeble .th-Buttons {
-        width: 60px;
+    table.resizeble .th-Buttons-Inside {
+        width: 30%;
     }
 }
