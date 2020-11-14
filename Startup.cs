@@ -13,8 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using coursework_itransition.Hubs;
-
 using Identity.Models;
+using ReflectionIT.Mvc.Paging;
 
 namespace coursework_itransition
 {
@@ -49,6 +49,12 @@ namespace coursework_itransition
             });
                 
             services.AddControllersWithViews();
+            
+            services.AddPaging(options => {
+                options.ViewName = "Bootstrap4";
+                options.PageParameterName = "pageindex";
+            });
+            
             services.AddRazorPages();
             services.AddSignalR();
             services.AddHttpContextAccessor();
@@ -96,15 +102,25 @@ namespace coursework_itransition
                     defaults: new { controller = "Composition", action = "New" });
             
                 endpoints.MapControllerRoute(
+                    name: "actionwithuser",
+                    pattern: "Administrator/{action}/{UserID}/{stringAction}",
+                    defaults: new { controller = "Administrator", action = "ActionWithUser" });
+                
+              endpoints.MapControllerRoute(
+                    name: "composition-admin",
+                    pattern: "Composition/{action}/{UserID?}",
+                    defaults: new { controller = "Composition", action = "New" });
+            
+                endpoints.MapControllerRoute(
                     name: "administrator",
-                    pattern: "Administrator/{action}/",
+                    pattern: "Administrator/{action}",
                     defaults: new { controller = "Administrator", action = "Administrator" });
             
                 endpoints.MapControllerRoute(
                     name: "deadends",
                     pattern: "Deadends/Index/{message?}",
                     defaults: new { controller = "Deadends", action = "Index" });
-                
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/");

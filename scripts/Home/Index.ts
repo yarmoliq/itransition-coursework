@@ -18,6 +18,7 @@ function populate() {
         }
     }
 }
+
 window.addEventListener("scroll", function(){
     arrowTop.hidden = (pageYOffset < document.documentElement.clientHeight);
     populate();

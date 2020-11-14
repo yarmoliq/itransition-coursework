@@ -18,7 +18,7 @@ sendRequest<Composition>("Composition", "Get", "POST", compositionID)
         comp.chapters.sort((c1, c2) => c1.order - c2.order);
         original    = new Composition(comp);
         composition = new Composition(comp);
-        
+
         titleInput.value    = composition.title;
         genreSelect.value   = composition.genre;
         summaryTA.value     = composition.summary;
@@ -41,7 +41,6 @@ sendRequest<Composition>("Composition", "Get", "POST", compositionID)
             li.appendChild(span);
             
             li.id = chapter.id;
-            li.setAttribute("data-order", chapter.order.toString());
             sortable.appendChild(li);
         });
 
@@ -54,8 +53,8 @@ sendRequest<Composition>("Composition", "Get", "POST", compositionID)
 
 
 function updateComposition() {
-    composition.title = titleInput.value;
-    composition.genre = genreSelect.value;
+    composition.title   = titleInput.value;
+    composition.genre   = genreSelect.value;
     composition.summary = summaryTA.value;
 
     let newOrder: string[] = [];
@@ -97,8 +96,10 @@ $("#sortable").sortable({
 
 
 document.getElementById("btn-back").addEventListener("click", () => {
-    if (returnUrl != 'undefined')
+    if (returnUrl == 'undefined' || returnUrl == undefined){
         location.href = location.origin;
+        return;
+    }
 
     location.href = decodeURIComponent(returnUrl);
 });
@@ -124,11 +125,15 @@ document.getElementById("btn-delete").addEventListener("click", () => {
     if (!confirm('Are you sure you want to delete this composition?'))
         return;
 
+    window.onbeforeunload = null;
+    
     sendRequest<string>("Composition", "Delete", "POST", compositionID)
         .then(response => {
             if (response == 'Success') {
-                if (returnUrl != 'undefined') {
+                if (returnUrl == 'undefined' || returnUrl == undefined) {
+                    console.log("going to ", location.origin);
                     location.href = location.origin;
+                    return;
                 }
                 location.href = decodeURIComponent(returnUrl);
             }

@@ -31,19 +31,17 @@ namespace coursework_itransition.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult New() => View();
-        public IActionResult NoEditRights() => View();
-        public IActionResult CompNotFound() => View();
-
+        [Route("Composition/New/{UserID?}")]
+        public IActionResult New(string UserID = null) => View();
         public async Task<IActionResult> Edit(string id, string returnUrl)
         {
-            var composition = await this._context.Compositions
+            var comp = await this._context.Compositions
                                     .Include(c => c.Chapters)
                                     .FirstOrDefaultAsync(c => c.ID == id);
 
-            if ((System.Object)composition != null)
+            if ((System.Object)comp != null)
             {
-                if (!(coursework_itransition.Utils.UserIsAuthor(this.User, composition) || this.User.IsInRole("Administrator")))
+                if (!(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator")))
                     return RedirectToAction("Index", "Deadends", new { message = "You have no rights to edit this composition" });
 
                 return View();
@@ -52,14 +50,17 @@ namespace coursework_itransition.Controllers
             return RedirectToAction("Index", "Deadends", new { message = "Composition was not found." });
         }
 
-        [HttpPost]
+        [HttpPost, Route("Composition/New/{UserID?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult New([Bind("Title,Summary,Genre")] Composition comp)
+        public IActionResult New([Bind("Title,Summary,Genre")] Composition comp, string UserID = null)
         {
             var newComp = new Composition();
             newComp.CreationDT = System.DateTime.UtcNow;
             newComp.LastEditDT = System.DateTime.UtcNow;
-            newComp.AuthorID = coursework_itransition.Utils.GetUserID(this.User);
+            if(UserID == null)
+                newComp.AuthorID = coursework_itransition.Utils.GetUserID(this.User);
+            else
+                newComp.AuthorID = UserID;
             newComp.Title = comp.Title;
             newComp.Summary = comp.Summary;
             newComp.Genre = comp.Genre;
@@ -70,6 +71,7 @@ namespace coursework_itransition.Controllers
             return RedirectToRoute("composition", new { controller = "Composition", action = "Edit", id = newComp.ID });
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Show(string id)
         {
             if(id == null)
@@ -77,6 +79,7 @@ namespace coursework_itransition.Controllers
 
             var comp = await this._context.Compositions
                                     .Include(c => c.Chapters)
+                                    .Include(c => c.Author)
                                     .FirstOrDefaultAsync(c => c.ID == id);
 
             if ((System.Object)comp == null)
@@ -109,7 +112,7 @@ namespace coursework_itransition.Controllers
                 return "Composition not found";
 
 
-            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp))
+            if(!(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator")))
                 return "You have no edit rights";
 
             comp.Title      = updated.Title;
@@ -130,6 +133,7 @@ namespace coursework_itransition.Controllers
             }
 
             comp.LastEditDT = System.DateTime.UtcNow;
+            this._context.SaveChanges();
 
             return "Success";
         }
@@ -147,8 +151,8 @@ namespace coursework_itransition.Controllers
             if ((System.Object)comp == null)
                 return "Composition not found";
 
-            if(!coursework_itransition.Utils.UserIsAuthor(this.User, comp))
-                return "You have no edit rights";
+            if(!(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator")))
+                return "You have no rights";
 
             this._context.Compositions.Remove(comp);
             this._context.SaveChanges();

@@ -21,7 +21,7 @@
                 <form asp-action="New">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <input id="input-title" asp-for="Title" class="form-control" placeholder="Chapter title" required>
+                        <input minlength="1" maxlength="80" id="input-title" asp-for="Title" class="form-control" placeholder="Chapter title" required>
                     </div>
                     <div class="form-group">
                         <textarea id="textarea-contents" class="form-control" asp-for="Contents" class="form-control" rows="10"></textarea>
@@ -36,7 +36,7 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="tab-content-md">
-                <p class="display-3 text-center" style="font-family: Big Shoulders Stencil Text;" id="md-preview-title"></p>
+                <p class="display-4 text-center" style="font-family: Big Shoulders Stencil Text;" id="md-preview-title"></p>
                 <hr style="border-top: 3px solid rgba(128, 128, 128, 0.25);">
                 <div id="md-preview-contents"></div>
             </div>
