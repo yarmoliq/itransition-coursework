@@ -6,10 +6,10 @@
 
 <div class="row justify-content-center">
     <div class="col-lg-9 col-xl-9">
-        <form asp-action="New">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="New" asp-route-UserID="@ViewContext.RouteData.Values["UserID"]" method="POST">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="Title" class="form-control" placeholder="Composition title" required>
+                <input minlength="1" maxlength="80" asp-for="Title" class="form-control" placeholder="Composition title" required>
             </div>
             <div class="form-group">
               <select asp-for="Genre" class="form-control" required>
@@ -26,7 +26,7 @@
             </div>
             <div class="form-group" align="center">
                 <a href="javascript:history.go(-1)" type="button" class="btn btn-secondary" onclick="return confirm('you sure? :)');">Cancel</a>
-                <input type="submit" value="Create" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary">Create</button>
             </div>
         </form>
     </div>
