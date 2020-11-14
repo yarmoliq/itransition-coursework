@@ -1,4 +1,3 @@
-let arrowTop = document.getElementById("arrowTop");
 let pol = document.getElementById("pol");
 
 function addPost() {
@@ -19,13 +18,6 @@ function populate() {
     }
 }
 
-window.addEventListener("scroll", function(){
-    arrowTop.hidden = (pageYOffset < document.documentElement.clientHeight);
-    populate();
-});
+window.addEventListener("scroll", populate);
 
 populate();
-
-arrowTop.addEventListener('click', function(){
-    window.scrollTo(pageXOffset, 0);
-});

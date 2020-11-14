@@ -14,6 +14,54 @@
         Composition
     </h3>
 </div>
+
+
+@foreach (var composition in Model._context.Compositions.Include(comp=>comp.Author).Include(comp=>comp.Chapters))
+{
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <h3 class="col-10">
+                    @composition.Author.Name
+                </h3>
+                <div class="ml-auto d-flex align-items-center">
+                    <div class="dropdown">
+                        <a class="h4 mr-3 dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" id="dropdown-hower" aria-labelledby="dropdownMenuButton">
+                            @if (UserIsAuthor(User, composition) || this.User.IsInRole("Administrator"))
+                            {  
+                                <a class="dropdown-item btn" asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()">
+                                    Edit
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h5>
+                @composition.Title
+            </h5>
+            @composition.Summary
+            <ol>
+                @foreach (var chapter in composition.Chapters)
+                {
+                    <li>
+                        @chapter.Title
+                    </li>
+                }
+            </ol>
+        </div>
+        <div class="card-footer">
+            @composition.LastEditDT
+        </div> 
+    </div>
+    <br/>
+}
+
+
 <div class="table-striped table-responsive-sm">
     <table class="table">
         <thead>
@@ -61,7 +109,6 @@
                                                 <div class="row">
                                                     <p>@i. @chapter.Title</p>
                                                 </div>
-                                                ++i;
                                             }
                                         </div>
                                     </div>
@@ -70,15 +117,13 @@
                         </div>
                     </td>
                     <td><p class="size">@composition.Title</p></td>
-                    <td><p class="size">@composition.Author.Name</p></td>
+                    <td></td>
                     <td><p>@composition.LastEditDT</p></td> 
                 </tr>
             }   
         </tboby>
     </table>    
 </div>
-
-<div id="arrowTop" hidden></div>
 
 <div id="pol"></div>
 

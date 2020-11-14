@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-flatly.css" />
     }
     <script type="module" src="~/js/switchTheme.js"></script>
+    <link rel="stylesheet" href="~/css/_Layout.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -63,6 +64,9 @@
         </main>
     </div>
 
+        <i id="arrowTop" class="fas fa-arrow-alt-circle-up fa-3x" hidden></i>
+        <i id="arrowBack" class="fas fa-arrow-alt-circle-down fa-3x" hidden></i>
+
     <footer class="footer text-muted" style="border-top: 1px solid rgba(128, 128, 128, 0.25);">
         <div class="container">
             &copy; 2020 - coursework_itransition
@@ -76,6 +80,7 @@
     @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/Shared/_Layout.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     @RenderSection("Scripts", required: false)
 </body>

@@ -1,23 +1,6 @@
-.modal-title{
-    width: 75%;
-}
-
-#arrowTop {
-    height: 9px;
-    width: 14px;
-    color: green;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    cursor: pointer;
-}
-
-#arrowTop::before {
-    content: '▲';
-}
 
 @media (min-width: 576px)
-{
+{    
     .size{
         overflow: hidden; 
         text-overflow: ellipsis;
