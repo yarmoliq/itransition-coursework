@@ -20,9 +20,6 @@ namespace coursework_itransition.Controllers
         public readonly ILogger<HomeController> _logger;
         public readonly RoleManager<IdentityRole> _roleManager;
         public readonly UserManager<ApplicationUser> _userManager;
-        public readonly IOrderedQueryable<ApplicationUser> sortedUsers;
-
-        public ReflectionIT.Mvc.Paging.PagingList<ApplicationUser> partofUsers;
 
         public AdministratorController(ApplicationDbContext context,
             ILogger<HomeController> logger,
@@ -33,13 +30,13 @@ namespace coursework_itransition.Controllers
             _logger = logger;
             _roleManager = roleManager;
             _userManager = userManager;
-            sortedUsers = _context.Users.Include(comp=>comp.Compositions).AsNoTracking().OrderBy(s=>s.Email);
         }
         public async Task<IActionResult> Administrator(int pageindex = 1)
         {
-            partofUsers = await PagingList.CreateAsync(sortedUsers, 10, pageindex);
+            var sortedUsers = _context.Users.Include(comp=>comp.Compositions).AsNoTracking().OrderBy(s=>s.Email);
+            var partofUsers = await PagingList.CreateAsync(sortedUsers, 10, pageindex);
             partofUsers.Action = "Administrator";
-            return View(this);
+            return View("Administrator", partofUsers);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -58,13 +55,13 @@ namespace coursework_itransition.Controllers
 
         [HttpPost, Route("Administrator/ActionWithUser/{UserID?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult ActionWithUser(string UserID, string stringAction)
+        public async Task<IActionResult> ActionWithUser(string UserID, string stringAction, int pageindex)
         {
             var method = (typeof(AdministratorController)).GetMethod(stringAction);
             string[] objects = new string[1];
             objects[0] = UserID;
             method.Invoke(this, objects);
-            return RedirectToAction("Administrator", "Administrator");
+            return await Administrator(pageindex);
         }
 
         public void DeleteUser(string UserID)
