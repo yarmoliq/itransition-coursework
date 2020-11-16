@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using coursework_itransition.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 using coursework_itransition.Data;
 using Microsoft.AspNetCore.Identity;
-using Identity.Models;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace coursework_itransition.Controllers
 {
@@ -14,6 +17,13 @@ namespace coursework_itransition.Controllers
         public readonly ApplicationDbContext _context;
         public readonly ILogger<HomeController> _logger;
         public readonly RoleManager<IdentityRole> _roleManager;
+
+        [HttpPost, Route("Administrator/Get")]
+        public async Task<List<Composition>> Get([FromBody] int start)
+        {
+            var elements = this._context.Compositions.Include(c => c.Chapters).OrderByDescending(w=>w.LastEditDT);
+            return await elements.Skip(start - 1).Take(10).ToListAsync();
+        }
         
         public HomeController(ApplicationDbContext context,
             ILogger<HomeController> logger,

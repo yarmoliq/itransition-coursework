@@ -61,6 +61,7 @@ namespace coursework_itransition.Controllers
             string[] objects = new string[1];
             objects[0] = UserID;
             method.Invoke(this, objects);
+            await _userManager.UpdateSecurityStampAsync(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
             return await Administrator(pageindex);
         }
 
