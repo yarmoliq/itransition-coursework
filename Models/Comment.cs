@@ -4,11 +4,16 @@ namespace coursework_itransition.Models
 {
     public class Comment
     {
-        public string ID{get; private set;}
+        public string ID{get; set;}
 
-        public string AuthorID{get; private set;}
+        public string AuthorID{get; set;}
+        public string CompositionID { get; set; }
 
-        public DateTime CreationDT{get; private set;}
+        [System.Text.Json.Serialization.JsonIgnore]
+
+        public Composition Composition{get; set;}
+
+        public DateTime CreationDT{get; set;}
         public DateTime LastEditDT{get;set;}
 
         public string Contents{get;set;}
