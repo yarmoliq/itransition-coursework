@@ -40,5 +40,28 @@ namespace coursework_itransition.Hubs
 
             return JsonSerializer.Serialize(comp.Comments.ToArray());
         }
+
+        public string GetUserName(string userID)
+        {
+            var user = this._context.Users.Find(userID);
+            if(user == null)
+                return null;
+
+            return user.Name;
+        }
+
+        public async Task CreateComment(string compID, string contents)
+        {
+            Comment newComment = new Comment();
+            newComment.CompositionID = compID;
+            newComment.Contents = contents;
+            newComment.CreationDT = newComment.LastEditDT = System.DateTime.UtcNow;
+            newComment.AuthorID = coursework_itransition.Utils.GetUserID(this.Context.User);
+
+            this._context.Comments.Add(newComment);
+            this._context.SaveChanges();
+
+            await this.Clients.All.SendAsync("AddComment", JsonSerializer.Serialize(newComment));
+        }
     }
 }
