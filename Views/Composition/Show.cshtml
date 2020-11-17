@@ -4,6 +4,9 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Text:wght@600&display=swap" rel="stylesheet">
 
+
+<div id="comp-id-holder" hidden>@Model.ID</div>
+
 <div class="container" style = "word-wrap:break-word;">
     <div class="row">
         <div class="col">
@@ -49,7 +52,23 @@
         <hr style="border-top: 3px solid rgba(128, 128, 128, 0.25);">
         <p class="chapter-contents">@chapter.Contents</p>
     }
+
+    <div id="comments-section">
+        <hr style="border-top: 3px solid rgba(128, 128, 128, 0.25);">
+        <h4 class="text-center">Comments</h4>
+
+        <div class="input-group mb-3">
+            <textarea style="resize:none;" class="form-control" id="textarea-comment-text" placeholder="Write you comment..."></textarea>
+            <div class="input-group-append">
+                <button class="btn btn-primary" id="btn-post-comment">Comment</button>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script type="module" src="~/js/Composition/markdown.js"></script>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script type="module" src="~/js/Composition/comments.js"></script>

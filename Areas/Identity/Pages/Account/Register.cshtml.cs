@@ -90,10 +90,14 @@ namespace coursework_itransition.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    // var role = new IdentityRole();
-                    // role.Name = "Administrator";
-                    // await _roleManager.CreateAsync(role);
-                    await _userManager.AddToRoleAsync(user, "Administrator");
+                    var r = await _roleManager.FindByNameAsync("Administrator");
+                    if(r == null)
+                    {
+                        var role = new IdentityRole();
+                        role.Name = "Administrator";
+                        await _roleManager.CreateAsync(role);
+                        await _userManager.AddToRoleAsync(user, "Administrator");
+                    }
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

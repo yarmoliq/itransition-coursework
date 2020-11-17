@@ -126,7 +126,7 @@ namespace coursework_itransition
                     pattern: "{controller=Home}/{action=Index}/");
                     
                 endpoints.MapRazorPages();
-                endpoints.MapHub<CommentHub>("/commenthub");
+                endpoints.MapHub<CommentsHub>("/comments");
             });
         }
     }

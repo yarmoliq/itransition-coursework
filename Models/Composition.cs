@@ -38,5 +38,6 @@ namespace coursework_itransition.Models
         // }
 
         public ICollection<Chapter> Chapters { get; set; }
+        public ICollection<Comment> Comments { get; set; }
     }
 }

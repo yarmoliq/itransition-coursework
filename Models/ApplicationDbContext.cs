@@ -34,6 +34,12 @@ namespace coursework_itransition.Data
                 .WithOne(b => b.Composition)
                 .HasForeignKey(b => b.CompositionID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Composition>()
+                .HasMany(b => b.Comments)
+                .WithOne(b => b.Composition)
+                .HasForeignKey(b => b.CompositionID)
+                .OnDelete(DeleteBehavior.Cascade);
                 
             builder.Entity<Chapter>()
                 .ToTable("Chapters")
@@ -45,6 +51,11 @@ namespace coursework_itransition.Data
                 .WithMany(b => b.Chapters)
                 .HasForeignKey(b => b.CompositionID)
                 .OnDelete(DeleteBehavior.Cascade);
+                
+            builder.Entity<Comment>()
+                .ToTable("Comments")
+                .Property(e => e.ID)
+                .ValueGeneratedOnAdd();
 
             base.OnModelCreating(builder);
         }
@@ -52,5 +63,7 @@ namespace coursework_itransition.Data
         public DbSet<Composition> Compositions { get; set; }
 
         public DbSet<Chapter> Chapters { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
     }
 }
