@@ -1,9 +1,6 @@
-.modal-title{
-    width: 75%;
-}
 
 @media (min-width: 576px)
-{
+{    
     .size{
         overflow: hidden; 
         text-overflow: ellipsis;

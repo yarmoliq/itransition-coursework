@@ -8,74 +8,19 @@
 }
 
 <link rel="stylesheet" href="~/css/index.css"/>
+<div id="id-user" hidden>@Utils.GetUserID(this.User)</div>
+<div id="admin-user" hidden>@this.User.IsInRole("Administrator")</div>
 
-<div class="p-2 text-center bg-dark">     
-    <h3 class="mb-2">
-        Composition
-    </h3>
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">      
+        <div class="p-2 text-center bg-dark">     
+            <h3 class="mb-2">
+                Composition
+            </h3>
+        </div>      
+        <div id="feed"></div>
+    </div>
+    <div class="col-1"></div>
 </div>
-<div class="table-striped table-responsive-sm">
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="th-Button" ></th>
-                <th class="th-Title" >Title</th>
-                <th class="th-Author" >Author</th>
-                <th class="th-LastEditDT" >LastEditDT</th>
-            </tr>
-        </thead>
-        <tboby>
-            @foreach (var composition in Model._context.Compositions.Include(comp=>comp.Author).Include(comp=>comp.Chapters))
-            {
-                <tr>
-                    <td>
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#model-@composition.ID" >
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <div class="modal fade bd-example-modal-lg" id="model-@composition.ID" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">         
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">@composition.Title</h5>
-                                        <div class="ml-auto d-flex align-items-center">
-                                            @if (UserIsAuthor(User, composition) || this.User.IsInRole("Administrator"))
-                                            {  
-                                                <a class="mr-3" asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()">
-                                                    Edit
-                                                </a>
-                                            }
-                                            <button type="button" class="ml-3 close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="container">
-                                            <div class="row">
-                                            </div>
-                                            <div class="row"> @composition.Summary </div>
-                                            <hr>
-                                            @{int i = 1;}
-                                            @foreach (var chapter in composition.Chapters)
-                                            {
-                                                <div class="row">
-                                                    <p>@i. @chapter.Title</p>
-                                                </div>
-                                                ++i;
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td><p class="size">@composition.Title</p></td>
-                    <td><p class="size">@composition.Author.Name</p></td>
-                    <td><p>@composition.LastEditDT</p></td> 
-                </tr>
-            }   
-        </tboby>
-    </table>    
-</div>
-
-<script type="script" src="~/js/Home/Index.js"></script> 
+<script type="module" src="~/js/Home/Index.js"></script> 
