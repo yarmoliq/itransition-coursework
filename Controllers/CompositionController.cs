@@ -33,7 +33,9 @@ namespace coursework_itransition.Controllers
 
         [Route("Composition/New/{UserID?}")]
         public IActionResult New(string UserID = null) => View();
-        public async Task<IActionResult> Edit(string id, string returnUrl)
+
+        [Route("Composition/Edit/{id}/{returnUrl?}")]
+        public async Task<IActionResult> Edit(string id, string returnUrl = null)
         {
             var comp = await this._context.Compositions
                                     .Include(c => c.Chapters)

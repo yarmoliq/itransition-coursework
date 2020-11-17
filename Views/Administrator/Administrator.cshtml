@@ -107,9 +107,9 @@
                                                                     <div class="size">@composition.Title</div>
                                                                 </td>
                                                                 <td class="th-Buttons-Inside">
-                                                                    <button type="button" class="btn btn-secondary">
+                                                                    <a asp-controller="Composition" asp-action="Show" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()" type="button" class="btn btn-secondary">
                                                                         <i class="fa fa-eye"></i>
-                                                                    </button>
+                                                                    </a>
                                                                     <a asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()" type="button" class="btn btn-secondary">
                                                                         <i class="fa fa-edit"></i>
                                                                     </a>

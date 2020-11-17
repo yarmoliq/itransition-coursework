@@ -98,7 +98,7 @@ namespace coursework_itransition
             
                 endpoints.MapControllerRoute(
                     name: "composition",
-                    pattern: "Composition/{action}/{id?}/{returnUrl?}",
+                    pattern: "Composition/{action}/{id}/{returnUrl?}",
                     defaults: new { controller = "Composition", action = "New" });
             
                 endpoints.MapControllerRoute(

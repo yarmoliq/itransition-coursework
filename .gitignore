@@ -3,14 +3,8 @@ Bin
 obj
 Obj
 app*.db*
-wwwroot/js/Administrator
-wwwroot/js/Chapter
-wwwroot/js/Composition
-wwwroot/js/Home
-wwwroot/js/Shared
-wwwroot/js/Models
-wwwroot/js/*.js
-wwwroot/js/*.js.map
+wwwroot/js/*
+!wwwroot/js/signalr
 .vscode
 Migrations
 node_modules
