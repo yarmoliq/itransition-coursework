@@ -55,8 +55,8 @@ namespace coursework_itransition.Controllers
         public IActionResult New([Bind("Title,Summary,Genre")] Composition comp, string UserID = null)
         {
             var newComp = new Composition();
-            newComp.CreationDT = System.DateTime.UtcNow;
-            newComp.LastEditDT = System.DateTime.UtcNow;
+            newComp.CreationDT = System.DateTime.Now;
+            newComp.LastEditDT = System.DateTime.Now;
             if(UserID == null)
                 newComp.AuthorID = coursework_itransition.Utils.GetUserID(this.User);
             else
@@ -132,7 +132,7 @@ namespace coursework_itransition.Controllers
                 chapter.Order = match.Order;
             }
 
-            comp.LastEditDT = System.DateTime.UtcNow;
+            comp.LastEditDT = System.DateTime.Now;
             this._context.SaveChanges();
 
             return "Success";

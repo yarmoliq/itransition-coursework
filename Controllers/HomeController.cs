@@ -25,6 +25,12 @@ namespace coursework_itransition.Controllers
             return await elements.Skip(start - 1).Take(10).ToListAsync();
         }
         
+        [HttpPost, Route("Administrator/GetAuthorName")]
+        public string GetAuthorName([FromBody] string UserID)
+        {
+            return _context.Users.FirstOrDefault(w=>w.Id == UserID).Name;
+        }
+
         public HomeController(ApplicationDbContext context,
             ILogger<HomeController> logger,
             RoleManager<IdentityRole> roleManager)

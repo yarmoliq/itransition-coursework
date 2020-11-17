@@ -12,60 +12,15 @@
 <div id="admin-user" hidden>@this.User.IsInRole("Administrator")</div>
 
 <div class="row">
-    <div class="col-2"></div>
-    <div class="col-8">      
+    <div class="col-1"></div>
+    <div class="col-10">      
         <div class="p-2 text-center bg-dark">     
             <h3 class="mb-2">
                 Composition
             </h3>
         </div>      
         <div id="feed"></div>
-        @* @foreach (var composition in Model._context.Compositions.Include(comp=>comp.Author).Include(comp=>comp.Chapters))
-        {
-            <div class="card">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <h3 class="col-10">
-                            @composition.Author.Name
-                        </h3>
-                        <div class="col-2 ml-auto d-flex align-items-center">
-                            <div class="dropdown">
-                                <a class="h4 mr-3 dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" id="dropdown-hower" aria-labelledby="dropdownMenuButton">
-                                    @if (UserIsAuthor(User, composition) || this.User.IsInRole("Administrator"))
-                                    {  
-                                        <a class="dropdown-item btn" asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()">
-                                            Edit
-                                        </a>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h5>
-                        @composition.Title
-                    </h5>
-                    @composition.Summary
-                    <ol>
-                        @foreach (var chapter in composition.Chapters)
-                        {
-                            <li>
-                                @chapter.Title
-                            </li>
-                        }
-                    </ol>
-                </div>
-                <div class="card-footer">
-                    @composition.LastEditDT
-                </div> 
-            </div>
-            <br/>
-        } *@
     </div>
-    <div class="col-2"></div>
+    <div class="col-1"></div>
 </div>
 <script type="module" src="~/js/Home/Index.js"></script> 

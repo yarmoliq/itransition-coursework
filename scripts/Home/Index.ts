@@ -1,26 +1,24 @@
 import { Composition } from "../Models/composition.js";
-import { sendRequest } from "./../request.js"
+import { sendRequest } from "../request.js";
 
 let main = document.getElementById("feed");
 let start : number = 0;
 let end : boolean = false;
 let anotherRequest : boolean = true;
 
-function addPost(comp : Composition) : void {
+async function addPost(comp : Composition) {
     let card = document.createElement("div");
     card.classList.add("card");
     let card_header = document.createElement("div");
     card_header.classList.add("card-header");
     let card_body = document.createElement("div");
-    card_body.addEventListener("click",()=>{
-        document.location.href = location.origin + "/Composition/Show/" + comp.id + "/" + encodeURIComponent(encodeURI(location.href));
-    });
     card_body.classList.add("card-body");
     let card_footer = document.createElement("div");
     card_footer.classList.add("card-footer");
     
     //header
     let row = document.createElement("div");
+    row.className = "row";
     let h3 = document.createElement("h3");
     h3.addEventListener("click",()=>{
         document.location.href = location.origin + "/Composition/Show/" + comp.id + "/" + encodeURIComponent(encodeURI(location.href));
@@ -30,7 +28,7 @@ function addPost(comp : Composition) : void {
     row.appendChild(h3);
 
     let out_dropdown = document.createElement("div");
-    out_dropdown.classList.add("col-2", "ml-auto", "d-flex", "align-items-center");
+    out_dropdown.classList.add("col-2", "d-flex", "align-items-center");
     let dropdown = document.createElement("div");
     dropdown.className = "dropdown";
     
@@ -60,21 +58,58 @@ function addPost(comp : Composition) : void {
     
     //body
     let h5 = document.createElement("h5");
-    h5.innerHTML = comp.authorID;
+    sendRequest<string>("Administrator", "GetAuthorName", "POST", comp.authorID).then((authorName)=>{h5.innerHTML = authorName;});
     card_body.appendChild(h5);
-    card_body.append(comp.summary ?? "");
-    
-    let ol = document.createElement("ol");
-    comp.chapters.forEach(chap => {
-        let li = document.createElement("li");
-        li.innerText = chap.title;
-        ol.appendChild(li);
+    let text = document.createElement("div");
+    text.className = "card-text";
+    text.addEventListener("click",()=>{
+        document.location.href = location.origin + "/Composition/Show/" + comp.id + "/" + encodeURIComponent(encodeURI(location.href));
     });
-    card_body.appendChild(ol);
-
-    //footer
+    let ol = document.createElement("ol");
+    card_body.appendChild(text);
+    function addReadMore(){
+        let readmore = document.createElement("a");
+        readmore.className = "card-link"
+        readmore.innerText = "Read more ...";
+        card_body.appendChild(readmore);
+        readmore.addEventListener("click",()=>{
+            comp.chapters.forEach(chap => {
+                let li = document.createElement("li");
+                li.innerText = chap.title;
+                ol.appendChild(li);
+            });
+            readmore.hidden = true;
+            text.innerHTML = "";
+            text.innerText = comp.summary;
+            text.appendChild(ol);
+        });
+    }
+    if(comp.summary.length < 500){
+        text.innerText = comp.summary ?? "";
+        let count = 500 - comp.summary.length;
+        for(var i = 0; i < comp.chapters.length; ++i)
+        {
+            if(count > comp.chapters[i].title.length){
+                count = count - comp.chapters[i].title.length;
+                let li = document.createElement("li");
+                li.innerText = comp.chapters[i].title;
+                ol.appendChild(li);
+            }
+            else{
+                addReadMore();
+                break;
+            }
+        }
+        text.appendChild(ol);
+    }
+    else{
+        text.innerText = comp.summary.substr(0,500) + "...";
+        addReadMore();
+    }
+    
     card_footer.className = "text-muted";
-    card_footer.append(comp.lastEditDT);
+    var k = new Date(comp.lastEditDT);
+    card_footer.append(k.toString());
 
     card.appendChild(card_header);
     card.appendChild(card_body);
