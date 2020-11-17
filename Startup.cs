@@ -106,7 +106,7 @@ namespace coursework_itransition
                     pattern: "Administrator/{action}/{UserID}/{stringAction}",
                     defaults: new { controller = "Administrator", action = "ActionWithUser" });
                 
-              endpoints.MapControllerRoute(
+                endpoints.MapControllerRoute(
                     name: "composition-admin",
                     pattern: "Composition/{action}/{UserID?}",
                     defaults: new { controller = "Composition", action = "New" });

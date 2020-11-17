@@ -1,0 +1,15 @@
+#arrowTop {
+    color: rgba(128, 128, 128, 0.5);
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+#arrowBack {
+    color: rgba(128, 128, 128, 0.5);
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+}
