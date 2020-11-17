@@ -18,14 +18,14 @@ namespace coursework_itransition.Controllers
         public readonly ILogger<HomeController> _logger;
         public readonly RoleManager<IdentityRole> _roleManager;
 
-        [HttpPost, Route("Administrator/Get")]
+        [HttpPost, Route("Home/Get")]
         public async Task<List<Composition>> Get([FromBody] int start)
         {
             var elements = this._context.Compositions.Include(c => c.Chapters).OrderByDescending(w=>w.LastEditDT);
-            return await elements.Skip(start - 1).Take(10).ToListAsync();
+            return await elements.Skip(start).Take(10).ToListAsync();
         }
         
-        [HttpPost, Route("Administrator/GetAuthorName")]
+        [HttpPost, Route("Home/GetAuthorName")]
         public string GetAuthorName([FromBody] string UserID)
         {
             return _context.Users.FirstOrDefault(w=>w.Id == UserID).Name;

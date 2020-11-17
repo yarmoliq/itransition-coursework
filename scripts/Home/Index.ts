@@ -58,7 +58,7 @@ async function addPost(comp : Composition) {
     
     //body
     let h5 = document.createElement("h5");
-    sendRequest<string>("Administrator", "GetAuthorName", "POST", comp.authorID).then((authorName)=>{h5.innerHTML = authorName;});
+    sendRequest<string>("Home", "GetAuthorName", "POST", comp.authorID).then((authorName)=>{h5.innerHTML = authorName;});
     card_body.appendChild(h5);
     let text = document.createElement("div");
     text.className = "card-text";
@@ -127,7 +127,7 @@ async function populate() {
         if (windowRelativeBottom < document.documentElement.clientHeight + 100) {
             if(anotherRequest){
                 anotherRequest = false;
-                await sendRequest<Composition[]>("Administrator", "Get", "POST", start).then(comps=>{
+                await sendRequest<Composition[]>("Home", "Get", "POST", start).then(comps=>{
                     if(comps.length == 0)
                     {
                         end = true;
