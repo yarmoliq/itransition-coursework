@@ -47,7 +47,10 @@ namespace coursework_itransition
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             });
-                
+
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
+            services.AddSingleton<IMailer, EmailService>();
+
             services.AddControllersWithViews();
             
             services.AddPaging(options => {
