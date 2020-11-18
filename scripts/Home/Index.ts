@@ -21,7 +21,7 @@ async function addPost(comp : Composition) {
     row.className = "row";
     let h3 = document.createElement("h3");
     h3.addEventListener("click",()=>{
-        document.location.href = location.origin + "/Composition/Show/" + comp.id + "/" + encodeURIComponent(encodeURI(location.href));
+        document.location.href = location.origin + "/Composition/Show/" + comp.id;
     });
     h3.classList.add("col-10");
     h3.innerText = comp.title;
@@ -46,7 +46,7 @@ async function addPost(comp : Composition) {
     if(document.getElementById("id-user").innerText == comp.authorID || document.getElementById("admin-user").innerText == "True"){
         let a = document.createElement("a");
         a.classList.add("dropdown-item", "btn");
-        a.href = location.origin + "/Composition/Edit/" + comp.id + "/" + encodeURIComponent(encodeURI(location.href));
+        a.href = location.origin + "/Composition/Edit/" + comp.id;
         a.innerText = "Edit";
         dropdown_menu.appendChild(a);
     }
@@ -63,7 +63,7 @@ async function addPost(comp : Composition) {
     let text = document.createElement("div");
     text.className = "card-text";
     text.addEventListener("click",()=>{
-        document.location.href = location.origin + "/Composition/Show/" + comp.id + "/" + encodeURIComponent(encodeURI(location.href));
+        document.location.href = location.origin + "/Composition/Show/" + comp.id;
     });
     let ol = document.createElement("ol");
     card_body.appendChild(text);

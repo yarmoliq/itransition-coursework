@@ -16,6 +16,13 @@ namespace coursework_itransition.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<ChapterController> _logger;
 
+        public class PostModel
+        {
+            public string Title { get; set; }
+            public string Contents { get; set; }
+            public string ReturnUrl { get; set; }
+        }
+
         public ChapterController(ApplicationDbContext context,
             ILogger<ChapterController> logger)
         {
@@ -23,14 +30,22 @@ namespace coursework_itransition.Controllers
             _logger = logger;
         }
 
-        public IActionResult New(string compID, string returnUrl = null) => View();
+        public IActionResult New(string compID) => View();
 
-        [Route("Chapter/Edit/{id}/{returnUrl?}")]
-        public IActionResult Edit(string id, string returnUrl = null) => View(this._context.Chapters.Find(id));
+        [Route("Chapter/Edit/{id}")]
+        public IActionResult Edit(string id)
+        {
+            var chapter = this._context.Chapters.Find(id);
 
-        [HttpPost, Route("Chapter/New/{compID}/{returnUrl?}")]
+            if((System.Object)chapter == null)
+                return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
+
+            return View(new PostModel{Title = chapter.Title, Contents = chapter.Contents});
+        }
+
+        [HttpPost, Route("Chapter/New/{compID}")]
         [ValidateAntiForgeryToken]
-        public async System.Threading.Tasks.Task<IActionResult> AddNewChapter(string compID, string returnUrl, [Bind("Title,Contents")] Chapter data)
+        public async System.Threading.Tasks.Task<IActionResult> AddNewChapter(string compID, [Bind("Title,Contents,ReturnUrl")] PostModel data)
         {
             var comp = await this._context.Compositions
                                                 .Include(c => c.Chapters)
@@ -52,14 +67,14 @@ namespace coursework_itransition.Controllers
             this._context.Chapters.Add(newChapter);
             this._context.SaveChanges();
 
-            if (returnUrl == null)
+            if (data.ReturnUrl == null)
                 return Redirect("~/");
-            return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
+            return Redirect(System.Web.HttpUtility.UrlDecode(data.ReturnUrl));
         }
 
-        [HttpPost, Route("Chapter/Edit/{id}/{returnUrl?}")]
+        [HttpPost, Route("Chapter/Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async System.Threading.Tasks.Task<IActionResult> EditChapter(string id, string returnUrl, [Bind("Title,Contents")] Chapter data)
+        public async System.Threading.Tasks.Task<IActionResult> EditChapter(string id, [Bind("Title,Contents,ReturnUrl")] PostModel data)
         {
             var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
             if((System.Object)chapter == null)
@@ -76,13 +91,13 @@ namespace coursework_itransition.Controllers
             this._context.Chapters.Update(chapter);
             this._context.SaveChanges();
 
-            if (returnUrl == null)
+            if (data.ReturnUrl == null)
                 return Redirect("~/");
-            return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
+            return Redirect(System.Web.HttpUtility.UrlDecode(data.ReturnUrl));
         }
 
-        [HttpPost, Route("Chapter/Delete/{id}/{returnUrl?}")]
-        public async System.Threading.Tasks.Task<IActionResult> DeleteChapter(string id, string returnUrl)
+        [HttpPost, Route("Chapter/Delete/{id}")]
+        public async System.Threading.Tasks.Task<IActionResult> DeleteChapter(string id, [Bind("ReturnUrl")]PostModel data)
         {
             var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
             if ((System.Object)chapter == null)
@@ -94,9 +109,9 @@ namespace coursework_itransition.Controllers
             this._context.Chapters.Remove(chapter);
             this._context.SaveChanges();
 
-            if (returnUrl == null)
+            if (data.ReturnUrl == null)
                 return Redirect("~/");
-            return Redirect(System.Web.HttpUtility.UrlDecode(returnUrl));
+            return Redirect(System.Web.HttpUtility.UrlDecode(data.ReturnUrl));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

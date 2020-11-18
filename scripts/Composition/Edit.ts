@@ -3,7 +3,6 @@ import { Composition } from "./../Models/composition.js"
 import { sendRequest } from "./../request.js"
 
 const compositionID : string = location.pathname.split("/")[3];
-const returnUrl     : string = decodeURIComponent(location.pathname.split("/")[4]);
 
 let titleInput      = <HTMLInputElement>    document.getElementById("input-title");
 let genreSelect     = <HTMLSelectElement>   document.getElementById("select-genre");
@@ -29,7 +28,7 @@ sendRequest<Composition>("Composition", "Get", "POST", compositionID)
             li.classList.add("custom-fixed");
 
             let a = document.createElement("a");
-            a.href = location.origin + "/Chapter/Edit/" + chapter.id + "/" + encodeURIComponent(encodeURI(location.href));
+            a.href = location.origin + "/Chapter/Edit/" + chapter.id;
             a.type = "button";
             a.classList.add("btn");
             a.classList.add("btn-secondary");
@@ -93,19 +92,8 @@ $("#sortable").sortable({
     stop: formChanged
 }).disableSelection();
 
-
-
-document.getElementById("btn-back").addEventListener("click", () => {
-    if (returnUrl == 'undefined' || returnUrl == undefined){
-        location.href = location.origin;
-        return;
-    }
-
-    location.href = decodeURIComponent(returnUrl);
-});
-
 document.getElementById("btn-add-chapter").addEventListener("click", () => {
-    location.href = location.origin + "/Chapter/New/" + compositionID + "/" + encodeURIComponent(encodeURI(location.href));
+    location.href = location.origin + "/Chapter/New/" + compositionID;
 });
 
 document.getElementById("btn-save").addEventListener("click", () => {
@@ -130,12 +118,7 @@ document.getElementById("btn-delete").addEventListener("click", () => {
     sendRequest<string>("Composition", "Delete", "POST", compositionID)
         .then(response => {
             if (response == 'Success') {
-                if (returnUrl == 'undefined' || returnUrl == undefined) {
-                    console.log("going to ", location.origin);
-                    location.href = location.origin;
-                    return;
-                }
-                location.href = decodeURIComponent(returnUrl);
+                location.href = document.getElementById('btn-back').getAttribute('href');
             }
 
             showAlert('There was an error deleteing your composition :(', false, response);

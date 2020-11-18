@@ -5,6 +5,7 @@ Obj
 app*.db*
 wwwroot/js/*
 !wwwroot/js/signalr
+!wwwroot/js/Composition/comments.js
 .vscode
 Migrations
 node_modules

@@ -21,7 +21,7 @@
 
         <div class="form-group" align="center">
             <button id="btn-delete" class="mr-2 ml-2 btn btn-danger" disabled>Delete</button>
-            <button id="btn-back" class="mr-2 ml-2 btn btn-primary">Back</button>
+            <a href="@Context.Request.Headers["Referer"].ToString()" id="btn-back" class="mr-2 ml-2 btn btn-primary">Back</a>
             <button id="btn-save" class="mr-2 ml-2 btn btn-success" disabled>Save</button>
         </div>
 
