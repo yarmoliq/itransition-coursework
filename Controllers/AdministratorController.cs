@@ -32,7 +32,7 @@ namespace coursework_itransition.Controllers
             _userManager = userManager;
         }
 
-        [Route("Administrator/Administrator/{UserID?}")]
+        [Route("Administrator/Administrator/{pageindex?}")]
         public async Task<IActionResult> Administrator(int pageindex = 1)
         {
             var sortedUsers = _context.Users.Include(comp=>comp.Compositions).AsNoTracking().OrderBy(s=>s.Email);
@@ -41,54 +41,50 @@ namespace coursework_itransition.Controllers
             return View("Administrator", partofUsers);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        // public async Task<string> RoleFind(string UserID)
-        
-        // {
-        //     var u = await _context.Users.FindAsync(UserID);
-        //     var lrn = await _userManager.GetRolesAsync(u);
-        //     return lrn[0];
-        // }
 
         [HttpPost, Route("Administrator/ActionWithUser/{UserID?}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ActionWithUser(string UserID, string stringAction, int pageindex)
         {
             var method = (typeof(AdministratorController)).GetMethod(stringAction);
-            string[] objects = new string[1];
-            objects[0] = UserID;
-            method.Invoke(this, objects);
-            await _userManager.UpdateSecurityStampAsync(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
-return RedirectToRoute(new { controller = "Administrator", action = "Administrator", pageindex = pageindex.ToString()});        }
+            string[] objects = new string[1]
+            {
+                UserID
+            };
+            
+            ((Task)method.Invoke(this, objects)).Wait();
 
-        public void DeleteUser(string UserID)
-        {
-            // _context.Users.Remove(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
-            // _context.SaveChanges();
-            _userManager.DeleteAsync(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
+            var user = this._context.Users.FirstOrDefault((u) => u.Id == UserID);
+
+            if (user != null)
+            { 
+                await this._userManager.UpdateSecurityStampAsync(user);
+            }
+
+            return RedirectToRoute(new { controller = "Administrator", action = "Administrator", pageindex = pageindex.ToString()});
         }
 
-        public void BanUser(string UserID)
+        public async Task DeleteUser(string UserID)
+        {
+            await _userManager.DeleteAsync(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
+        }
+
+        public async Task BanUser(string UserID)
         {
             var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
             user.LockoutEnd = System.DateTime.Now.AddHours(365 * 24 * 150);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void UnBanUser(string UserID)
+        public async Task UnBanUser(string UserID)
         {
             var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
             user.LockoutEnd = null;
             _context.Users.Update(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public async void MakeAdmin(string UserID)
+        public async Task MakeAdmin(string UserID)
         {
             var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
             var listRoleUser = await _userManager.GetRolesAsync(user);
@@ -98,7 +94,7 @@ return RedirectToRoute(new { controller = "Administrator", action = "Administrat
             }
         }
 
-        public async void RemoveAdminStatus(string UserID)
+        public async Task RemoveAdminStatus(string UserID)
         {
             var user = _context.Users.FirstOrDefault(w=>w.Id == UserID);
             var listRoleUser = await _userManager.GetRolesAsync(user);
@@ -106,6 +102,12 @@ return RedirectToRoute(new { controller = "Administrator", action = "Administrat
             {
                 await _userManager.RemoveFromRoleAsync(user, "Administrator");
             }
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

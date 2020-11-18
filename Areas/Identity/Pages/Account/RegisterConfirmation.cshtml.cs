@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 
 using Identity.Models;
-using Microsoft.Extensions.Options;
 
 namespace coursework_itransition.Areas.Identity.Pages.Account
 {
@@ -16,16 +15,16 @@ namespace coursework_itransition.Areas.Identity.Pages.Account
     public class RegisterConfirmationModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IOptions<SmtpSettings> _smptSettings;
         private readonly IEmailSender _sender;
+        private readonly IMailer _mailer;
 
         public RegisterConfirmationModel(UserManager<ApplicationUser> userManager,
-            IEmailSender sender,
-            IOptions<SmtpSettings> smtpSettings)
+            IMailer mailer,
+            IEmailSender sender)
         {
             _userManager = userManager;
             _sender = sender;
-            _smptSettings = smtpSettings;
+            _mailer = mailer;
         }
 
         public string Email { get; set; }
@@ -63,8 +62,7 @@ namespace coursework_itransition.Areas.Identity.Pages.Account
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme);
 
-                EmailService emailService = new EmailService(_smptSettings);
-                await emailService.SendEmailAsync(Email, "Confirm your account",
+                await _mailer.SendEmailAsync(Email, "Confirm your account",
                             $"To confirm your account click <a href='{EmailConfirmationUrl}'>this link</a>");
             }
 
