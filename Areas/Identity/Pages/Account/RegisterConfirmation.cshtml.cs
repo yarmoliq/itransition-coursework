@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using EmailApp;
 
 using Identity.Models;
 
@@ -27,7 +28,7 @@ namespace coursework_itransition.Areas.Identity.Pages.Account
 
         public bool DisplayConfirmAccountLink { get; set; }
 
-        public string EmailConfirmationUrl { get; set; }
+        private string EmailConfirmationUrl { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
         {
@@ -55,6 +56,9 @@ namespace coursework_itransition.Areas.Identity.Pages.Account
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme);
+                EmailService emailService = new EmailService();
+                await emailService.SendEmailAsync(Email, "Confirm your account",
+                            $"To confirm your account click <a href='{EmailConfirmationUrl}'>this link</a>");
             }
 
             return Page();
