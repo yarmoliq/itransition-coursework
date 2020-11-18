@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using EmailApp;
 
 using Identity.Models;
+using Microsoft.Extensions.Options;
 
 namespace coursework_itransition.Areas.Identity.Pages.Account
 {
@@ -16,12 +16,16 @@ namespace coursework_itransition.Areas.Identity.Pages.Account
     public class RegisterConfirmationModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IOptions<SmtpSettings> _smptSettings;
         private readonly IEmailSender _sender;
 
-        public RegisterConfirmationModel(UserManager<ApplicationUser> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<ApplicationUser> userManager,
+            IEmailSender sender,
+            IOptions<SmtpSettings> smtpSettings)
         {
             _userManager = userManager;
             _sender = sender;
+            _smptSettings = smtpSettings;
         }
 
         public string Email { get; set; }
@@ -44,19 +48,22 @@ namespace coursework_itransition.Areas.Identity.Pages.Account
             }
 
             Email = email;
-            // Once you add a real email sender, you should remove this code that lets you confirm the account
             DisplayConfirmAccountLink = true;
+            
             if (DisplayConfirmAccountLink)
             {
                 var userId = await _userManager.GetUserIdAsync(user);
+
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
                 EmailConfirmationUrl = Url.Page(
                     "/Account/ConfirmEmail",
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme);
-                EmailService emailService = new EmailService();
+
+                EmailService emailService = new EmailService(_smptSettings);
                 await emailService.SendEmailAsync(Email, "Confirm your account",
                             $"To confirm your account click <a href='{EmailConfirmationUrl}'>this link</a>");
             }

@@ -10,3 +10,5 @@ wwwroot/js/*
 Migrations
 node_modules
 package-lock.json
+appsettings.Development.json
+appsettings.json
