@@ -31,6 +31,8 @@ namespace coursework_itransition.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
         }
+
+        [Route("Administrator/Administrator/{UserID?}")]
         public async Task<IActionResult> Administrator(int pageindex = 1)
         {
             var sortedUsers = _context.Users.Include(comp=>comp.Compositions).AsNoTracking().OrderBy(s=>s.Email);
@@ -62,8 +64,7 @@ namespace coursework_itransition.Controllers
             objects[0] = UserID;
             method.Invoke(this, objects);
             await _userManager.UpdateSecurityStampAsync(_context.Users.FirstOrDefault((u)=>u.Id == UserID));
-            return await Administrator(pageindex);
-        }
+return RedirectToRoute(new { controller = "Administrator", action = "Administrator", pageindex = pageindex.ToString()});        }
 
         public void DeleteUser(string UserID)
         {
