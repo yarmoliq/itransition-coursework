@@ -26,18 +26,10 @@ namespace coursework_itransition.Models
 
         public DateTime LastEditDT { get; set; }
 
-        // public List<Tuple<string,short>> IDAndRating = new List<Tuple<string, short>>();
-
         public string Genre { get; set; }
 
-        // public double averageRating()
-        // {
-        //     double average = 0;
-        //     IDAndRating.ForEach(w=>{average += w.Item2;});
-        //     return average/IDAndRating.Count;
-        // }
-
         public ICollection<Chapter> Chapters { get; set; }
+        
         public ICollection<Comment> Comments { get; set; }
     }
 }

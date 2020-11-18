@@ -1,14 +1,14 @@
-﻿using System.Diagnostics;
+﻿using System.Linq;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using coursework_itransition.Models;
-using System.Collections.Generic;
-using System.Linq;
-
-using coursework_itransition.Data;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+
+using coursework_itransition.Models;
+using coursework_itransition.Data;
 
 namespace coursework_itransition.Controllers
 {

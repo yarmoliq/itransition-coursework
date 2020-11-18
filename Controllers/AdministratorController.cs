@@ -1,15 +1,16 @@
+using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
-using coursework_itransition.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Identity.Models;
-using System.Linq;
-using coursework_itransition.Models;
 using ReflectionIT.Mvc.Paging;
+
+using coursework_itransition.Data;
+using coursework_itransition.Models;
 
 namespace coursework_itransition.Controllers
 {

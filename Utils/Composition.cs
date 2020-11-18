@@ -17,6 +17,7 @@ namespace coursework_itransition
 
             return c.Value == comp.AuthorID;
         }
+        
         public static bool UserIsAuthor(ClaimsPrincipal User, string AuthorID)
         {
             if (User == null)

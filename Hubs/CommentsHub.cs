@@ -1,19 +1,12 @@
-
-using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.Logging;
-using System.Collections.Concurrent;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 using coursework_itransition.Models;
 using coursework_itransition.Data;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace coursework_itransition.Hubs

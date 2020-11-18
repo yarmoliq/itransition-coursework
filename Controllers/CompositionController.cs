@@ -2,15 +2,13 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using coursework_itransition.Models;
-
 using Microsoft.AspNetCore.Authorization;
-
-using coursework_itransition.Data;
-
 using Microsoft.AspNetCore.Identity;
-using Identity.Models;
 using Microsoft.EntityFrameworkCore;
+using Identity.Models;
+
+using coursework_itransition.Models;
+using coursework_itransition.Data;
 
 namespace coursework_itransition.Controllers
 {
