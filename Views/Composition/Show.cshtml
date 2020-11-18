@@ -17,8 +17,11 @@
         @if(coursework_itransition.Utils.UserIsAuthor(User, Model) || User.IsInRole("Administrator"))
         {
             <div class="col-auto align-self-center">
-                <a asp-controller="Composition" asp-action="Edit" asp-route-id="@Model.ID" asp-route-returnUrl="@Url.ActionLink()">
+                <a asp-controller="Composition" asp-action="Edit" asp-route-id="@Model.ID">
                     Edit
+                </a><br>
+                <a href="@Context.Request.Headers["Referer"].ToString()">
+                    Back
                 </a>
             </div>
         }
