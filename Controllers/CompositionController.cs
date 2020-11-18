@@ -62,7 +62,12 @@ namespace coursework_itransition.Controllers
             if(UserID == null)
                 newComp.AuthorID = coursework_itransition.Utils.GetUserID(this.User);
             else
-                newComp.AuthorID = UserID;
+            {
+                var u = this._context.Users.Find(UserID);
+                if(u == null)
+                    return RedirectToAction("Index", "Deadends", new { message = "User not found" });
+                newComp.AuthorID = u.Id;
+            }
             newComp.Title = comp.Title;
             newComp.Summary = comp.Summary;
             newComp.Genre = comp.Genre;
