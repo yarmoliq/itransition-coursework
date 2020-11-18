@@ -56,7 +56,11 @@ namespace coursework_itransition.Hubs
             newComment.CompositionID = compID;
             newComment.Contents = contents;
             newComment.CreationDT = newComment.LastEditDT = System.DateTime.UtcNow;
-            newComment.AuthorID = coursework_itransition.Utils.GetUserID(this.Context.User);
+
+            var user = this._context.Users.Find(coursework_itransition.Utils.GetUserID(this.Context.User));
+            if(user == null)
+                return;
+            newComment.AuthorID = user.Id;
 
             this._context.Comments.Add(newComment);
             this._context.SaveChanges();
