@@ -47,19 +47,22 @@ namespace coursework_itransition.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ActionWithUser(string UserID, string stringAction, int pageindex)
         {
-            var method = (typeof(AdministratorController)).GetMethod(stringAction);
-            string[] objects = new string[1]
+            if(UserID != coursework_itransition.Utils.GetUserID(this.User))
             {
-                UserID
-            };
-            
-            ((Task)method.Invoke(this, objects)).Wait();
+                var method = (typeof(AdministratorController)).GetMethod(stringAction);
+                string[] objects = new string[1]
+                {
+                    UserID
+                };
+                
+                ((Task)method.Invoke(this, objects)).Wait();
 
-            var user = this._context.Users.FirstOrDefault((u) => u.Id == UserID);
+                var user = this._context.Users.FirstOrDefault((u) => u.Id == UserID);
 
-            if (user != null)
-            { 
-                await this._userManager.UpdateSecurityStampAsync(user);
+                if (user != null)
+                { 
+                    await this._userManager.UpdateSecurityStampAsync(user);
+                }
             }
 
             return RedirectToRoute(new { controller = "Administrator", action = "Administrator", pageindex = pageindex.ToString()});
