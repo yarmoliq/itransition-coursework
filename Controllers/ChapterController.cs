@@ -39,6 +39,9 @@ namespace coursework_itransition.Controllers
             if((System.Object)chapter == null)
                 return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
 
+            if (!(coursework_itransition.Utils.UserIsAuthor(this.User, chapter.Composition.AuthorID) || this.User.IsInRole("Administrator")))
+                return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
+
             return View(new PostModel{Title = chapter.Title, Contents = chapter.Contents});
         }
 
@@ -79,7 +82,7 @@ namespace coursework_itransition.Controllers
             if((System.Object)chapter == null)
                 return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
 
-            if(!coursework_itransition.Utils.UserIsAuthor(this.User, chapter.Composition.AuthorID))
+            if(!(coursework_itransition.Utils.UserIsAuthor(this.User, chapter.Composition.AuthorID) || this.User.IsInRole("Administrator")))
                 return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
 
             chapter.Title       = data.Title;
