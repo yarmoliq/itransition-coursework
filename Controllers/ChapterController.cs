@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using coursework_itransition.Models;
 using coursework_itransition.Data;
+using System.Threading.Tasks;
 
 namespace coursework_itransition.Controllers
 {
@@ -32,9 +33,9 @@ namespace coursework_itransition.Controllers
         public IActionResult New(string compID) => View();
 
         [Route("Chapter/Edit/{id}")]
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
-            var chapter = this._context.Chapters.Find(id);
+            var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
 
             if((System.Object)chapter == null)
                 return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
