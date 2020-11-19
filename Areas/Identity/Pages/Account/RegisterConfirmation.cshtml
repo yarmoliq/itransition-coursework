@@ -1,13 +1,4 @@
 @page
-@model RegisterConfirmationModel
-@{
-    ViewData["Title"] = "Register confirmation";
-}
+@{ ViewData["Title"] = "Register confirmation"; }
 
-<h1>@ViewData["Title"]</h1>
-
-<p>
-        Please check your email @Model.Email to confirm your account.
-</p>
-
-<a href='https://@Model.Email.Split("@")[1]'>Go to email</a>
+<h3>Please check your email to confirm registration.</h3>
