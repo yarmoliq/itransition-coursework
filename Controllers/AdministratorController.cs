@@ -45,7 +45,7 @@ namespace coursework_itransition.Controllers
 
         [HttpPost, Route("Administrator/ActionWithUser/{UserID?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ActionWithUser(string UserID, string stringAction, int pageindex)
+        public IActionResult ActionWithUser(string UserID, string stringAction, int pageindex)
         {
             if(UserID != coursework_itransition.Utils.GetUserID(this.User))
             {
@@ -56,13 +56,6 @@ namespace coursework_itransition.Controllers
                 };
                 
                 ((Task)method.Invoke(this, objects)).Wait();
-
-                var user = this._context.Users.FirstOrDefault((u) => u.Id == UserID);
-
-                if (user != null)
-                { 
-                    await this._userManager.UpdateSecurityStampAsync(user);
-                }
             }
 
             return RedirectToRoute(new { controller = "Administrator", action = "Administrator", pageindex = pageindex.ToString()});
