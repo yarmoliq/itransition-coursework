@@ -9,6 +9,7 @@ using Identity.Models;
 
 using coursework_itransition.Models;
 using coursework_itransition.Data;
+using static coursework_itransition.AccessControl;
 
 namespace coursework_itransition.Controllers
 {
@@ -41,7 +42,7 @@ namespace coursework_itransition.Controllers
 
             if ((System.Object)comp != null)
             {
-                if (!(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator")))
+                if (!UserHasAccess(this.User, comp))
                     return RedirectToAction("Index", "Deadends", new { message = "You have no rights to edit this composition" });
 
                 return View();
@@ -117,7 +118,7 @@ namespace coursework_itransition.Controllers
                 return "Composition not found";
 
 
-            if(!(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator")))
+            if(!UserHasAccess(this.User, comp))
                 return "You have no edit rights";
 
             comp.Title      = updated.Title;
@@ -156,7 +157,7 @@ namespace coursework_itransition.Controllers
             if ((System.Object)comp == null)
                 return "Composition not found";
 
-            if(!(coursework_itransition.Utils.UserIsAuthor(this.User, comp) || this.User.IsInRole("Administrator")))
+            if(!UserHasAccess(this.User, comp))
                 return "You have no rights";
 
             this._context.Compositions.Remove(comp);

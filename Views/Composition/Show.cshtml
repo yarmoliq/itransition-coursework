@@ -15,7 +15,7 @@
             <div class="text-muted">Created: @Model.CreationDT</div>
             <div class="text-muted">Last edit: @Model.LastEditDT</div>
         </div>
-        @if(coursework_itransition.Utils.UserIsAuthor(User, Model) || User.IsInRole("Administrator"))
+        @if(coursework_itransition.AccessControl.UserHasAccess(this.User, Model))
         {
             <div class="col-auto align-self-center">
                 <a asp-controller="Composition" asp-action="Edit" asp-route-id="@Model.ID">
