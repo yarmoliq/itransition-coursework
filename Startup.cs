@@ -95,14 +95,14 @@ namespace coursework_itransition
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "chapter",
-                    pattern: "Chapter/{action}/{compID}",
+                    name: "chapter-create",
+                    pattern: "Chapter/New/{compID}",
                     defaults: new { controller = "Chapter", action = "New" });
-            
+
                 endpoints.MapControllerRoute(
-                    name: "chapter-edit",
+                    name: "chapter",
                     pattern: "Chapter/{action}/{id}",
-                    defaults: new { controller = "Chapter", action = "New" });
+                    defaults: new { controller = "Chapter", action = "Edit" });
             
                 endpoints.MapControllerRoute(
                     name: "composition",

@@ -18,7 +18,8 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane fade show active" id="tab-content-raw">
-                <form asp-action="New">
+                <form asp-action="New" method="POST" 
+                        asp-route-compID="@ViewContext.RouteData.Values["compID"]">
                     <input asp-for="ReturnUrl" value="@Context.Request.Headers["Referer"].ToString()" hidden></input>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
@@ -29,8 +30,7 @@
                     </div>
                     <div class="form-group" align="center">
                         <a href="@Context.Request.Headers["Referer"].ToString()" type="button" class="mr-2 btn btn-secondary" onclick="return confirm('you sure? :)');">Cancel</a>
-                        <input type="submit" value="Save and close" class="ml-2 btn btn-primary" 
-                                asp-route-compID="@ViewContext.RouteData.Values["compID"]">
+                        <button type="submit" class="ml-2 btn btn-success">Save and close</button>
                     </div>
                 </form>
             </div>

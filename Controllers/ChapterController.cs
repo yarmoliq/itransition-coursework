@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using coursework_itransition.Models;
 using coursework_itransition.Data;
 using static coursework_itransition.AccessControl;
+using System.Linq;
 
 namespace coursework_itransition.Controllers
 {
@@ -31,65 +32,60 @@ namespace coursework_itransition.Controllers
             _logger = logger;
         }
 
-        public IActionResult New(string compID) => View();
-
-        [Route("Chapter/Edit/{id}")]
-        public async Task<IActionResult> Edit(string id)
+        private Chapter GetChapter(string id, out IActionResult res)
         {
-            var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
+            var chapter = this._context.Chapters.Include(c => c.Composition).FirstOrDefault(c => c.ID == id);
 
-            if((System.Object)chapter == null)
-                return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
+            if ((System.Object)chapter == null)
+            {
+                res = RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
+                return null;
+            }
 
             if (!UserHasAccess(this.User, chapter))
-                return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
+            {
+                res = RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
+                return null;
+            }
 
-            return View(new PostModel{Title = chapter.Title, Contents = chapter.Contents});
+            res = null;
+            return chapter;
         }
 
-        [HttpPost, Route("Chapter/New/{compID}")]
-        [ValidateAntiForgeryToken]
-        public async System.Threading.Tasks.Task<IActionResult> AddNewChapter(string compID, [Bind("Title,Contents,ReturnUrl")] PostModel data)
+        private RedirectResult RedirectBack(string url)
         {
-            var comp = await this._context.Compositions
-                                                .Include(c => c.Chapters)
-                                                .FirstOrDefaultAsync(c => c.ID == compID);
-                                                
-            if((System.Object)comp == null)
-                return RedirectToAction("Index", "Deadends", new { message = "Composition for the chapter was not found." });
-
-            if(!UserHasAccess(this.User, comp))
-                return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
-
-            var newChapter = new Chapter();
-            newChapter.CreationDT       = System.DateTime.UtcNow;
-            newChapter.LastEditDT       = System.DateTime.UtcNow;
-            newChapter.CompositionID    = compID;
-            newChapter.Title            = data.Title;
-            newChapter.Contents         = data.Contents;
-            newChapter.Order            = comp.Chapters.Count;
-            newChapter.Composition      = comp;
-
-            comp.LastEditDT             = System.DateTime.UtcNow;
-
-            this._context.Chapters.Add(newChapter);
-            this._context.SaveChanges();
-
-            if (data.ReturnUrl == null)
+            // net vremeni pisat proverky na realnost ssilki
+            if (url == null || url == "")
                 return Redirect("~/");
-            return Redirect(System.Web.HttpUtility.UrlDecode(data.ReturnUrl));
+
+            return Redirect(System.Web.HttpUtility.UrlDecode(url));
         }
+
+        [HttpGet, Route("Chapter/New/{compID}")]
+        public IActionResult NewGet(string compID) => View("New");
+
+
+        [HttpGet, Route("Chapter/Edit/{id}")]
+        public IActionResult EditGet(string id)
+        {
+            IActionResult res = null;
+            var chapter = GetChapter(id, out res);
+            
+            if(res != null)
+                return res;
+
+            return View("Edit", new PostModel{Title = chapter.Title, Contents = chapter.Contents});
+        }
+
 
         [HttpPost, Route("Chapter/Edit/{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditChapter(string id, [Bind("Title,Contents,ReturnUrl")] PostModel data)
+        public IActionResult EditPost(string id, [Bind("Title,Contents,ReturnUrl")] PostModel data)
         {
-            var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
-            if((System.Object)chapter == null)
-                return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
+            IActionResult res = null;
+            var chapter = GetChapter(id, out res);
 
-            if(!UserHasAccess(this.User, chapter))
-                return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
+            if (res != null)
+                return res;
 
             chapter.Title       = data.Title;
             chapter.Contents    = data.Contents;
@@ -99,27 +95,22 @@ namespace coursework_itransition.Controllers
             this._context.Chapters.Update(chapter);
             this._context.SaveChanges();
 
-            if (data.ReturnUrl == null)
-                return Redirect("~/");
-            return Redirect(System.Web.HttpUtility.UrlDecode(data.ReturnUrl));
+            return RedirectBack(data.ReturnUrl);
         }
 
         [HttpPost, Route("Chapter/Delete/{id}")]
-        public async Task<IActionResult> DeleteChapter(string id, [Bind("ReturnUrl")]PostModel data)
+        public IActionResult DeleteChapter(string id, [Bind("ReturnUrl")]PostModel data)
         {
-            var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
-            if ((System.Object)chapter == null)
-                return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
+            IActionResult res = null;
+            var chapter = GetChapter(id, out res);
 
-            if (!UserHasAccess(this.User, chapter))
-                return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
+            if (res != null)
+                return res;
 
             this._context.Chapters.Remove(chapter);
             this._context.SaveChanges();
 
-            if (data.ReturnUrl == null)
-                return Redirect("~/");
-            return Redirect(System.Web.HttpUtility.UrlDecode(data.ReturnUrl));
+            return RedirectBack(data.ReturnUrl);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
