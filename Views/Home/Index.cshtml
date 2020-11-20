@@ -1,7 +1,4 @@
-﻿@using static coursework_itransition.Utils;
-@using Microsoft.EntityFrameworkCore;
-
-@model coursework_itransition.Controllers.HomeController;
+﻿@model coursework_itransition.Controllers.HomeController;
 
 @{
     ViewData["Title"] = "Home Page";
@@ -11,16 +8,15 @@
 <div id="id-user" hidden>@Utils.GetUserID(this.User)</div>
 <div id="admin-user" hidden>@this.User.IsInRole("Administrator")</div>
 
-<div class="row">
-    <div class="col-1"></div>
-    <div class="col-10">      
-        <div class="p-2 text-center bg-dark">     
-            <h3 class="mb-2">
+<div class="row justify-content-md-center">
+    <div class="col-lg-10">
+        <div class="p-2 text-center bg-dark mb-3">
+            <h3>
                 Composition
             </h3>
         </div>      
         <div id="feed"></div>
     </div>
-    <div class="col-1"></div>
 </div>
+
 <script type="module" src="~/js/Home/Index.js"></script> 
