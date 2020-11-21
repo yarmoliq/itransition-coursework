@@ -3,7 +3,6 @@
 }
 
 @model coursework_itransition.Controllers.PersonalPageController
-@using static coursework_itransition.Utils;
 
 @addTagHelper *, ReflectionIT.Mvc.Paging
 
@@ -63,7 +62,7 @@
                                     <div class="modal-header">
                                         <h5 class="modal-title " style="word-wrap: break-word;"id="exampleModalLongTitle">@composition.Title</h5>
                                         <div class="ml-auto d-flex align-items-center">
-                                            @if (UserIsAuthor(User, composition) || this.User.IsInRole("Administrator"))
+                                            @if (coursework_itransition.AccessControl.UserHasAccess(User,composition))
                                             {  
                                                 <a class="mr-3" asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()">
                                                     Edit
