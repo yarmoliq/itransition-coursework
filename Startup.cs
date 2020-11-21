@@ -121,7 +121,7 @@ namespace coursework_itransition
             
                 endpoints.MapControllerRoute(
                     name: "administrator",
-                    pattern: "Administrator/{action}/{pageindex?}",
+                    pattern: "Administrator/{action}",
                     defaults: new { controller = "Administrator", action = "Administrator" });
             
                 endpoints.MapControllerRoute(
@@ -132,6 +132,11 @@ namespace coursework_itransition
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/");
+
+                endpoints.MapControllerRoute(
+                    name: "personalpage",
+                    pattern: "PersonalPage/{action}/{UserID}",
+                    defaults: new { controller = "PersonalPage", action = "PersonalPage" });
                     
                 endpoints.MapRazorPages();
                 endpoints.MapHub<CommentsHub>("/comments");

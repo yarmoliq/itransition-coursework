@@ -2,6 +2,7 @@
 @using Identity.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@using coursework_itransition
 
 @if (SignInManager.IsSignedIn(User) )
 {
@@ -11,7 +12,7 @@
     {
         <a class="dropdown-item" asp-area="" asp-controller="Administrator" asp-action="Administrator">Admin</a>
     }
-    <a  class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
+    <a  class="dropdown-item" asp-controller="PersonalPage" asp-action="PersonalPage" asp-route-UserID="@Utils.GetUserID(this.User)">My page</a>
     <div class="dropdown-divider"></div>
     <form  class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
         <button  type="submit" class="dropdown-item">Logout</button>

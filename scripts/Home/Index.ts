@@ -50,6 +50,12 @@ async function addPost(comp : Composition) {
         a.innerText = "Edit";
         dropdown_menu.appendChild(a);
     }
+
+    let a = document.createElement("a");
+    a.classList.add("dropdown-item", "btn");
+    a.href = location.origin + "/PersonalPage/PersonalPage/" + comp.authorID;
+    a.innerText = "Author";
+    dropdown_menu.appendChild(a);
     dropdown.appendChild(dropdown_menu);
 
     out_dropdown.appendChild(dropdown);
@@ -84,13 +90,13 @@ async function addPost(comp : Composition) {
             text.appendChild(ol);
         });
     }
-    if(comp.summary.length < 500){
-        text.innerText = comp.summary ?? "";
-        let count = 500 - comp.summary.length;
+    if(comp.summary == null || comp.summary.length < 500){
+        text.innerText = comp.summary;
+        let count = 500 - (comp.summary != null ? comp.summary.length : 0);
         for(var i = 0; i < comp.chapters.length; ++i)
         {
-            if(count > comp.chapters[i].title.length){
-                count = count - comp.chapters[i].title.length;
+            if(comp.chapters[i].title == null || count > comp.chapters[i].title.length){
+                count = count - (comp.chapters[i].title != null ? comp.chapters[i].title.length : 0);
                 let li = document.createElement("li");
                 li.innerText = comp.chapters[i].title;
                 ol.appendChild(li);
@@ -109,7 +115,10 @@ async function addPost(comp : Composition) {
     
     card_footer.className = "text-muted";
     var k = new Date(comp.lastEditDT);
-    card_footer.append(k.toString());
+    console.log(k.toLocaleTimeString());
+    console.log(k.toLocaleString());
+    //console.log(k.toLocaleDataString());
+    card_footer.append(k.toLocaleString());
 
     card.appendChild(card_header);
     card.appendChild(card_body);

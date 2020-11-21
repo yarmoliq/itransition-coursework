@@ -39,6 +39,7 @@ namespace coursework_itransition.Controllers
             var sortedUsers = _context.Users.Include(comp=>comp.Compositions).AsNoTracking().OrderBy(s=>s.Email);
             var partofUsers = await PagingList.CreateAsync(sortedUsers, 10, pageindex);
             partofUsers.Action = "Administrator";
+            
             return View("Administrator", partofUsers);
         }
 

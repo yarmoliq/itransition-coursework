@@ -1,0 +1,103 @@
+@{
+    ViewData["Title"] = "PersonalPage";
+}
+
+@model coursework_itransition.Controllers.PersonalPageController
+@using static coursework_itransition.Utils;
+
+@addTagHelper *, ReflectionIT.Mvc.Paging
+
+<div class="h4">
+    @Model.user.Name
+</div>
+
+<div class="h4">
+    @Model.user.Email
+</div>
+
+
+<nav aria-label="Users navigation">
+    <vc:pager paging-list="@Model.PartOfCompsition"></vc:pager>
+</nav>
+
+
+<form asp-action="PersonalPage" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by title: <input class="form-control" type="text" name="currentFilter" placeholder="Filter" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-secondary" /> 
+            <a type="submit" class="btn btn-secondary" asp-action="PersonalPage">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<div class="p-2 text-center bg-dark">     
+    <h3 class="mb-2">
+        Compositions
+    </h3>
+</div>
+<div class="table-striped table-responsive-sm">
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    <a asp-action="PersonalPage" asp-route-sortOrder="title" asp-route-currentFilter="@ViewData["currentFilter"]">Title</a>
+                </th>
+                <th>
+                    <a asp-action="PersonalPage" asp-route-sortOrder="timr" asp-route-currentFilter="@ViewData["currentFilter"]">LastEditDT</a>
+                </th>
+            </tr>
+        </thead>
+        <tboby>
+            @foreach (var composition in Model.PartOfCompsition)
+            {
+                <tr>
+                    <td>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#model-@composition.ID" >
+                            <i class="fa fa-eye"></i>
+                        </button>
+                        <div class="modal fade bd-example-modal-lg" id="model-@composition.ID" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">         
+                                    <div class="modal-header">
+                                        <h5 class="modal-title " style="word-wrap: break-word;"id="exampleModalLongTitle">@composition.Title</h5>
+                                        <div class="ml-auto d-flex align-items-center">
+                                            @if (UserIsAuthor(User, composition) || this.User.IsInRole("Administrator"))
+                                            {  
+                                                <a class="mr-3" asp-controller="Composition" asp-action="Edit" asp-route-id="@composition.ID" asp-route-returnUrl="@Url.ActionLink()">
+                                                    Edit
+                                                </a>
+                                            }
+                                            <button type="button" class="ml-3 close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container">
+                                            <div class="row"> @composition.Summary </div>
+                                            <hr>
+                                            <ol>
+                                                @foreach (var chapter in composition.Chapters)
+                                                {
+                                                    <li>@chapter.Title</li>
+                                                }
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><p class="size">@composition.Title</p></td>
+                    <td><p>@composition.LastEditDT</p></td> 
+                </tr>
+            }   
+        </tboby>
+    </table>    
+</div>
+
+<nav aria-label="Users navigation">
+    <vc:pager paging-list="@Model.PartOfCompsition" />
+</nav>
