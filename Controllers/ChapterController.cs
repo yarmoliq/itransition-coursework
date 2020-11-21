@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 using coursework_itransition.Models;
 using coursework_itransition.Data;
-using System.Threading.Tasks;
+using static coursework_itransition.AccessControl;
 
 namespace coursework_itransition.Controllers
 {
@@ -40,7 +41,7 @@ namespace coursework_itransition.Controllers
             if((System.Object)chapter == null)
                 return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
 
-            if (!(coursework_itransition.Utils.UserIsAuthor(this.User, chapter.Composition.AuthorID) || this.User.IsInRole("Administrator")))
+            if (!UserHasAccess(this.User, chapter))
                 return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
 
             return View(new PostModel{Title = chapter.Title, Contents = chapter.Contents});
@@ -53,8 +54,12 @@ namespace coursework_itransition.Controllers
             var comp = await this._context.Compositions
                                                 .Include(c => c.Chapters)
                                                 .FirstOrDefaultAsync(c => c.ID == compID);
+                                                
             if((System.Object)comp == null)
                 return RedirectToAction("Index", "Deadends", new { message = "Composition for the chapter was not found." });
+
+            if(!UserHasAccess(this.User, comp))
+                return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
 
             var newChapter = new Chapter();
             newChapter.CreationDT       = System.DateTime.UtcNow;
@@ -77,13 +82,13 @@ namespace coursework_itransition.Controllers
 
         [HttpPost, Route("Chapter/Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async System.Threading.Tasks.Task<IActionResult> EditChapter(string id, [Bind("Title,Contents,ReturnUrl")] PostModel data)
+        public async Task<IActionResult> EditChapter(string id, [Bind("Title,Contents,ReturnUrl")] PostModel data)
         {
             var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
             if((System.Object)chapter == null)
                 return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
 
-            if(!(coursework_itransition.Utils.UserIsAuthor(this.User, chapter.Composition.AuthorID) || this.User.IsInRole("Administrator")))
+            if(!UserHasAccess(this.User, chapter))
                 return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
 
             chapter.Title       = data.Title;
@@ -100,13 +105,13 @@ namespace coursework_itransition.Controllers
         }
 
         [HttpPost, Route("Chapter/Delete/{id}")]
-        public async System.Threading.Tasks.Task<IActionResult> DeleteChapter(string id, [Bind("ReturnUrl")]PostModel data)
+        public async Task<IActionResult> DeleteChapter(string id, [Bind("ReturnUrl")]PostModel data)
         {
             var chapter = await this._context.Chapters.Include(c => c.Composition).FirstOrDefaultAsync(c => c.ID == id);
             if ((System.Object)chapter == null)
                 return RedirectToAction("Index", "Deadends", new { message = "Chapter was not found" });
 
-            if (!coursework_itransition.Utils.UserIsAuthor(this.User, chapter.Composition.AuthorID))
+            if (!UserHasAccess(this.User, chapter))
                 return RedirectToAction("Index", "Deadends", new { message = "You have no edit rights over this piece of art ..." });
 
             this._context.Chapters.Remove(chapter);

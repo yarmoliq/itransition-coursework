@@ -20,7 +20,5 @@ namespace coursework_itransition.Models
         public string Contents { get; set; }
 
         public int Order { get; set; }
-
-        // public List<string> Likes;
     }
 }
