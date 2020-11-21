@@ -18,6 +18,10 @@ function generateComment(data) {
     cardtitle.id = data.ID;
     connection.invoke('GetUserName', data.AuthorID)
         .then((name) => {
+            let final = name;
+            if (name == 'undefined' || name == null) {
+                final = '¯\_(ツ)_/¯';
+            }
             document.getElementById(data.ID).innerHTML = name;
         });
     cardbody.appendChild(cardtitle);
