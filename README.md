@@ -52,6 +52,13 @@
 - темная тема
 - динамически подгружаемая фид лента (как в вк)
 
+## Проблемные места
+
+- неправильное ведение фронта
+- достаточно часто встречается повторяющийся код
+- маршрутизация - спагетти-код
+- ...
+
 ## Что получилось
 
 <a href="https://www.youtube.com/watch?v=zJPIfkTtTI0&feature=youtu.be" target="_blank"><img src="https://img.youtube.com/vi/zJPIfkTtTI0/hqdefault.jpg" 
